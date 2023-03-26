@@ -1,0 +1,11 @@
+// ==========================
+// direction
+// ==========================
+$direction: (
+  t: (top, ),
+  b: (bottom, ),
+  l: (left, ),
+  r: (right, ),
+  x: (left, right),
+  y: (top, right),
+);

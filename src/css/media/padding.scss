@@ -1,0 +1,34 @@
+// ==========================
+// padding
+// ==========================
+@each $key,
+$entry in $direction {
+  .p#{$key}-auto {
+    @each $val in $entry {
+      padding-#{$val}: auto;
+    }
+  }
+}
+
+@each $key,
+$entry in $direction {
+  .p#{$key}-0 {
+    @each $val in $entry {
+      padding-#{$val}: 0;
+    }
+  }
+}
+
+@for $itr from $start-value through $end-value {
+
+  $value: 8 * $itr;
+
+  @each $key,
+  $entry in $direction {
+    .p#{$key}-x-#{$itr} {
+      @each $val in $entry {
+        padding-#{$val}: #{$value}px;
+      }
+    }
+  }
+}

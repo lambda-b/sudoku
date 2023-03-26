@@ -1,0 +1,68 @@
+// ==========================
+// sudoku
+// ==========================
+.sudoku-table {
+  min-height: 630px;
+  min-width: 630px;
+  @extend .mx-auto;
+  @extend .px-0;
+}
+
+.sudoku-cell {
+  @mixin border($top, $bottom, $left, $right) {
+    @extend .bdt-#{$top};
+    @extend .bdb-#{$bottom};
+    @extend .bdl-#{$left};
+    @extend .bdr-#{$right};
+  }
+
+  height: 70px;
+  width: 70px;
+
+  &-1 {
+    @include border(3, 1, 3, 1);
+  }
+
+  &-2 {
+    @include border(3, 1, 1, 1);
+  }
+
+  &-3 {
+    @include border(3, 1, 1, 3);
+  }
+
+  &-4 {
+    @include border(1, 1, 3, 1);
+  }
+
+  &-5 {
+    @include border(1, 1, 1, 1);
+  }
+
+  &-6 {
+    @include border(1, 1, 1, 3);
+  }
+
+  &-7 {
+    @include border(1, 3, 3, 1);
+  }
+
+  &-8 {
+    @include border(1, 3, 1, 1);
+  }
+
+  &-9 {
+    @include border(1, 3, 1, 3);
+  }
+
+  &-inner {
+    height: 100%;
+    width: 100%;
+    font-size: 40px;
+    text-align: center;
+  }
+
+  .cell-selected {
+    box-shadow: 0px 0px 10px $cyan;
+  }
+}

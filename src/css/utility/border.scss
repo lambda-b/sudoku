@@ -1,0 +1,22 @@
+// ==========================
+// border
+// ==========================
+
+@for $itr from $start-value through $end-value {
+
+  @each $color-name,
+  $color-code in $colors {
+    .bd-#{$color-name}-#{$itr} {
+      border: solid #{$itr}px $color-code;
+    }
+  }
+
+  @each $key,
+  $entry in $direction {
+    .bd#{$key}-#{$itr} {
+      @each $val in $entry {
+        border-#{$val}: solid #{$itr}px $grey-light;
+      }
+    }
+  }
+}

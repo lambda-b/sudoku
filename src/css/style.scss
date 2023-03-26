@@ -1,0 +1,24 @@
+// ==========================
+// foundation
+// ==========================
+@import 'foundation/variables.scss';
+@import 'foundation/direction.scss';
+@import 'foundation/color.scss';
+@import 'foundation/normalize.scss';
+
+// ==========================
+// media
+// ==========================
+@import 'media/margin.scss';
+@import 'media/padding.scss';
+
+// ==========================
+// utility
+// ==========================
+@import 'utility/border.scss';
+@import 'utility/flex.scss';
+
+// ==========================
+// component
+// ==========================
+@import 'components/sudoku.scss';
