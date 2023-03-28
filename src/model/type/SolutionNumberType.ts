@@ -1,4 +1,4 @@
-export const SOLUTION_NUMBERS = [...[...Array(10)].map((_, index) => index)] as const;
+export const SOLUTION_NUMBERS = [...Array(10).map((_, index) => index)] as const;
 
 export type SolutionNumberType = typeof SOLUTION_NUMBERS[number];
 
