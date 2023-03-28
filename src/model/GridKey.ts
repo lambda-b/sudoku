@@ -1,5 +1,5 @@
-import { IdObject, IdType } from "@/model/IdObject";
 import { PointType } from "@/model/type/PointType";
+import { IdObject, IdType } from "@/utility/model/IdObject";
 
 export abstract class GridKey implements IdObject {
   private _type: PointType;
