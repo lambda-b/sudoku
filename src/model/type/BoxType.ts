@@ -1,4 +1,4 @@
-export const BOX_TYPE = [...Array(9).map((_, index) => index)] as const;
+export const BOX_TYPE = [...[...Array(9)].map((_, index) => index)] as const;
 
 export type BoxType = typeof BOX_TYPE[number];
 

@@ -1,4 +1,4 @@
-export const ROW_TYPE = [...Array(9).map((_, index) => index)] as const;
+export const ROW_TYPE = [...[...Array(9)].map((_, index) => index)] as const;
 
 export type RowType = typeof ROW_TYPE[number];
 
