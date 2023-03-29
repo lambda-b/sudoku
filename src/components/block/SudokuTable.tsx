@@ -1,5 +1,5 @@
-import { SelectAddressContext, SudokuDataContext } from "@/foundation/context";
-import { convert, handleKeyDown } from "@/foundation/function";
+import { SelectAddressContext, SudokuDataContext } from "@/base/context";
+import { convert, handleKeyDown } from "@/base/function";
 import { useContext, useEffect, useState } from "react";
 import SudokuCell from "@/components/atom/SudokuCell";
 

@@ -2,8 +2,8 @@ import { solveSudoku } from '@/calc/sudoku';
 import React, { useReducer } from 'react';
 import SudokuSelectSheet from './components/block/SudokuSelectSheet';
 import SudokuTable from './components/block/SudokuTable';
-import { SelectAddressContext, SudokuDataContext } from './foundation/context';
-import { INITIAL_SUDOKU_DATA, selectAddressFunction, sudokuDataFunction } from './foundation/reducer';
+import { SelectAddressContext, SudokuDataContext } from './base/context';
+import { INITIAL_SUDOKU_DATA, selectAddressFunction, sudokuDataFunction } from './base/reducer';
 
 function Sudoku() {
 

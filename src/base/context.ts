@@ -3,7 +3,7 @@ import {
   INITIAL_SUDOKU_DATA,
   SelectAddressAction,
   SudokuDataAction
-} from "@/foundation/reducer";
+} from "@/base/reducer";
 
 interface SudokuContextType {
   data: string;

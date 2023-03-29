@@ -1,5 +1,5 @@
 import { Dispatch } from "react"
-import { SelectAddressAction, SudokuDataAction } from "@/foundation/reducer"
+import { SelectAddressAction, SudokuDataAction } from "@/base/reducer"
 import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
 import { SolutionNumberType } from "@/model/type/SolutionNumberType";

@@ -1,6 +1,6 @@
 import { ClassNamesArg, cx } from "@emotion/css";
 import { useContext } from "react";
-import { SelectAddressContext, SudokuDataContext } from '@/foundation/context';
+import { SelectAddressContext, SudokuDataContext } from '@/base/context';
 
 
 export interface SudokuButtonProps {

@@ -1,5 +1,5 @@
-import { convert } from "@/foundation/function";
-import { SudokuDataAction } from "@/foundation/reducer";
+import { convert } from "@/base/function";
+import { SudokuDataAction } from "@/base/reducer";
 import { GridBoxNumKey } from "@/model/GridBoxNumKey";
 import { GridColNumKey } from "@/model/GridColNumKey";
 import { GridKey } from "@/model/GridKey";
