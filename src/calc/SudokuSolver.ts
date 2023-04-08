@@ -1,9 +1,9 @@
 import { SudokuDataAction } from "@/base/reducer";
-import SudokuConfig from "@/calc/SudokuConfig";
+import SudokuTemplate from "@/calc/SudokuTemplate";
 import { Dispatch } from "react";
 
 class SudokuSolver {
-  private config: SudokuConfig = new SudokuConfig;
+  private proxy: SudokuTemplate = new SudokuTemplate();
 
   private dispatch: Dispatch<SudokuDataAction>;
 
@@ -12,9 +12,9 @@ class SudokuSolver {
   }
 
   public *solve(data: string) {
-    this.config.initialize();
-    this.config.preSelectGridOption(data);
-    const matrix = this.config.beanMatrix;
+    this.proxy.initialize();
+    this.proxy.preSelectGridOption(data);
+    const matrix = this.proxy.beanMatrix;
 
     for (const solution of matrix.solveExactCover([])) {
       for (const { gridOption } of solution) {
@@ -25,7 +25,7 @@ class SudokuSolver {
         yield;
       }
     }
-  };
+  }
 }
 
 export default SudokuSolver;
