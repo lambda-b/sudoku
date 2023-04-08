@@ -1,7 +1,7 @@
-import ColumnAdapter from "@/algorithm/adapter/ColumnAdapter";
-import RowAdapter from "@/algorithm/adapter/RowAdapter";
 import DancingLinks from "@/algorithm/DancingLinks";
 import { convert } from "@/base/function";
+import ColumnAdapter from "@/calc/adapter/ColumnAdapter";
+import RowAdapter from "@/calc/adapter/RowAdapter";
 import { GridKey } from "@/model/GridKey";
 import { GridOption } from "@/model/GridOption";
 import { ColType, COL_TYPE, isColType } from "@/model/type/ColType";

@@ -1,5 +1,5 @@
-import RowAdapter from "@/algorithm/adapter/RowAdapter";
 import DancingLinks from "@/algorithm/DancingLinks";
+import RowAdapter from "@/calc/adapter/RowAdapter";
 import { GridKey } from "@/model/GridKey";
 import { GridOption } from "@/model/GridOption";
 import { IdObject } from "@/utility/model/IdObject";

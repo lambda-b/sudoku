@@ -1,5 +1,5 @@
-import ColumnAdapter from "@/algorithm/adapter/ColumnAdapter";
 import DancingLinks from "@/algorithm/DancingLinks";
+import ColumnAdapter from "@/calc/adapter/ColumnAdapter";
 import { GridBoxNumKey } from "@/model/GridBoxNumKey";
 import { GridColNumKey } from "@/model/GridColNumKey";
 import { GridKey } from "@/model/GridKey";
