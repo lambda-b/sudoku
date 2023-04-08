@@ -1,10 +1,9 @@
-import BaseModel from "@/utility/model/BaseModel";
 
 namespace DancingLinks {
 
   export type Node<R extends Axis<R, C>, C extends Axis<R, C>> = [R, C];
 
-  export interface Axis<R extends Axis<R, C>, C extends Axis<R, C>> extends BaseModel {
+  export interface Axis<R extends Axis<R, C>, C extends Axis<R, C>> {
     size: number;
     clear: () => void;
     restore: (param: Node<R, C>[]) => void;

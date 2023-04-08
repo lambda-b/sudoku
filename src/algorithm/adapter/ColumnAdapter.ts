@@ -54,19 +54,4 @@ export default class ColumnAdapter implements DancingLinks.Axis<RowAdapter, Colu
       yield it;
     }
   }
-
-  public equals(obj: Object) {
-    if (this === obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof ColumnAdapter)) {
-      return false;
-    }
-
-    const other = obj as ColumnAdapter;
-    return this.col.equals(other.col);
-  }
 }
