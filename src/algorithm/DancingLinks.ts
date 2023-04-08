@@ -41,16 +41,9 @@ namespace DancingLinks {
       for (const [_, col] of leadingRow.getReverseNodes()) {
         const restorations = restorationsList.pop();
         if (restorations) {
-          col.restore(restorations);
           this.headers.add(col);
           for (const [row, _] of restorations) {
-            const nodes: Node<R, C>[] = [];
-            for (const node of row.getForwardNodes()) {
-              // すでにrestoreしたcolの重複を避ける
-              if (!col.equals(node[1])) {
-                nodes.push(node);
-              }
-            }
+            const nodes = Array.from(row.getForwardNodes());
             row.restore(nodes);
           }
         }
