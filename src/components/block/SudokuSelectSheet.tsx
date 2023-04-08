@@ -1,4 +1,3 @@
-import React from 'react';
 import SudokuButton from '@/components/atom/SudokuButton';
 
 const SudokuSelectSheet = () => {

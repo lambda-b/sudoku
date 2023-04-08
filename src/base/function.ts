@@ -1,8 +1,8 @@
-import { Dispatch } from "react"
-import { SelectAddressAction, SudokuDataAction } from "@/base/reducer"
+import { SelectAddressAction, SudokuDataAction } from "@/base/reducer";
 import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
 import { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import { Dispatch } from "react";
 
 export const handleKeyDown = (
   event: KeyboardEvent,

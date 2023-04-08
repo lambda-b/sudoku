@@ -1,9 +1,9 @@
-import { createContext, Dispatch } from "react";
 import {
   INITIAL_SUDOKU_DATA,
   SelectAddressAction,
   SudokuDataAction
 } from "@/base/reducer";
+import { createContext, Dispatch } from "react";
 
 interface SudokuContextType {
   data: string;
