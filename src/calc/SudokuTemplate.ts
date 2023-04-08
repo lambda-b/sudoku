@@ -10,12 +10,18 @@ import { isSolutionNumberType, SolutionNumberType, SOLUTION_NUMBERS } from "@/mo
 import { IdMap } from "@/utility/IdMap";
 import { IdSet } from "@/utility/IdSet";
 
-class SudokuConfig {
+class SudokuTemplate {
   private feasibles = new IdMap<GridKey, GridOption[]>();
 
   private headers = new IdSet<ColumnAdapter>();
 
   private matrix = new DancingLinks.Matrix<RowAdapter, ColumnAdapter>(this.headers);
+
+  constructor() {
+    ColumnAdapter.setFeasibles(this.feasibles);
+    RowAdapter.setFeasible(this.feasibles);
+    this.initialize();
+  }
 
   private get allCovers() {
     const covers: RowAdapter[] = [];
@@ -32,12 +38,7 @@ class SudokuConfig {
     return covers;
   }
 
-  public initialize() {
-    this.feasibles.clear();
-    ColumnAdapter.setFeasibles(this.feasibles);
-    this.headers.clear();
-    RowAdapter.setFeasible(this.feasibles);
-
+  private initialize() {
     const covers = this.allCovers;
     for (const row of covers) {
       for (const [_, col] of row.getForwardNodes()) {
@@ -50,9 +51,9 @@ class SudokuConfig {
         this.headers.add(col);
       }
     }
-  };
+  }
 
-  public preSelectGridOption(data: string) {
+  public setup(data: string) {
     const grid = convert(data);
     grid.forEach((row, i) => {
       row.forEach((num, j) => {
@@ -66,11 +67,13 @@ class SudokuConfig {
         }
       });
     });
-  };
+  }
 
-  get beanMatrix() {
-    return this.matrix;
+  public *solveSudoku(): IterableIterator<GridOption[]> {
+    for (const solution of this.matrix.solveExactCover([])) {
+      yield solution.map(row => row.gridOption);
+    }
   }
 }
 
-export default SudokuConfig;
+export default SudokuTemplate;

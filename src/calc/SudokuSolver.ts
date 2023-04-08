@@ -3,8 +3,6 @@ import SudokuTemplate from "@/calc/SudokuTemplate";
 import { Dispatch } from "react";
 
 class SudokuSolver {
-  private proxy: SudokuTemplate = new SudokuTemplate();
-
   private dispatch: Dispatch<SudokuDataAction>;
 
   constructor(dispatch: Dispatch<SudokuDataAction>) {
@@ -12,13 +10,12 @@ class SudokuSolver {
   }
 
   public *solve(data: string) {
-    this.proxy.initialize();
-    this.proxy.preSelectGridOption(data);
-    const matrix = this.proxy.beanMatrix;
+    const template = new SudokuTemplate();
+    template.setup(data);
 
-    for (const solution of matrix.solveExactCover([])) {
-      for (const { gridOption } of solution) {
-        const { row, col, num } = gridOption;
+    for (const solution of template.solveSudoku()) {
+      for (const option of solution) {
+        const { row, col, num } = option;
         const address = row * 9 + col;
         const cellNumber = num;
         this.dispatch({ address, cellNumber });
