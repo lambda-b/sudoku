@@ -18,8 +18,6 @@ class SudokuTemplate {
   private matrix = new DancingLinks.Matrix<RowAdapter, ColumnAdapter>(this.headers);
 
   constructor() {
-    ColumnAdapter.setFeasibles(this.feasibles);
-    RowAdapter.setFeasible(this.feasibles);
     this.initialize();
   }
 
@@ -30,7 +28,7 @@ class SudokuTemplate {
       for (const col of COL_TYPE) {
         for (const num of SOLUTION_NUMBERS) {
           const option = new GridOption(row, col, num);
-          covers.push(new RowAdapter(option));
+          covers.push(new RowAdapter(option, this.feasibles));
         }
       }
     }
@@ -63,7 +61,7 @@ class SudokuTemplate {
             j as ColType,
             num as SolutionNumberType,
           );
-          this.matrix.select(new RowAdapter(option));
+          this.matrix.select(new RowAdapter(option, this.feasibles));
         }
       });
     });

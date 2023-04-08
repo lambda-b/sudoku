@@ -11,14 +11,11 @@ import { BoxType } from "@/model/type/BoxType";
 export default class RowAdapter implements DancingLinks.Axis<RowAdapter, ColumnAdapter> {
   private row: GridOption;
 
-  private static feasibles: Map<GridKey, GridOption[]>;
+  private feasibles: Map<GridKey, GridOption[]>;
 
-  constructor(row: GridOption) {
+  constructor(row: GridOption, feasibles: Map<GridKey, GridOption[]>) {
     this.row = row;
-  }
-
-  public static setFeasible(feasbiles: Map<GridKey, GridOption[]>) {
-    RowAdapter.feasibles = feasbiles;
+    this.feasibles = feasibles;
   }
 
   get gridOption() {
@@ -31,29 +28,29 @@ export default class RowAdapter implements DancingLinks.Axis<RowAdapter, ColumnA
 
   public clear() {
     for (const [_, col] of this.getForwardNodes()) {
-      const options = (RowAdapter.feasibles.get(col.gridKey) ?? []).filter(
+      const options = (this.feasibles.get(col.gridKey) ?? []).filter(
         (option) => !option.equals(this.gridOption)
       );
-      RowAdapter.feasibles.set(col.gridKey, options);
+      this.feasibles.set(col.gridKey, options);
     }
   }
 
   public restore(param: DancingLinks.Node<RowAdapter, ColumnAdapter>[]) {
     for (const [_, col] of param) {
-      const options = RowAdapter.feasibles.get(col.gridKey) ?? [];
+      const options = this.feasibles.get(col.gridKey) ?? [];
       options.push(this.gridOption);
-      RowAdapter.feasibles.set(col.gridKey, options);
+      this.feasibles.set(col.gridKey, options);
     }
   }
 
   public *getForwardNodes(): IterableIterator<DancingLinks.Node<RowAdapter, ColumnAdapter>> {
     const { row, col, num } = this.gridOption;
-    yield [this, new ColumnAdapter(new GridRowColKey(row, col))];
-    yield [this, new ColumnAdapter(new GridRowNumKey(row, num))];
-    yield [this, new ColumnAdapter(new GridColNumKey(col, num))];
+    yield [this, new ColumnAdapter(new GridRowColKey(row, col), this.feasibles)];
+    yield [this, new ColumnAdapter(new GridRowNumKey(row, num), this.feasibles)];
+    yield [this, new ColumnAdapter(new GridColNumKey(col, num), this.feasibles)];
     const b = 3;
     const box = Math.floor(row / b) * b + Math.floor(col / b);
-    yield [this, new ColumnAdapter(new GridBoxNumKey(box as BoxType, num))];
+    yield [this, new ColumnAdapter(new GridBoxNumKey(box as BoxType, num), this.feasibles)];
   }
 
   public *getReverseNodes(): IterableIterator<DancingLinks.Node<RowAdapter, ColumnAdapter>> {
