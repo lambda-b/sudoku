@@ -1,8 +1,9 @@
 import { ColType } from "@/model/type/ColType";
 import { RowType } from "@/model/type/RowType";
 import { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import BaseModel from "@/utility/model/BaseModel";
 
-export class GridOption {
+export class GridOption implements BaseModel {
   private _row: RowType;
   private _col: ColType;
   private _num: SolutionNumberType;
