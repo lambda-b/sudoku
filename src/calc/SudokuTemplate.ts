@@ -1,57 +1,35 @@
-import DancingLinks from "@/algorithm/DancingLinks";
+import { Column } from "@/algorithm/dancinglinks/Column";
+import { Matrix } from "@/algorithm/dancinglinks/Matrix";
 import { convert } from "@/base/function";
-import ColumnAdapter from "@/calc/adapter/ColumnAdapter";
-import RowAdapter from "@/calc/adapter/RowAdapter";
+import { ColumnAdapter } from "@/calc/adapter/ColumnAdapter";
+import { RowAdapter } from "@/calc/adapter/RowAdapter";
+import { SudokuColumnFactory } from "@/calc/factory/SudokuColumnFactory";
+import { SudokuRowFactory } from "@/calc/factory/SudokuRowFactory";
 import { GridKey } from "@/model/GridKey";
 import { GridOption } from "@/model/GridOption";
-import { ColType, COL_TYPE, isColType } from "@/model/type/ColType";
-import { isRowType, RowType, ROW_TYPE } from "@/model/type/RowType";
-import { isSolutionNumberType, SolutionNumberType, SOLUTION_NUMBERS } from "@/model/type/SolutionNumberType";
+import { ColType, isColType } from "@/model/type/ColType";
+import { RowType, isRowType } from "@/model/type/RowType";
+import { SolutionNumberType, isSolutionNumberType } from "@/model/type/SolutionNumberType";
 import { IdMap } from "@/utility/IdMap";
-import { IdSet } from "@/utility/IdSet";
 
 class SudokuTemplate {
   private feasibles = new IdMap<GridKey, GridOption[]>();
 
-  private headers = new IdSet<ColumnAdapter>();
+  private headers = new Set<Column>();
 
-  private matrix = new DancingLinks.Matrix<RowAdapter, ColumnAdapter>(this.headers);
+  private matrix = new Matrix(this.headers);
 
-  constructor() {
-    this.initialize();
-  }
-
-  private get allCovers() {
-    const covers: RowAdapter[] = [];
-
-    for (const row of ROW_TYPE) {
-      for (const col of COL_TYPE) {
-        for (const num of SOLUTION_NUMBERS) {
-          const option = new GridOption(row, col, num);
-          covers.push(new RowAdapter(option, this.feasibles));
-        }
-      }
-    }
-
-    return covers;
-  }
-
-  private initialize() {
-    const covers = this.allCovers;
+  public setup(data: string) {
+    const allColumns = SudokuColumnFactory.createAllColumns();
+    const covers = SudokuRowFactory.createAllRows(ColumnAdapter.converter(allColumns));
     for (const row of covers) {
-      for (const [_, col] of row.getForwardNodes()) {
-        const equivalences = this.feasibles.get(col.gridKey);
-        if (equivalences) {
-          equivalences.push(row.gridOption);
-        } else {
-          this.feasibles.set(col.gridKey, [row.gridOption]);
-        }
+      for (const { col } of row.getForwardNodes()) {
         this.headers.add(col);
       }
     }
-  }
 
-  public setup(data: string) {
+    const optionMapper = RowAdapter.converter(covers);
+
     const grid = convert(data);
     grid.forEach((row, i) => {
       row.forEach((num, j) => {
@@ -61,7 +39,10 @@ class SudokuTemplate {
             j as ColType,
             num as SolutionNumberType,
           );
-          this.matrix.select(new RowAdapter(option, this.feasibles));
+          const r = optionMapper.get(option);
+          if (r) {
+            this.matrix.select(r);
+          }
         }
       });
     });
@@ -69,7 +50,7 @@ class SudokuTemplate {
 
   public *solveSudoku(): IterableIterator<GridOption[]> {
     for (const solution of this.matrix.solveExactCover([])) {
-      yield solution.map(row => row.gridOption);
+      yield solution.map(row => (row as RowAdapter).gridOption);
     }
   }
 }

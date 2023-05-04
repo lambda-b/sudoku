@@ -1,54 +1,25 @@
-import DancingLinks from "@/algorithm/DancingLinks";
-import RowAdapter from "@/calc/adapter/RowAdapter";
+import { Column } from "@/algorithm/dancinglinks/Column";
 import { GridKey } from "@/model/GridKey";
-import { GridOption } from "@/model/GridOption";
-import { IdObject } from "@/utility/model/IdObject";
+import { IdMap } from "@/utility/IdMap";
 
-export default class ColumnAdapter implements DancingLinks.Axis<RowAdapter, ColumnAdapter>, IdObject {
+export class ColumnAdapter extends Column {
   private col: GridKey;
 
-  private feasibles: Map<GridKey, GridOption[]>
-
-  constructor(col: GridKey, feasibles: Map<GridKey, GridOption[]>) {
+  public constructor(col: GridKey) {
+    super();
     this.col = col;
-    this.feasibles = feasibles;
   }
 
-  get gridKey() {
+  public get gridKey() {
     return this.col;
   }
 
-  get id() {
-    return this.gridKey.id;
-  }
-
-  get size() {
-    return this.feasibles.get(this.gridKey)?.length ?? 0;
-  }
-
-  public clear() {
-    this.feasibles.delete(this.gridKey);
-  }
-
-  public restore(param: DancingLinks.Node<RowAdapter, ColumnAdapter>[]) {
-    const options: GridOption[] = [];
-    for (const [row, _] of param) {
-      options.push(row.gridOption);
+  public static converter(cols: ColumnAdapter[]) {
+    const mapper = new IdMap<GridKey, ColumnAdapter>();
+    for (const c of cols) {
+      mapper.set(c.gridKey, c);
     }
-    this.feasibles.set(this.gridKey, options);
-  }
 
-  public *getForwardNodes(): IterableIterator<DancingLinks.Node<RowAdapter, ColumnAdapter>> {
-    const options = this.feasibles.get(this.gridKey) ?? [];
-    for (const option of options) {
-      yield [new RowAdapter(option, this.feasibles), this];
-    }
-  }
-
-  public *getReverseNodes(): IterableIterator<DancingLinks.Node<RowAdapter, ColumnAdapter>> {
-    const reverseList = Array.from(this.getForwardNodes()).reverse();
-    for (const it of reverseList) {
-      yield it;
-    }
+    return mapper;
   }
 }
