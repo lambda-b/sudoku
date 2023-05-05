@@ -41,4 +41,16 @@ export class Column {
     const size = Array.from(this.getForwardNodes()).length;
     return size;
   }
+
+  public static minimum(columns: Set<Column>) {
+    let minCol = null;
+    let minSize = Infinity;
+
+    for (const col of columns) {
+      minCol = col.size < minSize ? col : minCol;
+      minSize = Math.min(col.size, minSize);
+    }
+
+    return minCol;
+  }
 }

@@ -49,10 +49,8 @@ export class Matrix {
     if (this.headers.size === 0) {
       yield solution;
     } else {
-      const minCol = Array.from(this.headers).reduce((accumulator, current) =>
-        accumulator.size < current.size ? accumulator : current
-      );
-      for (const { row } of minCol.getForwardNodes()) {
+      const minCol = Column.minimum(this.headers);
+      for (const { row } of minCol?.getForwardNodes() ?? []) {
         solution.push(row);
         const restorationsList = this.select(row);
         for (const rows of this.solveExactCover(solution)) {
