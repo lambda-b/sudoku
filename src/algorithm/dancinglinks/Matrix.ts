@@ -16,7 +16,7 @@ export class Matrix {
     const restorationsList: LinkNode[][] = [];
     for (const { col } of selected.getForwardNodes()) {
       const restorations: LinkNode[] = [];
-      for (const node of col.getForwardNodes()) {
+      for (const node of col) {
         restorations.push(node);
         node.row.clear();
       }
@@ -50,7 +50,7 @@ export class Matrix {
       yield solution;
     } else {
       const minCol = Column.minimum(this.headers);
-      for (const { row } of minCol?.getForwardNodes() ?? []) {
+      for (const { row } of minCol ?? []) {
         solution.push(row);
         const restorationsList = this.select(row);
         for (const rows of this.solveExactCover(solution)) {

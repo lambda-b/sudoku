@@ -16,7 +16,7 @@ export class Column {
     this._origin = origin;
   }
 
-  public *getForwardNodes() {
+  public *[Symbol.iterator]() {
     if (this.origin === null) {
       return;
     }
@@ -32,7 +32,7 @@ export class Column {
   }
 
   public get size() {
-    const size = Array.from(this.getForwardNodes()).length;
+    const size = Array.from(this).length;
     return size;
   }
 
