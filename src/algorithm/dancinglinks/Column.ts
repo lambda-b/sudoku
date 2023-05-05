@@ -1,8 +1,7 @@
 import { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
 
 /**
- * 列クラス<br>
- * 列処理のHelper的役割を担う
+ * 列クラス
  */
 export class Column {
 
