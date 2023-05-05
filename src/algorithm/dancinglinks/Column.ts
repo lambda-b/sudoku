@@ -31,12 +31,6 @@ export class Column {
     }
   }
 
-  public clear() {
-    for (const node of this.getForwardNodes()) {
-      node.clearHorizontal();
-    }
-  }
-
   public get size() {
     const size = Array.from(this.getForwardNodes()).length;
     return size;

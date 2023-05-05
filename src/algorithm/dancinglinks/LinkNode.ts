@@ -48,20 +48,6 @@ export class LinkNode {
   }
 
   /**
-   * 左右の接続情報を変更し、自身を横の関係からノードとして無効化する
-   */
-  public clearHorizontal() {
-    if (this.row.origin === this) {
-      this.row.setOrigin(this === this.right ? null : this.right);
-    }
-    this.left._right = this._right;
-    this.right._left = this._left;
-
-    this._left = this;
-    this._right = this;
-  }
-
-  /**
    * 上下の接続情報を新しく作成
    */
   public restoreVertical() {
@@ -78,7 +64,7 @@ export class LinkNode {
   /**
    * 左右の接続情報を新しく作成
    */
-  public restoreHorizontal() {
+  private restoreHorizontal() {
     if (this.row.origin) {
       this._left = this.row.origin.left;
       this._right = this.row.origin;
