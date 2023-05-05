@@ -1,5 +1,5 @@
 import { Column } from "@/algorithm/dancinglinks/Column";
-import { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
+import { Restores } from "@/algorithm/dancinglinks/Restores";
 import { Row } from "@/algorithm/dancinglinks/Row";
 
 
@@ -13,9 +13,9 @@ export class Matrix {
 
   public select(selected: Row) {
     // 現在の戦略に矛盾が生じた際に元の状態を復元するためのリスト
-    const restorationsList: LinkNode[][] = [];
+    const restorationsList: Restores[] = [];
     for (const { col } of selected) {
-      const restorations: LinkNode[] = [];
+      const restorations = new Restores(col);
       for (const node of col) {
         restorations.push(node);
         node.row.clear();
@@ -27,11 +27,10 @@ export class Matrix {
     return restorationsList;
   }
 
-  public deselect(deselected: Row, restorationsList: LinkNode[][]) {
-    for (const { col } of deselected.reverse()) {
-      const restorations = restorationsList.pop();
+  public deselect(restorationsList: Restores[]) {
+    for (const restorations of restorationsList.reverse()) {
       if (restorations) {
-        this.headers.add(col);
+        this.headers.add(restorations.col);
         for (const { row } of restorations) {
           row.restore();
         }
@@ -56,7 +55,7 @@ export class Matrix {
         for (const rows of this.solveExactCover(solution)) {
           yield rows;
         }
-        this.deselect(row, restorationsList);
+        this.deselect(restorationsList);
         solution.pop();
       }
     }

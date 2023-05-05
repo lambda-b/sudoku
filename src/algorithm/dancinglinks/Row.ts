@@ -31,22 +31,6 @@ export class Row {
     }
   }
 
-
-  public *reverse() {
-    if (this.origin === null) {
-      return;
-    }
-
-    const origin = this.origin;
-    const rtn = [origin];
-    for (let node = this.origin.left; node !== this.origin; node = node.left) {
-      rtn.push(node);
-    }
-    for (const node of rtn) {
-      yield node;
-    }
-  }
-
   public clear() {
     for (const node of this) {
       node.clearVertical();
