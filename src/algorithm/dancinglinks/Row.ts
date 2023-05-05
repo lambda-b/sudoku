@@ -16,7 +16,7 @@ export class Row {
     this._origin = origin;
   }
 
-  public *getForwardNodes() {
+  public *[Symbol.iterator]() {
     if (this.origin === null) {
       return;
     }
@@ -32,7 +32,7 @@ export class Row {
   }
 
 
-  public *getReverseNodes() {
+  public *reverse() {
     if (this.origin === null) {
       return;
     }
@@ -48,13 +48,13 @@ export class Row {
   }
 
   public clear() {
-    for (const node of this.getForwardNodes()) {
+    for (const node of this) {
       node.clearVertical();
     }
   }
 
   public restore() {
-    for (const node of this.getForwardNodes()) {
+    for (const node of this) {
       node.restoreVertical();
     }
   }

@@ -14,7 +14,7 @@ export class Matrix {
   public select(selected: Row) {
     // 現在の戦略に矛盾が生じた際に元の状態を復元するためのリスト
     const restorationsList: LinkNode[][] = [];
-    for (const { col } of selected.getForwardNodes()) {
+    for (const { col } of selected) {
       const restorations: LinkNode[] = [];
       for (const node of col) {
         restorations.push(node);
@@ -28,7 +28,7 @@ export class Matrix {
   }
 
   public deselect(deselected: Row, restorationsList: LinkNode[][]) {
-    for (const { col } of deselected.getReverseNodes()) {
+    for (const { col } of deselected.reverse()) {
       const restorations = restorationsList.pop();
       if (restorations) {
         this.headers.add(col);
