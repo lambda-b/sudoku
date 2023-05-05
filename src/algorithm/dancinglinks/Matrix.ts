@@ -11,10 +11,10 @@ export class Matrix {
     this.headers = headers;
   }
 
-  public select(leadingRow: Row) {
+  public select(selected: Row) {
     // 現在の戦略に矛盾が生じた際に元の状態を復元するためのリスト
     const restorationsList: LinkNode[][] = [];
-    for (const { col } of leadingRow.getForwardNodes()) {
+    for (const { col } of selected.getForwardNodes()) {
       const restorations: LinkNode[] = [];
       for (const node of col.getForwardNodes()) {
         restorations.push(node);
@@ -27,8 +27,8 @@ export class Matrix {
     return restorationsList;
   }
 
-  public deselect(leadingRow: Row, restorationsList: LinkNode[][]) {
-    for (const { col } of leadingRow.getReverseNodes()) {
+  public deselect(deselected: Row, restorationsList: LinkNode[][]) {
+    for (const { col } of deselected.getReverseNodes()) {
       const restorations = restorationsList.pop();
       if (restorations) {
         this.headers.add(col);
