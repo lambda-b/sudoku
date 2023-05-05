@@ -2,7 +2,7 @@ import { ColType } from "@/model/type/ColType";
 import { RowType } from "@/model/type/RowType";
 import { SolutionNumberType } from "@/model/type/SolutionNumberType";
 import BaseModel from "@/utility/model/BaseModel";
-import { IdObject } from "@/utility/model/IdObject";
+import { IdObject, equals } from "@/utility/model/IdObject";
 
 export class GridOption implements BaseModel, IdObject {
   private _row: RowType;
@@ -32,17 +32,6 @@ export class GridOption implements BaseModel, IdObject {
   }
 
   public equals(obj: Object) {
-    if (this === obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof GridOption)) {
-      return false;
-    }
-
-    const other = obj as GridOption;
-    return this.id === other.id;
+    return equals(this, obj);
   }
 }

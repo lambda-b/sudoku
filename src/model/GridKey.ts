@@ -1,6 +1,6 @@
 import { PointType } from "@/model/type/PointType";
 import BaseModel from "@/utility/model/BaseModel";
-import { IdObject, IdType } from "@/utility/model/IdObject";
+import { IdObject, IdType, equals } from "@/utility/model/IdObject";
 
 export abstract class GridKey implements IdObject, BaseModel {
   private _type: PointType;
@@ -16,17 +16,6 @@ export abstract class GridKey implements IdObject, BaseModel {
   }
 
   public equals(obj: Object) {
-    if (this === obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof GridKey)) {
-      return false;
-    }
-
-    const other = obj as GridKey;
-    return this.id === other.id;
+    return equals(this, obj);
   }
 }
