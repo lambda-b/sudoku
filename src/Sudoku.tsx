@@ -1,13 +1,11 @@
 import SudokuSolver from '@/calc/SudokuSolver';
 import { useReducer, useState } from 'react';
-import { SelectAddressContext, SudokuDataContext } from './base/context';
-import { INITIAL_SUDOKU_DATA, selectAddressFunction, sudokuDataFunction } from './base/reducer';
+import { SudokuDataContext } from './base/context';
+import { INITIAL_SUDOKU_DATA, sudokuDataFunction } from './base/reducer';
 import SudokuSelectSheet from './components/block/SudokuSelectSheet';
 import SudokuTable from './components/block/SudokuTable';
 
 function Sudoku() {
-
-  const [selectedAddress, dispatchAddress] = useReducer(selectAddressFunction, -1);
 
   const [data, dispatchData] = useReducer(sudokuDataFunction, INITIAL_SUDOKU_DATA);
 
@@ -30,10 +28,8 @@ function Sudoku() {
         onClick={onClickSolve}
       >Solve</button>
       <SudokuDataContext.Provider value={{ data, dispatchData }}>
-        <SelectAddressContext.Provider value={{ selectedAddress, dispatchAddress }}>
-          <SudokuTable />
-          <SudokuSelectSheet />
-        </SelectAddressContext.Provider>
+        <SudokuTable />
+        <SudokuSelectSheet />
       </SudokuDataContext.Provider>
     </div>
   );
