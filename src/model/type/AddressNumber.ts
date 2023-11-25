@@ -1,4 +1,4 @@
-export const ADDRESS_NUMBER = [...Array(81)].map((_, i) => i);
+export const ADDRESS_NUMBER = [...[...Array(81)].map((_, i) => i)] as const;
 
 export type AddressNumberType = typeof ADDRESS_NUMBER[number];
 
