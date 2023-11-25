@@ -1,6 +1,6 @@
-import { SelectAddressContext, SudokuDataContext } from '@/base/context';
+import { cellNumberState } from '@/base/recoil';
 import { ClassNamesArg, cx } from "@emotion/css";
-import { useContext } from "react";
+import { useSetRecoilState } from 'recoil';
 
 
 export interface SudokuButtonProps {
@@ -13,18 +13,16 @@ const SudokuButton = ({
   cellNumber,
 }: SudokuButtonProps) => {
 
-  const { dispatchData } = useContext(SudokuDataContext);
+  const setCell = useSetRecoilState(cellNumberState);
 
-  const { selectedAddress } = useContext(SelectAddressContext);
-
-  const handleInput = (value: number) => {
-    dispatchData({ address: selectedAddress, cellNumber: value });
+  const handleInput = () => {
+    setCell(cellNumber);
   };
 
   return (
     <div className={cx("sudoku-cell", className)}>
       <button className="sudoku-cell-inner"
-        onClick={() => handleInput(cellNumber)}
+        onClick={handleInput}
       >
         {cellNumber}
       </button>

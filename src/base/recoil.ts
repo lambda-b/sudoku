@@ -33,6 +33,23 @@ export const cellState = selectorFamily<Cell, AddressNumberType>({
   },
 });
 
+export const cellNumberState = selector<number>({
+  key: "cell-number",
+  get: ({ get }) => {
+    const address = get(addressAtom);
+    const cell = get(cellAtom(address));
+    return cell.cellNumber;
+  },
+  set: ({ get, set }, cellNumber) => {
+    if (cellNumber instanceof DefaultValue) {
+      return;
+    }
+    const address = get(addressAtom);
+    const cell = get(cellAtom(address));
+    set(cellAtom(address), { ...cell, cellNumber });
+  },
+});
+
 export const cellWholeState = selector<Cell | undefined>({
   key: "cell-whole-selector",
   get: () => undefined,
