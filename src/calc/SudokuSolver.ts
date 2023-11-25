@@ -1,10 +1,10 @@
-import { Cell } from "@/base/recoil/cell";
 import SudokuTemplate from "@/calc/SudokuTemplate";
+import { SudokuCellModel } from "@/model/SudokuCellModel";
 
 class SudokuSolver {
-  private dispatch: (param: Cell) => void;
+  private dispatch: (param: SudokuCellModel) => void;
 
-  constructor(dispatch: (param: Cell) => void) {
+  constructor(dispatch: (param: SudokuCellModel) => void) {
     this.dispatch = dispatch;
   }
 

@@ -1,18 +1,12 @@
 import { addressAtom } from "@/base/recoil/address";
+import { SudokuCellModel } from "@/model/SudokuCellModel";
 import { ADDRESS_NUMBER, AddressNumberType } from "@/model/type/AddressNumber";
 import { DefaultValue, atomFamily, selector, selectorFamily } from "recoil";
-
 
 export const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
-export interface Cell {
-  cellNumber: number,
-  address: AddressNumberType,
-  isSelected: boolean,
-}
-
-export const cellAtom = atomFamily<Cell, AddressNumberType>({
+export const cellAtom = atomFamily<SudokuCellModel, AddressNumberType>({
   key: "cell-atom",
   default: address => {
     return {
@@ -23,7 +17,7 @@ export const cellAtom = atomFamily<Cell, AddressNumberType>({
   },
 });
 
-export const cellState = selectorFamily<Cell, AddressNumberType>({
+export const cellState = selectorFamily<SudokuCellModel, AddressNumberType>({
   key: "cell",
   get: address => ({ get }) => get(cellAtom(address)),
   set: address => ({ get, set }, cell) => {
