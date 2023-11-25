@@ -1,5 +1,5 @@
 import { addressState } from "@/base/recoil/address";
-import { cellState } from "@/base/recoil/cell";
+import { cellNumberState } from "@/base/recoil/cell";
 import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
 import { AddressNumberType, isAddressNumber } from "@/model/type/AddressNumber";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
@@ -46,15 +46,14 @@ export const handleRecoilByKey = (
     return;
   }
 
-  const cell = getLoadable(cellState(address)).contents;
   if (event.key === 'Backspace') {
-    set(cellState(address), { ...cell, cellNumber: 0 });
+    set(cellNumberState, 0);
     return;
   }
 
   if (isOneDigitNumberType(event.key)) {
     const cellNumber = Number(event.key);
-    set(cellState(address), { ...cell, cellNumber });
+    set(cellNumberState, cellNumber);
     return;
   }
 };
