@@ -1,11 +1,10 @@
 import { Cell } from "@/base/recoil";
 import SudokuTemplate from "@/calc/SudokuTemplate";
-import { SetterOrUpdater } from "recoil";
 
 class SudokuSolver {
-  private dispatch: SetterOrUpdater<Cell | undefined>;
+  private dispatch: (param: Cell) => void;
 
-  constructor(dispatch: SetterOrUpdater<Cell | undefined>) {
+  constructor(dispatch: (param: Cell) => void) {
     this.dispatch = dispatch;
   }
 

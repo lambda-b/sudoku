@@ -1,13 +1,15 @@
-import { cellWholeState, tableState } from "@/base/recoil";
+import { Cell, cellState, tableState } from "@/base/recoil";
 import SudokuSolver from "@/calc/SudokuSolver";
 import { useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilCallback, useRecoilValue } from "recoil";
 
 export const SudokuSolveButton = () => {
 
   const data = useRecoilValue(tableState);
 
-  const setCell = useSetRecoilState(cellWholeState);
+  const setCell = useRecoilCallback(({ set }) => {
+    return (cell: Cell) => set(cellState(cell.address), cell);
+  }, []);
 
   const [solver] = useState<SudokuSolver>(new SudokuSolver(setCell));
 

@@ -52,22 +52,6 @@ export const cellNumberState = selector<number>({
   },
 });
 
-export const cellWholeState = selector<Cell | undefined>({
-  key: "cell-whole-selector",
-  get: () => undefined,
-  set: ({ set }, cell) => {
-    if (!cell) {
-      return;
-    }
-
-    if (cell instanceof DefaultValue) {
-      return;
-    }
-
-    set(cellState(cell.address), cell);
-  }
-})
-
 export const tableState = selector<string>({
   key: "table-selector",
   get: ({ get }) => {
