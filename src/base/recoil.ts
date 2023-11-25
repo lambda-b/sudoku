@@ -1,6 +1,8 @@
-import { INITIAL_SUDOKU_DATA } from "@/base/reducer";
 import { ADDRESS_NUMBER, AddressNumberType } from "@/model/type/AddressNumber";
 import { DefaultValue, atom, atomFamily, selector, selectorFamily } from "recoil";
+
+export const INITIAL_SUDOKU_DATA =
+  "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
 export interface Cell {
   cellNumber: number;
