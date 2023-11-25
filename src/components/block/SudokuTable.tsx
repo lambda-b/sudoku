@@ -1,16 +1,15 @@
-import { keyOperationSelector } from "@/base/keyboard";
-import { tableState } from "@/base/recoil";
+import { handleRecoilByKey } from "@/base/keyboard";
 import SudokuCell from "@/components/atom/SudokuCell";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilCallback } from "recoil";
 
 const shape = [...Array(9)].map(() => [...Array(9)]);
 
 const SudokuTable = () => {
 
-  const setSudokuData = useSetRecoilState(tableState);
-
-  const handleKey = useSetRecoilState(keyOperationSelector);
+  const handleKey = useRecoilCallback((opts) => {
+    return (event: KeyboardEvent) => handleRecoilByKey(opts, event);
+  }, []);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKey, false);

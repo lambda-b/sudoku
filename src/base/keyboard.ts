@@ -2,7 +2,7 @@ import { addressState, cellState } from "@/base/recoil";
 import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
 import { AddressNumberType, isAddressNumber } from "@/model/type/AddressNumber";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
-import { DefaultValue, selector } from "recoil";
+import { CallbackInterface } from "recoil";
 
 const selectAddressFunction = (
   address: AddressNumberType | -1,
@@ -27,41 +27,33 @@ const selectAddressFunction = (
   }
 };
 
-export const keyOperationSelector = selector<KeyboardEvent | undefined>({
-  key: "key-operation",
-  get: () => undefined,
-  set: ({ get, set }, event) => {
+export const handleRecoilByKey = (
+  { snapshot, set }: CallbackInterface,
+  event: KeyboardEvent,
+) => {
 
-    if (!event) {
-      return;
-    }
+  const { getLoadable } = snapshot;
+  const address = getLoadable(addressState).contents;
+  if (!isAddressNumber(address)) {
+    return;
+  }
 
-    if (event instanceof DefaultValue) {
-      return;
-    }
+  if (isAddressMoveKeyType(event.key)) {
+    const type = event.key as AddressMoveKeyType;
+    const newAddress = selectAddressFunction(address, type);
+    set(addressState, newAddress);
+    return;
+  }
 
-    const address = get(addressState);
-    if (!isAddressNumber(address)) {
-      return;
-    }
+  const cell = getLoadable(cellState(address)).contents;
+  if (event.key === 'Backspace') {
+    set(cellState(address), { ...cell, cellNumber: 0 });
+    return;
+  }
 
-    if (isAddressMoveKeyType(event.key)) {
-      const type = event.key as AddressMoveKeyType;
-      const newAddress = selectAddressFunction(address, type);
-      set(addressState, newAddress);
-      return;
-    }
-
-    const cell = get(cellState(address));
-    if (event.key === 'Backspace') {
-      set(cellState(address), { ...cell, cellNumber: 0 });
-      return;
-    }
-
-    if (isOneDigitNumberType(event.key)) {
-      const cellNumber = Number(event.key);
-      set(cellState(address), { ...cell, cellNumber });
-      return;
-    }
-  },
-});
+  if (isOneDigitNumberType(event.key)) {
+    const cellNumber = Number(event.key);
+    set(cellState(address), { ...cell, cellNumber });
+    return;
+  }
+};

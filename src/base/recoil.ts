@@ -14,7 +14,7 @@ const cellAtom = atomFamily<Cell, AddressNumberType>({
   key: "cell",
   default: address => {
     return {
-      cellNumber: 0,
+      cellNumber: Number(INITIAL_SUDOKU_DATA[address]),
       address,
       isSelected: false,
     };
