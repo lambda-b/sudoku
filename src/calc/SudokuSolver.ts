@@ -1,11 +1,10 @@
-import { SudokuDataAction } from "@/base/reducer";
 import SudokuTemplate from "@/calc/SudokuTemplate";
-import { Dispatch } from "react";
+import { SudokuCellModel } from "@/model/SudokuCellModel";
 
 class SudokuSolver {
-  private dispatch: Dispatch<SudokuDataAction>;
+  private dispatch: (param: SudokuCellModel) => void;
 
-  constructor(dispatch: Dispatch<SudokuDataAction>) {
+  constructor(dispatch: (param: SudokuCellModel) => void) {
     this.dispatch = dispatch;
   }
 
@@ -18,7 +17,8 @@ class SudokuSolver {
         const { row, col, num } = option;
         const address = row * 9 + col;
         const cellNumber = num;
-        this.dispatch({ address, cellNumber });
+        const isSelected = false;
+        this.dispatch({ address, cellNumber, isSelected });
         yield;
       }
     }

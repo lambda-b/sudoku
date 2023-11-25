@@ -1,38 +1,28 @@
-import { SelectAddressContext, SudokuDataContext } from "@/base/context";
-import { convert, handleKeyDown } from "@/base/function";
+import { handleRecoilByKey } from "@/base/keyboard";
 import SudokuCell from "@/components/atom/SudokuCell";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRecoilCallback } from "recoil";
+
+const shape = [...Array(9)].map(() => [...Array(9)]);
 
 const SudokuTable = () => {
 
-  const { data, dispatchData } = useContext(SudokuDataContext);
-
-  const { selectedAddress, dispatchAddress } = useContext(SelectAddressContext);
-
-  const [sudokuData, setSudokuData] = useState<number[][]>(
-    [...Array(9)].map(() => [...Array(9)].map(() => 0))
-  );
+  const handleKey = useRecoilCallback((opts) => {
+    return (event: KeyboardEvent) => handleRecoilByKey(opts, event);
+  }, []);
 
   useEffect(() => {
-    if (data.length === 81) {
-      setSudokuData(convert(data));
-    }
-  }, [data]);
+    document.addEventListener('keydown', handleKey, false);
 
-  useEffect(() => {
-    const handler = (event: KeyboardEvent) =>
-      handleKeyDown(event, selectedAddress, dispatchAddress, dispatchData);
-    document.addEventListener('keydown', handler, false);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [handleKey]);
 
-    return () => document.removeEventListener('keydown', handler);
-  }, [selectedAddress, dispatchAddress, dispatchData]);
-
-  return (
+  return <>
     <div className="sudoku-table">
-      {sudokuData.map((record, rowIdx) => {
+      {shape.map((row, rowIdx) => {
         return (
           <div key={rowIdx} className="flex flex-middle flex-center">
-            {record.map((cellNumber, colIdx) => {
+            {row.map((_, colIdx) => {
 
               const type = 3 * (rowIdx % 3) + (colIdx % 3) + 1;
               const address = 9 * rowIdx + colIdx;
@@ -41,7 +31,6 @@ const SudokuTable = () => {
                 <SudokuCell
                   key={address}
                   className={`sudoku-cell-${type}`}
-                  cellNumber={cellNumber}
                   address={address}
                 />
               );
@@ -50,7 +39,7 @@ const SudokuTable = () => {
         );
       })}
     </div>
-  );
+  </>;
 };
 
 export default SudokuTable;

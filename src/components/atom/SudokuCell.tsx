@@ -1,10 +1,9 @@
-import { SelectAddressContext, SudokuDataContext } from '@/base/context';
+import { cellState } from '@/base/recoil/cell';
 import { ClassNamesArg, cx } from '@emotion/css';
-import { useContext } from 'react';
+import { useRecoilState } from 'recoil';
 
 export interface SudokuCellProps {
   className?: ClassNamesArg;
-  cellNumber: number;
   address: number;
 }
 
@@ -17,22 +16,19 @@ export interface SudokuCellProps {
  */
 const SudokuCell = ({
   className = '',
-  cellNumber,
   address,
 }: SudokuCellProps) => {
 
-  const { dispatchData } = useContext(SudokuDataContext);
+  const [cell, setCell] = useRecoilState(cellState(address));
 
-  const { selectedAddress, dispatchAddress } = useContext(SelectAddressContext);
-
-  const isSelected = address === selectedAddress;
+  const { cellNumber, isSelected } = cell;
 
   return (
     <div className={cx("sudoku-cell", className)}>
       <div
         className={cx("sudoku-cell-inner", isSelected && 'cell-selected')}
-        onClick={() => dispatchAddress({ type: 'click', address })}
-        onDoubleClick={() => dispatchData({ address, cellNumber: 0 })}
+        onClick={() => setCell({ cellNumber, address, isSelected: true })}
+        onDoubleClick={() => setCell({ ...cell, cellNumber: 0 })}
       >
         {!!cellNumber && cellNumber}
       </div>
