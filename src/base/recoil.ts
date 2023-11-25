@@ -2,7 +2,7 @@ import { INITIAL_SUDOKU_DATA } from "@/base/reducer";
 import { ADDRESS_NUMBER, AddressNumberType } from "@/model/type/AddressNumber";
 import { DefaultValue, atom, atomFamily, selector, selectorFamily } from "recoil";
 
-interface Cell {
+export interface Cell {
   cellNumber: number;
   address: AddressNumberType,
   isSelected: boolean;
@@ -33,14 +33,33 @@ export const cellState = selectorFamily<Cell, AddressNumberType>({
   },
 });
 
+export const cellWholeState = selector<Cell | undefined>({
+  key: "cell-whole-selector",
+  get: () => undefined,
+  set: ({ set }, cell) => {
+    if (!cell) {
+      return;
+    }
+
+    if (cell instanceof DefaultValue) {
+      return;
+    }
+
+    set(cellState(cell.address), cell);
+  }
+})
+
 export const tableState = selector<string>({
   key: "table-selector",
   get: ({ get }) => {
-    return ADDRESS_NUMBER.map(address => get(cellAtom(address))).join("");
+    return ADDRESS_NUMBER.map(address => {
+      const cell = get(cellAtom(address));
+      return cell.cellNumber;
+    }).join("");
   },
   set: ({ get, set }, table) => {
     if (table instanceof DefaultValue) {
-      set(tableState, INITIAL_SUDOKU_DATA);
+      set(tableState, INITIAL_SUDOKU_DATA)
       return;
     }
 
