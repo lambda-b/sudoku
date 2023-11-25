@@ -1,17 +1,19 @@
+import { addressAtom } from "@/base/recoil/address";
 import { ADDRESS_NUMBER, AddressNumberType } from "@/model/type/AddressNumber";
-import { DefaultValue, atom, atomFamily, selector, selectorFamily } from "recoil";
+import { DefaultValue, atomFamily, selector, selectorFamily } from "recoil";
+
 
 export const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
 export interface Cell {
-  cellNumber: number;
+  cellNumber: number,
   address: AddressNumberType,
-  isSelected: boolean;
+  isSelected: boolean,
 }
 
-const cellAtom = atomFamily<Cell, AddressNumberType>({
-  key: "cell",
+export const cellAtom = atomFamily<Cell, AddressNumberType>({
+  key: "cell-atom",
   default: address => {
     return {
       cellNumber: Number(INITIAL_SUDOKU_DATA[address]),
@@ -22,16 +24,16 @@ const cellAtom = atomFamily<Cell, AddressNumberType>({
 });
 
 export const cellState = selectorFamily<Cell, AddressNumberType>({
-  key: "cell-selector",
+  key: "cell",
   get: address => ({ get }) => get(cellAtom(address)),
-  set: address => ({ get, set }, newValue) => {
+  set: address => ({ get, set }, cell) => {
     const oldAddress = get(addressAtom);
     const oldCell = get(cellAtom(oldAddress));
     set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
 
-    const newAddress = newValue instanceof DefaultValue ? -1 : newValue.address;
+    const newAddress = cell instanceof DefaultValue ? -1 : cell.address;
     set(addressAtom, newAddress);
-    set(cellAtom(address), newValue);
+    set(cellAtom(address), cell);
   },
 });
 
@@ -53,7 +55,7 @@ export const cellNumberState = selector<number>({
 });
 
 export const tableState = selector<string>({
-  key: "table-selector",
+  key: "table",
   get: ({ get }) => {
     return ADDRESS_NUMBER.map(address => {
       const cell = get(cellAtom(address));
@@ -74,25 +76,5 @@ export const tableState = selector<string>({
       const cell = get(cellAtom(i));
       set(cellAtom(i), { ...cell, cellNumber: Number(value) });
     });
-  },
-});
-
-const addressAtom = atom<AddressNumberType | -1>({
-  key: "address",
-  default: -1,
-});
-
-export const addressState = selector<AddressNumberType | -1>({
-  key: "address-selector",
-  get: ({ get }) => get(addressAtom),
-  set: ({ get, set }, newAddress) => {
-    const oldAddress = get(addressAtom);
-    const oldCell = get(cellAtom(oldAddress));
-    set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
-
-    const address = newAddress instanceof DefaultValue ? -1 : newAddress;
-    const newCell = get(cellAtom(address));
-    set(cellAtom(address), { ...newCell, isSelected: true });
-    set(addressAtom, address);
   },
 });

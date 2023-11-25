@@ -1,4 +1,5 @@
-import { addressState, cellState } from "@/base/recoil";
+import { addressState } from "@/base/recoil/address";
+import { cellState } from "@/base/recoil/cell";
 import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
 import { AddressNumberType, isAddressNumber } from "@/model/type/AddressNumber";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";

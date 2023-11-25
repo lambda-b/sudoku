@@ -1,4 +1,4 @@
-import { cellState } from '@/base/recoil';
+import { cellState } from '@/base/recoil/cell';
 import { ClassNamesArg, cx } from '@emotion/css';
 import { useRecoilState } from 'recoil';
 

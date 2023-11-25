@@ -1,4 +1,4 @@
-import { Cell, cellState, tableState } from "@/base/recoil";
+import { Cell, cellState, tableState } from "@/base/recoil/cell";
 import SudokuSolver from "@/calc/SudokuSolver";
 import { useState } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";

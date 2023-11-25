@@ -1,4 +1,4 @@
-import { Cell } from "@/base/recoil";
+import { Cell } from "@/base/recoil/cell";
 import SudokuTemplate from "@/calc/SudokuTemplate";
 
 class SudokuSolver {
