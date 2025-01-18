@@ -1,20 +1,17 @@
-import { handleRecoilByKey } from "@/base/keyboard";
+import { handleJotaiByKey } from "@/base/keyboard";
 import SudokuCell from "@/components/atom/SudokuCell";
+import { useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { useRecoilCallback } from "recoil";
 
 const shape = [...Array(9)].map(() => [...Array(9)]);
 
 const SudokuTable = () => {
-
-  const handleKey = useRecoilCallback((opts) => {
-    return (event: KeyboardEvent) => handleRecoilByKey(opts, event);
-  }, []);
+  const handleKey = useSetAtom(handleJotaiByKey);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKey, false);
+    document.addEventListener("keydown", handleKey, false);
 
-    return () => document.removeEventListener('keydown', handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
   }, [handleKey]);
 
   return <>
@@ -23,7 +20,6 @@ const SudokuTable = () => {
         return (
           <div key={rowIdx} className="flex flex-middle flex-center">
             {row.map((_, colIdx) => {
-
               const type = 3 * (rowIdx % 3) + (colIdx % 3) + 1;
               const address = 9 * rowIdx + colIdx;
 

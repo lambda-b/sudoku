@@ -1,10 +1,9 @@
-import { cellNumberState } from '@/base/recoil/cell';
-import { ClassNamesArg, cx } from "@emotion/css";
-import { useSetRecoilState } from 'recoil';
-
+import { cellNumberState } from "@/base/jotai/cell";
+import { cx } from "@emotion/css";
+import { useSetAtom } from "jotai";
 
 export interface SudokuButtonProps {
-  className?: ClassNamesArg;
+  className?: string;
   cellNumber: number;
 }
 
@@ -13,7 +12,7 @@ const SudokuButton = ({
   cellNumber,
 }: SudokuButtonProps) => {
 
-  const setCell = useSetRecoilState(cellNumberState);
+  const setCell = useSetAtom(cellNumberState);
 
   const handleInput = () => {
     setCell(cellNumber);
@@ -21,9 +20,7 @@ const SudokuButton = ({
 
   return (
     <div className={cx("sudoku-cell", className)}>
-      <button className="sudoku-cell-inner"
-        onClick={handleInput}
-      >
+      <button className="sudoku-cell-inner" onClick={handleInput}>
         {cellNumber}
       </button>
     </div>

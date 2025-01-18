@@ -1,16 +1,13 @@
-import { cellState, tableState } from "@/base/recoil/cell";
+import { cellUpdater, tableState } from "@/base/jotai/cell";
 import SudokuSolver from "@/calc/SudokuSolver";
-import { SudokuCellModel } from "@/model/SudokuCellModel";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useState } from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
 
 export const SudokuSolveButton = () => {
 
-  const data = useRecoilValue(tableState);
+  const data = useAtomValue(tableState);
 
-  const setCell = useRecoilCallback(({ set }) => {
-    return (cell: SudokuCellModel) => set(cellState(cell.address), cell);
-  }, []);
+  const setCell = useSetAtom(cellUpdater);
 
   const [solver] = useState<SudokuSolver>(new SudokuSolver(setCell));
 

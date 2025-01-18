@@ -1,13 +1,13 @@
-import { addressState } from "@/base/recoil/address";
-import { cellNumberState } from "@/base/recoil/cell";
+import { addressState } from "@/base/jotai/address";
+import { cellNumberState } from "@/base/jotai/cell";
 import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
 import { AddressNumberType, isAddressNumber } from "@/model/type/AddressNumber";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
-import { CallbackInterface } from "recoil";
+import { atom } from "jotai";
 
 const selectAddressFunction = (
   address: AddressNumberType | -1,
-  type: AddressMoveKeyType,
+  type: AddressMoveKeyType
 ) => {
   if (!isAddressNumber(address)) {
     return address;
@@ -28,13 +28,8 @@ const selectAddressFunction = (
   }
 };
 
-export const handleRecoilByKey = (
-  { snapshot, set }: CallbackInterface,
-  event: KeyboardEvent,
-) => {
-
-  const { getLoadable } = snapshot;
-  const address = getLoadable(addressState).contents;
+export const handleJotaiByKey = atom(null, (get, set, event: KeyboardEvent) => {
+  const address = get(addressState);
   if (!isAddressNumber(address)) {
     return;
   }
@@ -46,7 +41,7 @@ export const handleRecoilByKey = (
     return;
   }
 
-  if (event.key === 'Backspace') {
+  if (event.key === "Backspace") {
     set(cellNumberState, 0);
     return;
   }
@@ -56,4 +51,4 @@ export const handleRecoilByKey = (
     set(cellNumberState, cellNumber);
     return;
   }
-};
+});
