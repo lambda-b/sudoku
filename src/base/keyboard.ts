@@ -41,7 +41,7 @@ export const handleJotaiByKey = atom(null, (get, set, event: KeyboardEvent) => {
     return;
   }
 
-  if (event.key === "Backspace") {
+  if (event.key === "Backspace" || event.key === "Delete") {
     set(cellNumberState, 0);
     return;
   }
