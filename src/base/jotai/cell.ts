@@ -1,37 +1,32 @@
 import { atomFamily } from "jotai/utils";
-import { Atom, atom, WritableAtom } from "jotai";
+import { atom } from "jotai";
 import { SudokuCellModel } from "@/model/SudokuCellModel";
 import { ADDRESS_NUMBER, AddressNumberType } from "@/model/type/AddressNumber";
-import deepEqual from "fast-deep-equal";
 import { addressAtom } from "@/base/jotai/address";
 
 export const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
-export const cellAtom = atomFamily(
-  (address) =>
-    atom({
-      cellNumber: Number(INITIAL_SUDOKU_DATA[address]),
-      address,
-      isSelected: false,
-    }),
-  deepEqual
+export const cellAtom = atomFamily((address: AddressNumberType) =>
+  atom({
+    cellNumber: Number(INITIAL_SUDOKU_DATA[address]),
+    address,
+    isSelected: false,
+  })
 );
 
-export const cellState = atomFamily(
-  (address) =>
-    atom(
-      (get) => get(cellAtom(address)),
-      (get, set, cell: SudokuCellModel) => {
-        const oldAddress = get(addressAtom);
-        const oldCell = get(cellAtom(oldAddress));
-        set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
+export const cellState = atomFamily((address: AddressNumberType) =>
+  atom(
+    (get) => get(cellAtom(address)),
+    (get, set, cell: SudokuCellModel) => {
+      const oldAddress = get(addressAtom);
+      const oldCell = get(cellAtom(oldAddress));
+      set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
 
-        set(addressAtom, cell.address);
-        set(cellAtom(address), cell);
-      }
-    ),
-  deepEqual
+      set(addressAtom, cell.address);
+      set(cellAtom(address), cell);
+    }
+  )
 );
 
 export const cellUpdater = atom(null, (_, set, cell: SudokuCellModel) => {
