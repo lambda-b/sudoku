@@ -28,10 +28,10 @@ export class GridOption implements BaseModel, IdObject {
   }
 
   get id() {
-    return `ID:${this.row}:${this.col}:${this.num}`
+    return `ID:${this.row}:${this.col}:${this.num}`;
   }
 
-  public equals(obj: Object) {
+  public equals(obj: object) {
     return equals(this, obj);
   }
 }

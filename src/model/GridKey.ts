@@ -15,7 +15,7 @@ export abstract class GridKey implements IdObject, BaseModel {
     return this._type;
   }
 
-  public equals(obj: Object) {
+  public equals(obj: object) {
     return equals(this, obj);
   }
 }

@@ -4,7 +4,7 @@ export interface IdObject {
   id: IdType;
 }
 
-export const equals = <T extends IdObject>(self: T, obj: Object) => {
+export const equals = <T extends IdObject>(self: T, obj: object) => {
   if (this === obj) {
     return true;
   }

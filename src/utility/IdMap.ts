@@ -18,12 +18,12 @@ export class IdMap<K extends IdObject, V> implements Map<K, V> {
   delete(key: K): boolean {
     return this._map.delete(key.id);
   }
-  forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
-    const callbackfnForId = (
-      entry: Pair<K, V>,
-      id: IdType,
-      map: Map<IdType, Pair<K, V>>,
-    ) => callbackfn(entry.value, entry.key, this);
+  forEach(
+    callbackfn: (value: V, key: K, map: Map<K, V>) => void,
+    thisArg?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  ): void {
+    const callbackfnForId = (entry: Pair<K, V>) =>
+      callbackfn(entry.value, entry.key, this);
     this._map.forEach(callbackfnForId, thisArg);
   }
   get(key: K): V | undefined {
@@ -39,28 +39,28 @@ export class IdMap<K extends IdObject, V> implements Map<K, V> {
   get size(): number {
     return this._map.size;
   }
-  *entries(): IterableIterator<[K, V]> {
+  *entries(): MapIterator<[K, V]> {
     const entries = this._map.values();
     for (const pair of entries) {
       yield [pair.key, pair.value];
     }
   }
-  *keys(): IterableIterator<K> {
+  *keys(): MapIterator<K> {
     const entries = this._map.values();
     for (const pair of entries) {
       yield pair.key;
     }
   }
-  *values(): IterableIterator<V> {
+  *values(): MapIterator<V> {
     const entries = this._map.values();
     for (const pair of entries) {
       yield pair.value;
     }
   }
-  [Symbol.iterator](): IterableIterator<[K, V]> {
+  [Symbol.iterator](): MapIterator<[K, V]> {
     return this.entries();
   }
   get [Symbol.toStringTag](): string {
     return "IdMap";
-  };
+  }
 }

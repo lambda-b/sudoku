@@ -1,5 +1,5 @@
 interface BaseModel {
-  equals: (obj: Object) => boolean;
+  equals: (obj: object) => boolean;
 }
 
 export default BaseModel;
