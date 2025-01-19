@@ -24,3 +24,6 @@ yarn.lock
 *.sln
 *.sw?
 *.log
+
+## package-lock
+package-lock.json
