@@ -25,7 +25,7 @@ export const SudokuSolveButton = () => {
 
       return () => clearInterval(exe);
     }
-  }, [processing]);
+  }, [processing, data, solver]);
 
   return (
     <button
