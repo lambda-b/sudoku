@@ -1,7 +1,12 @@
 export const ADDRESS_MOVE_KEYS = [
-  "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Escape",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "Escape",
 ] as const;
 
-export type AddressMoveKeyType = typeof ADDRESS_MOVE_KEYS[number];
+export type AddressMoveKeyType = (typeof ADDRESS_MOVE_KEYS)[number];
 
-export const isAddressMoveKeyType = (param: string) => ADDRESS_MOVE_KEYS.includes(param as AddressMoveKeyType);
+export const isAddressMoveKeyType = (param: string) =>
+  ADDRESS_MOVE_KEYS.indexOf(param as AddressMoveKeyType) >= 0;
