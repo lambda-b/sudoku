@@ -1,0 +1,62 @@
+{
+  "name": "sudoku",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "jammy"
+    }
+  },
+
+  // 追加する拡張機能のIDを入力
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        //Javaを使うひとはアンコメントして有効化
+        //"vscjava.vscode-java-pack",
+
+        //Rustを使う人はアンコメントして有効化
+        //"Swellaby.rust-pack",
+
+        "formulahendry.code-runner",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "blacketpaircolordlw.bracket-pair-color-dlw",
+        "christian-kohler.path-intellisense",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "ionutvmi.path-autocomplete",
+        "mosapride.zenkaku",
+        "ms-azuretools.vscode-docker",
+        "ms-python.autopep8",
+        "ms-python.debugpy",
+        "ms-python.vscode-pylance",
+        "ms-vscode.cmake-tools",
+        "oderwat.indent-rainbow",
+        "qcz.text-power-tools",
+        "shardulm94.trailing-spaces",
+        "streetsidesoftware.code-spell-checker",
+        "twxs.cmake",
+        "visualstudioexptteam.intellicode-api-usage-examples",
+        "visualstudioexptteam.vscodeintellicode",
+        "shd101wyy.markdown-preview-enhanced",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+
+  // コンテナのフォワードポートの設定
+  "forwardPorts": [900],
+
+  // この設定をしないと、コンテナのデフォルトユーザーがrootとなり不都合が多いので必須。
+  // non-root user などで調べるとより詳しくわかります。
+  "remoteUser": "vscode",
+
+  // 追加導入する機能の選択
+  "features": {
+    "docker-from-docker": "latest",
+    "git": "latest",
+    "sshd": "latest",
+    "python": "latest"
+  }
+}
