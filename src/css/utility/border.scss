@@ -1,21 +1,22 @@
+@use "../partial/variables";
+@use "../partial/direction";
+@use "../partial/color";
+
 // ==========================
 // border
 // ==========================
 
-@for $itr from $start-value through $end-value {
-
-  @each $color-name,
-  $color-code in $colors {
+@for $itr from variables.$start-value through variables.$end-value {
+  @each $color-name, $color-code in color.$colors {
     .bd-#{$color-name}-#{$itr} {
       border: solid #{$itr}px $color-code;
     }
   }
 
-  @each $key,
-  $entry in $direction {
+  @each $key, $entry in direction.$direction {
     .bd#{$key}-#{$itr} {
       @each $val in $entry {
-        border-#{$val}: solid #{$itr}px $grey-light;
+        border-#{$val}: solid #{$itr}px color.$grey-light;
       }
     }
   }

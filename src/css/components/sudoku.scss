@@ -1,3 +1,8 @@
+@use "../partial/color";
+@use "../utility/margin.scss";
+@use "../utility/padding.scss";
+@use "../utility/border.scss";
+
 // ==========================
 // sudoku
 // ==========================
@@ -63,6 +68,6 @@
   }
 
   .cell-selected {
-    box-shadow: 0px 0px 10px $cyan;
+    box-shadow: 0px 0px 10px color.$cyan;
   }
 }

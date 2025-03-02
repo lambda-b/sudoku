@@ -1,25 +1,18 @@
 // ==========================
 // foundation
 // ==========================
-@import 'foundation/variables.scss';
-@import 'foundation/direction.scss';
-@import 'foundation/color.scss';
-@import 'foundation/normalize.scss';
-
-// ==========================
-// media
-// ==========================
-@import 'media/margin.scss';
-@import 'media/padding.scss';
+@use "base/normalize.scss";
 
 // ==========================
 // utility
 // ==========================
-@import 'utility/border.scss';
-@import 'utility/flex.scss';
+@use "utility/margin.scss";
+@use "utility/padding.scss";
+@use "utility/border.scss";
+@use "utility/flex.scss";
 
 // ==========================
 // component
 // ==========================
-@import 'components/container.scss';
-@import 'components/sudoku.scss';
+@use "components/container.scss";
+@use "components/sudoku.scss";

@@ -1,8 +1,10 @@
+@use "../partial/variables";
+@use "../partial/direction";
+
 // ==========================
 // margin
 // ==========================
-@each $key,
-$entry in $direction {
+@each $key, $entry in direction.$direction {
   .m#{$key}-auto {
     @each $val in $entry {
       margin-#{$val}: auto;
@@ -10,8 +12,7 @@ $entry in $direction {
   }
 }
 
-@each $key,
-$entry in $direction {
+@each $key, $entry in direction.$direction {
   .m#{$key}-0 {
     @each $val in $entry {
       margin-#{$val}: 0;
@@ -19,12 +20,10 @@ $entry in $direction {
   }
 }
 
-@for $itr from $start-value through $end-value {
-
+@for $itr from variables.$start-value through variables.$end-value {
   $value: 8 * $itr;
 
-  @each $key,
-  $entry in $direction {
+  @each $key, $entry in direction.$direction {
     .m#{$key}-x-#{$itr} {
       @each $val in $entry {
         margin-#{$val}: #{$value}px;

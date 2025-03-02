@@ -1,3 +1,5 @@
+@use "../partial/color";
+
 // ==========================
 // button
 // ==========================
@@ -7,6 +9,6 @@ button {
   cursor: pointer;
 
   &:focus {
-    box-shadow: 0px 0px 10px $cyan;
+    box-shadow: 0px 0px 10px color.$cyan;
   }
 }
