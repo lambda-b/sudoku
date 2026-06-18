@@ -1,0 +1,12 @@
+{
+  "app": "npx tsx bin/app.ts",
+  "context": {
+    "bucketName": "dancinglinks-sudoku-solver",
+    "certificateArn": "arn:aws:acm:us-east-1:154539905353:certificate/28775c3e-1141-4ef3-8a41-cde305b8d76f",
+    "domainName": "sudoku.pisan-zapra.com",
+    "hostedZoneName": "pisan-zapra.com",
+    "siteIndexDocument": "index.html",
+    "siteErrorDocument": "index.html",
+    "puzzleCount": 1000
+  }
+}

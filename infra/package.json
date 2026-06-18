@@ -1,0 +1,23 @@
+{
+  "name": "@sudoku/infra",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "bootstrap": "cdk bootstrap",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff",
+    "synth": "cdk synth",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.260.0",
+    "constructs": "^10.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "aws-cdk": "^2.1128.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}

@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
+    "infra:bootstrap": "npm --prefix infra run bootstrap",
+    "infra:diff": "npm --prefix infra run diff",
+    "infra:deploy": "npm run build && npm --prefix infra run deploy",
+    "infra:synth": "npm --prefix infra run synth",
     "lint": "biome check . && oxlint .",
     "format": "biome check --write .",
     "preview": "vite preview"
