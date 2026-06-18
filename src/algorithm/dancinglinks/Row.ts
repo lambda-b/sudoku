@@ -4,17 +4,17 @@ import type { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
  * 行クラス
  */
 export class Row {
-  private _origin: LinkNode | null = null;
+  #origin: LinkNode | null = null;
 
-  public get origin() {
-    return this._origin;
+  get origin() {
+    return this.#origin;
   }
 
-  public setOrigin(origin: LinkNode | null) {
-    this._origin = origin;
+  setOrigin(origin: LinkNode | null) {
+    this.#origin = origin;
   }
 
-  public *[Symbol.iterator]() {
+  *[Symbol.iterator]() {
     if (this.origin === null) {
       return;
     }
@@ -29,13 +29,13 @@ export class Row {
     }
   }
 
-  public clear() {
+  clear() {
     for (const node of this) {
       node.clearVertical();
     }
   }
 
-  public restore() {
+  restore() {
     for (const node of this) {
       node.restoreVertical();
     }

@@ -2,24 +2,24 @@ import type { Column } from "@/algorithm/dancinglinks/Column";
 import type { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
 
 export class Restores {
-  private _col: Column;
+  #col: Column;
 
-  private _restores: LinkNode[] = [];
+  #restores: LinkNode[] = [];
 
-  public constructor(col: Column) {
-    this._col = col;
+  constructor(col: Column) {
+    this.#col = col;
   }
 
-  public get col() {
-    return this._col;
+  get col() {
+    return this.#col;
   }
 
-  public push(node: LinkNode) {
-    this._restores.push(node);
+  push(node: LinkNode) {
+    this.#restores.push(node);
   }
 
-  public *[Symbol.iterator]() {
-    for (const node of this._restores) {
+  *[Symbol.iterator]() {
+    for (const node of this.#restores) {
       yield node;
     }
   }

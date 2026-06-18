@@ -3,21 +3,21 @@ import type { BoxType } from "@/model/type/BoxType";
 import type { SolutionNumberType } from "@/model/type/SolutionNumberType";
 
 export class GridBoxNumKey extends GridKey {
-  private _box: BoxType;
-  private _num: SolutionNumberType;
+  #box: BoxType;
+  #num: SolutionNumberType;
 
   constructor(box: BoxType, num: SolutionNumberType) {
     super("box_num");
-    this._box = box;
-    this._num = num;
+    this.#box = box;
+    this.#num = num;
   }
 
   get box() {
-    return this._box;
+    return this.#box;
   }
 
   get num() {
-    return this._num;
+    return this.#num;
   }
 
   get id() {

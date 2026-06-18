@@ -3,21 +3,21 @@ import type { ColType } from "@/model/type/ColType";
 import type { RowType } from "@/model/type/RowType";
 
 export class GridRowColKey extends GridKey {
-  private _row: RowType;
-  private _col: ColType;
+  #row: RowType;
+  #col: ColType;
 
   constructor(row: RowType, col: ColType) {
     super("row_col");
-    this._row = row;
-    this._col = col;
+    this.#row = row;
+    this.#col = col;
   }
 
   get row() {
-    return this._row;
+    return this.#row;
   }
 
   get col() {
-    return this._col;
+    return this.#col;
   }
 
   get id() {

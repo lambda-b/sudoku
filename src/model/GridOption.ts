@@ -5,33 +5,33 @@ import type BaseModel from "@/utility/model/BaseModel";
 import { equals, type IdObject } from "@/utility/model/IdObject";
 
 export class GridOption implements BaseModel, IdObject {
-  private _row: RowType;
-  private _col: ColType;
-  private _num: SolutionNumberType;
+  #row: RowType;
+  #col: ColType;
+  #num: SolutionNumberType;
 
   constructor(row: RowType, col: ColType, num: SolutionNumberType) {
-    this._row = row;
-    this._col = col;
-    this._num = num;
+    this.#row = row;
+    this.#col = col;
+    this.#num = num;
   }
 
   get row() {
-    return this._row;
+    return this.#row;
   }
 
   get col() {
-    return this._col;
+    return this.#col;
   }
 
   get num() {
-    return this._num;
+    return this.#num;
   }
 
   get id() {
     return `ID:${this.row}:${this.col}:${this.num}`;
   }
 
-  public equals(obj: object) {
+  equals(obj: object) {
     return equals(this, obj);
   }
 }

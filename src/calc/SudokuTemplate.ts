@@ -14,16 +14,16 @@ import {
 } from "@/model/type/SolutionNumberType";
 
 class SudokuTemplate {
-  private allColumns = createAllColumns();
+  #allColumns = createAllColumns();
 
-  private covers = createAllRows(ColumnAdapter.converter(this.allColumns));
+  #covers = createAllRows(ColumnAdapter.converter(this.#allColumns));
 
-  private headers = new Set<Column>(this.allColumns);
+  #headers = new Set<Column>(this.#allColumns);
 
-  private matrix = new Matrix(this.headers);
+  #matrix = new Matrix(this.#headers);
 
-  public setup(data: string) {
-    const optionMapper = RowAdapter.converter(this.covers);
+  setup(data: string) {
+    const optionMapper = RowAdapter.converter(this.#covers);
 
     const grid = convert(data);
     grid.forEach((row, i) => {
@@ -36,15 +36,15 @@ class SudokuTemplate {
           );
           const r = optionMapper.get(option);
           if (r) {
-            this.matrix.select(r);
+            this.#matrix.select(r);
           }
         }
       });
     });
   }
 
-  public *solveSudoku(): IterableIterator<GridOption[]> {
-    for (const solution of this.matrix.solveExactCover([])) {
+  *solveSudoku(): IterableIterator<GridOption[]> {
+    for (const solution of this.#matrix.solveExactCover([])) {
       yield solution.map((row) => (row as RowAdapter).gridOption);
     }
   }
