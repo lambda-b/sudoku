@@ -1,5 +1,5 @@
 import { Column } from "@/algorithm/dancinglinks/Column";
-import { GridKey } from "@/model/GridKey";
+import type { GridKey } from "@/model/GridKey";
 import { IdMap } from "@/utility/IdMap";
 
 export class ColumnAdapter extends Column {

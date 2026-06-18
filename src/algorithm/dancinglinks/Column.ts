@@ -1,10 +1,9 @@
-import { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
+import type { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
 
 /**
  * 列クラス
  */
 export class Column {
-
   private _origin: LinkNode | null = null;
 
   public get origin() {

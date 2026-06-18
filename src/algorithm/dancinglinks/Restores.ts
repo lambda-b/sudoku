@@ -1,5 +1,5 @@
-import { Column } from "@/algorithm/dancinglinks/Column";
-import { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
+import type { Column } from "@/algorithm/dancinglinks/Column";
+import type { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
 
 export class Restores {
   private _col: Column;

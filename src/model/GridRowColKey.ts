@@ -1,6 +1,6 @@
 import { GridKey } from "@/model/GridKey";
-import { ColType } from "@/model/type/ColType";
-import { RowType } from "@/model/type/RowType";
+import type { ColType } from "@/model/type/ColType";
+import type { RowType } from "@/model/type/RowType";
 
 export class GridRowColKey extends GridKey {
   private _row: RowType;

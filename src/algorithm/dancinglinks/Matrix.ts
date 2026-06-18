@@ -1,10 +1,8 @@
 import { Column } from "@/algorithm/dancinglinks/Column";
 import { Restores } from "@/algorithm/dancinglinks/Restores";
-import { Row } from "@/algorithm/dancinglinks/Row";
-
+import type { Row } from "@/algorithm/dancinglinks/Row";
 
 export class Matrix {
-
   private headers: Set<Column>;
 
   constructor(headers: Set<Column>) {
@@ -40,7 +38,7 @@ export class Matrix {
 
   /**
    * ExactCover問題のSolver
-   * 
+   *
    * @param solution 現在仮定している解の部分
    * @returns 得られた解
    */

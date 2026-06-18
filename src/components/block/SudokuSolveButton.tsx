@@ -1,8 +1,8 @@
-import { cellUpdater, tableState } from "@/base/jotai/cell";
-import SudokuSolver from "@/calc/SudokuSolver";
-import { cx } from "@emotion/css";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
+import { cx } from "@/base/function";
+import { cellUpdater, tableState } from "@/base/jotai/cell";
+import SudokuSolver from "@/calc/SudokuSolver";
 
 export const SudokuSolveButton = () => {
   const data = useAtomValue(tableState);
@@ -30,10 +30,13 @@ export const SudokuSolveButton = () => {
   return (
     <button
       className={cx(
-        "button is-outlined",
-        processing ? "is-danger" : "is-primary"
+        "my-3 cursor-pointer rounded border px-4 py-2 font-medium transition-colors",
+        processing
+          ? "border-red-600 text-red-600 hover:bg-red-50"
+          : "border-cyan-600 text-cyan-600 hover:bg-cyan-50",
       )}
       onClick={() => setProcessing((b) => !b)}
+      type="button"
     >
       {processing ? "Stop" : "Solve"}
     </button>

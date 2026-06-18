@@ -1,6 +1,6 @@
 import { GridKey } from "@/model/GridKey";
-import { BoxType } from "@/model/type/BoxType";
-import { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import type { BoxType } from "@/model/type/BoxType";
+import type { SolutionNumberType } from "@/model/type/SolutionNumberType";
 
 export class GridBoxNumKey extends GridKey {
   private _box: BoxType;

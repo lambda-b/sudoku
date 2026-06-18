@@ -1,5 +1,5 @@
-import { Column } from "@/algorithm/dancinglinks/Column";
-import { Row } from "@/algorithm/dancinglinks/Row";
+import type { Column } from "@/algorithm/dancinglinks/Column";
+import type { Row } from "@/algorithm/dancinglinks/Row";
 
 export class LinkNode {
   private _row: Row;

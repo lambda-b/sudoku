@@ -1,5 +1,5 @@
 import { Row } from "@/algorithm/dancinglinks/Row";
-import { GridOption } from "@/model/GridOption";
+import type { GridOption } from "@/model/GridOption";
 import { IdMap } from "@/utility/IdMap";
 
 export class RowAdapter extends Row {

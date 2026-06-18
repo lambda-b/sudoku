@@ -1,5 +1,5 @@
 import SudokuTemplate from "@/calc/SudokuTemplate";
-import { SudokuCellModel } from "@/model/SudokuCellModel";
+import type { SudokuCellModel } from "@/model/SudokuCellModel";
 
 class SudokuSolver {
   private dispatch: (param: SudokuCellModel) => void;

@@ -1,4 +1,4 @@
-import { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import type { SolutionNumberType } from "@/model/type/SolutionNumberType";
 
 export const convert = (data: string) => {
   type UnsolvedType = SolutionNumberType | 0;
@@ -11,13 +11,17 @@ export const convert = (data: string) => {
     const subdata = data
       .substring(9 * i, 9 * (i + 1))
       .split("")
-      .map(ch => Number(ch));
+      .map((ch) => Number(ch));
     data2D.push(subdata as UnsolvedType[]);
   }
 
   return data2D;
 };
 
-export const toString = (data2D: (SolutionNumberType | 0)[][]) => {
-  return data2D.map(row => row.join("")).join("");
+export const stringifySudoku = (data2D: (SolutionNumberType | 0)[][]) => {
+  return data2D.map((row) => row.join("")).join("");
+};
+
+export const cx = (...classes: (false | null | undefined | string)[]) => {
+  return classes.filter(Boolean).join(" ");
 };

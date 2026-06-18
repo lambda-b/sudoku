@@ -1,17 +1,13 @@
-import { cellNumberState } from "@/base/jotai/cell";
-import { cx } from "@emotion/css";
 import { useSetAtom } from "jotai";
+import { cx } from "@/base/function";
+import { cellNumberState } from "@/base/jotai/cell";
 
 export interface SudokuButtonProps {
   className?: string;
   cellNumber: number;
 }
 
-const SudokuButton = ({
-  className = '',
-  cellNumber,
-}: SudokuButtonProps) => {
-
+const SudokuButton = ({ className = "", cellNumber }: SudokuButtonProps) => {
   const setCell = useSetAtom(cellNumberState);
 
   const handleInput = () => {
@@ -19,8 +15,12 @@ const SudokuButton = ({
   };
 
   return (
-    <div className={cx("sudoku-cell", className)}>
-      <button className="sudoku-cell-inner" onClick={handleInput}>
+    <div className={cx("h-[70px] w-[70px] border-[#b5b5b5]", className)}>
+      <button
+        className="h-full w-full cursor-pointer text-center text-[40px]"
+        onClick={handleInput}
+        type="button"
+      >
         {cellNumber}
       </button>
     </div>

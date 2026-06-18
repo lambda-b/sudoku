@@ -1,4 +1,4 @@
-import { IdObject, IdType } from "@/utility/model/IdObject";
+import type { IdObject, IdType } from "@/utility/model/IdObject";
 
 interface Pair<K, V> {
   key: K;
@@ -20,7 +20,7 @@ export class IdMap<K extends IdObject, V> implements Map<K, V> {
   }
   forEach(
     callbackfn: (value: V, key: K, map: Map<K, V>) => void,
-    thisArg?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+    thisArg?: unknown,
   ): void {
     const callbackfnForId = (entry: Pair<K, V>) =>
       callbackfn(entry.value, entry.key, this);

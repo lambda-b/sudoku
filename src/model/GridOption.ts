@@ -1,8 +1,8 @@
-import { ColType } from "@/model/type/ColType";
-import { RowType } from "@/model/type/RowType";
-import { SolutionNumberType } from "@/model/type/SolutionNumberType";
-import BaseModel from "@/utility/model/BaseModel";
-import { IdObject, equals } from "@/utility/model/IdObject";
+import type { ColType } from "@/model/type/ColType";
+import type { RowType } from "@/model/type/RowType";
+import type { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import type BaseModel from "@/utility/model/BaseModel";
+import { equals, type IdObject } from "@/utility/model/IdObject";
 
 export class GridOption implements BaseModel, IdObject {
   private _row: RowType;

@@ -1,6 +1,6 @@
 import { GridKey } from "@/model/GridKey";
-import { ColType } from "@/model/type/ColType";
-import { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import type { ColType } from "@/model/type/ColType";
+import type { SolutionNumberType } from "@/model/type/SolutionNumberType";
 
 export class GridColNumKey extends GridKey {
   private _col: ColType;
