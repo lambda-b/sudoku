@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { tableState } from "@/base/jotai/cell";
+import { puzzleState, tableState } from "@/base/jotai/cell";
 
 type SudokuPuzzle = {
   id: string;
@@ -20,6 +20,7 @@ const fetchRandomPuzzle = async () => {
 
 export const SudokuPuzzleLoader = () => {
   const setTable = useSetAtom(tableState);
+  const setPuzzle = useSetAtom(puzzleState);
   const { data, isFetching, isError, refetch } = useQuery({
     queryKey: ["puzzles", "random"],
     queryFn: fetchRandomPuzzle,
@@ -28,9 +29,10 @@ export const SudokuPuzzleLoader = () => {
 
   useEffect(() => {
     if (data) {
+      setPuzzle(data.puzzle);
       setTable(data.puzzle);
     }
-  }, [data, setTable]);
+  }, [data, setPuzzle, setTable]);
 
   return (
     <button

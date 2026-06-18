@@ -10,6 +10,8 @@ import {
 export const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
+export const puzzleState = atom(INITIAL_SUDOKU_DATA);
+
 export const cellAtom = atomFamily((address: AddressNumberType) =>
   atom({
     cellNumber: Number(INITIAL_SUDOKU_DATA[address]),
