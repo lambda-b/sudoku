@@ -1,14 +1,16 @@
-import SudokuButton from '@/components/atom/SudokuButton';
+import SudokuButton from "@/components/atom/SudokuButton";
+
+const cellNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const SudokuSelectSheet = () => {
   return (
-    <div className='flex flex-middle flex-center'>
-      {[...Array(9)].map((_, index) => {
+    <div className="flex items-center justify-center">
+      {cellNumbers.map((cellNumber) => {
         return (
           <SudokuButton
-            key={index}
-            className="sudoku-cell-5 mt-x-8"
-            cellNumber={index + 1}
+            key={cellNumber}
+            className="mt-16 border"
+            cellNumber={cellNumber}
           />
         );
       })}

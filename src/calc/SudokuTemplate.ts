@@ -1,28 +1,29 @@
-import { Column } from "@/algorithm/dancinglinks/Column";
+import type { Column } from "@/algorithm/dancinglinks/Column";
 import { Matrix } from "@/algorithm/dancinglinks/Matrix";
 import { convert } from "@/base/function";
 import { ColumnAdapter } from "@/calc/adapter/ColumnAdapter";
 import { RowAdapter } from "@/calc/adapter/RowAdapter";
-import { SudokuColumnFactory } from "@/calc/factory/SudokuColumnFactory";
-import { SudokuRowFactory } from "@/calc/factory/SudokuRowFactory";
+import { createAllColumns } from "@/calc/factory/SudokuColumnFactory";
+import { createAllRows } from "@/calc/factory/SudokuRowFactory";
 import { GridOption } from "@/model/GridOption";
-import { ColType, isColType } from "@/model/type/ColType";
-import { RowType, isRowType } from "@/model/type/RowType";
-import { SolutionNumberType, isSolutionNumberType } from "@/model/type/SolutionNumberType";
+import { type ColType, isColType } from "@/model/type/ColType";
+import { isRowType, type RowType } from "@/model/type/RowType";
+import {
+  isSolutionNumberType,
+  type SolutionNumberType,
+} from "@/model/type/SolutionNumberType";
 
 class SudokuTemplate {
+  #allColumns = createAllColumns();
 
-  private allColumns = SudokuColumnFactory.createAllColumns();
+  #covers = createAllRows(ColumnAdapter.converter(this.#allColumns));
 
-  private covers = SudokuRowFactory.createAllRows(ColumnAdapter.converter(this.allColumns));
+  #headers = new Set<Column>(this.#allColumns);
 
-  private headers = new Set<Column>(this.allColumns);
+  #matrix = new Matrix(this.#headers);
 
-  private matrix = new Matrix(this.headers);
-
-  public setup(data: string) {
-
-    const optionMapper = RowAdapter.converter(this.covers);
+  setup(data: string) {
+    const optionMapper = RowAdapter.converter(this.#covers);
 
     const grid = convert(data);
     grid.forEach((row, i) => {
@@ -35,16 +36,16 @@ class SudokuTemplate {
           );
           const r = optionMapper.get(option);
           if (r) {
-            this.matrix.select(r);
+            this.#matrix.select(r);
           }
         }
       });
     });
   }
 
-  public *solveSudoku(): IterableIterator<GridOption[]> {
-    for (const solution of this.matrix.solveExactCover([])) {
-      yield solution.map(row => (row as RowAdapter).gridOption);
+  *solveSudoku(): IterableIterator<GridOption[]> {
+    for (const solution of this.#matrix.solveExactCover([])) {
+      yield solution.map((row) => (row as RowAdapter).gridOption);
     }
   }
 }

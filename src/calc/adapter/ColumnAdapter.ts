@@ -1,20 +1,20 @@
 import { Column } from "@/algorithm/dancinglinks/Column";
-import { GridKey } from "@/model/GridKey";
+import type { GridKey } from "@/model/GridKey";
 import { IdMap } from "@/utility/IdMap";
 
 export class ColumnAdapter extends Column {
-  private col: GridKey;
+  #col: GridKey;
 
-  public constructor(col: GridKey) {
+  constructor(col: GridKey) {
     super();
-    this.col = col;
+    this.#col = col;
   }
 
-  public get gridKey() {
-    return this.col;
+  get gridKey() {
+    return this.#col;
   }
 
-  public static converter(cols: ColumnAdapter[]) {
+  static converter(cols: ColumnAdapter[]) {
     const mapper = new IdMap<GridKey, ColumnAdapter>();
     for (const c of cols) {
       mapper.set(c.gridKey, c);

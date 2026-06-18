@@ -1,15 +1,21 @@
-import { SudokuSolveButton } from "@/components/block/SudokuSolveButton";
+import { SudokuPuzzleLoader } from "@/components/block/SudokuPuzzleLoader";
+import { SudokuResetButton } from "@/components/block/SudokuResetButton";
 import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
+import { SudokuSolveButton } from "@/components/block/SudokuSolveButton";
 import SudokuTable from "@/components/block/SudokuTable";
 
-function Sudoku() {
+const Sudoku = () => {
   return (
-    <div className="container">
-      <SudokuSolveButton />
+    <div className="min-w-[630px] text-center">
+      <div className="my-3 flex items-center justify-center gap-3">
+        <SudokuPuzzleLoader />
+        <SudokuResetButton />
+        <SudokuSolveButton />
+      </div>
       <SudokuTable />
       <SudokuSelectSheet />
     </div>
   );
-}
+};
 
 export default Sudoku;

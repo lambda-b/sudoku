@@ -1,21 +1,20 @@
-import { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
+import type { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
 
 /**
  * 列クラス
  */
 export class Column {
+  #origin: LinkNode | null = null;
 
-  private _origin: LinkNode | null = null;
-
-  public get origin() {
-    return this._origin;
+  get origin() {
+    return this.#origin;
   }
 
-  public setOrigin(origin: LinkNode | null) {
-    this._origin = origin;
+  setOrigin(origin: LinkNode | null) {
+    this.#origin = origin;
   }
 
-  public *[Symbol.iterator]() {
+  *[Symbol.iterator]() {
     if (this.origin === null) {
       return;
     }
@@ -30,12 +29,12 @@ export class Column {
     }
   }
 
-  public get size() {
+  get size() {
     const size = Array.from(this).length;
     return size;
   }
 
-  public static minimum(columns: Set<Column>) {
+  static minimum(columns: Set<Column>) {
     let minCol = null;
     let minSize = Infinity;
 

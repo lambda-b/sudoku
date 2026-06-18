@@ -1,13 +1,19 @@
+import { atom } from "jotai";
 import { addressState } from "@/base/jotai/address";
 import { cellNumberState } from "@/base/jotai/cell";
-import { AddressMoveKeyType, isAddressMoveKeyType } from "@/model/type/AddressMoveKeyType";
-import { AddressNumberType, isAddressNumber } from "@/model/type/AddressNumber";
+import {
+  type AddressMoveKeyType,
+  isAddressMoveKeyType,
+} from "@/model/type/AddressMoveKeyType";
+import {
+  type AddressNumberType,
+  isAddressNumber,
+} from "@/model/type/AddressNumber";
 import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
-import { atom } from "jotai";
 
 const selectAddressFunction = (
   address: AddressNumberType | -1,
-  type: AddressMoveKeyType
+  type: AddressMoveKeyType,
 ) => {
   if (!isAddressNumber(address)) {
     return address;
