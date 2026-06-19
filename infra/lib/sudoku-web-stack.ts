@@ -64,7 +64,7 @@ export class SudokuWebStack extends Stack {
       ? undefined
       : new cloudfront.Function(this, "RandomPuzzleFunction", {
           code: cloudfront.FunctionCode.fromInline(
-            createRandomPuzzleFunctionCode(puzzleCount),
+            readRandomPuzzleFunctionCode(puzzleCount),
           ),
           comment:
             "Rewrites /api/puzzles/random to a random static puzzle JSON.",
@@ -173,18 +173,10 @@ const readPuzzleCount = (): number => {
   return manifest.count;
 };
 
-const createRandomPuzzleFunctionCode = (puzzleCount: number): string => `
-function handler(event) {
-  var request = event.request;
-
-  if (request.uri !== "/api/puzzles/random") {
-    return request;
-  }
-
-  var id = Math.floor(Math.random() * ${puzzleCount});
-  request.uri = "/puzzles/" + String(id).padStart(4, "0") + ".json";
-  request.querystring = {};
-
-  return request;
-}
-`;
+const readRandomPuzzleFunctionCode = (puzzleCount: number): string => {
+  const functionPath = join(infraDir, "cloudfront-functions/random-puzzle.js");
+  return readFileSync(functionPath, "utf-8").replace(
+    "__PUZZLE_COUNT__",
+    String(puzzleCount),
+  );
+};
