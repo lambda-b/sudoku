@@ -71,6 +71,24 @@ export class SudokuWebStack extends Stack {
           runtime: cloudfront.FunctionRuntime.JS_2_0,
         });
 
+    const randomPuzzleResponseHeadersPolicy = importExistingResources
+      ? undefined
+      : new cloudfront.ResponseHeadersPolicy(
+          this,
+          "RandomPuzzleResponseHeadersPolicy",
+          {
+            customHeadersBehavior: {
+              customHeaders: [
+                {
+                  header: "Cache-Control",
+                  override: true,
+                  value: "no-store",
+                },
+              ],
+            },
+          },
+        );
+
     const certificate =
       domainName && certificateArn
         ? acm.Certificate.fromCertificateArn(
@@ -79,11 +97,12 @@ export class SudokuWebStack extends Stack {
             certificateArn,
           )
         : undefined;
+    const siteOrigin = origins.S3BucketOrigin.withOriginAccessControl(bucket);
 
     const distribution = new cloudfront.Distribution(this, "Distribution", {
       certificate,
       defaultBehavior: {
-        origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
+        origin: siteOrigin,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
         compress: true,
@@ -97,6 +116,27 @@ export class SudokuWebStack extends Stack {
           : undefined,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
+      additionalBehaviors:
+        randomPuzzleFunction && randomPuzzleResponseHeadersPolicy
+          ? {
+              "/api/puzzles/random": {
+                origin: siteOrigin,
+                allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+                cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+                cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+                compress: true,
+                functionAssociations: [
+                  {
+                    eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+                    function: randomPuzzleFunction,
+                  },
+                ],
+                responseHeadersPolicy: randomPuzzleResponseHeadersPolicy,
+                viewerProtocolPolicy:
+                  cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+              },
+            }
+          : undefined,
       defaultRootObject: siteIndexDocument,
       domainNames: domainName ? [domainName] : undefined,
       errorResponses: importExistingResources
