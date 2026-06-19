@@ -23,33 +23,18 @@ type PuzzleManifest = {
 
 const infraDir = fileURLToPath(new URL("..", import.meta.url));
 const projectRoot = join(infraDir, "..");
+const bucketName = "dancinglinks-sudoku-solver";
+const certificateArn =
+  "arn:aws:acm:us-east-1:154539905353:certificate/28775c3e-1141-4ef3-8a41-cde305b8d76f";
+const domainName = "sudoku.pisan-zapra.com";
+const hostedZoneName = "pisan-zapra.com";
+const siteDocument = "index.html";
 
 export class SudokuWebStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const domainName = this.node.tryGetContext("domainName") as
-      | string
-      | undefined;
-    const hostedZoneName = this.node.tryGetContext("hostedZoneName") as
-      | string
-      | undefined;
-    const certificateArn = this.node.tryGetContext("certificateArn") as
-      | string
-      | undefined;
-    const bucketName = this.node.tryGetContext("bucketName") as
-      | string
-      | undefined;
-    const importExistingResources =
-      this.node.tryGetContext("importExistingResources") === "true";
-    const siteIndexDocument =
-      (this.node.tryGetContext("siteIndexDocument") as string | undefined) ??
-      "index.html";
-    const siteErrorDocument =
-      (this.node.tryGetContext("siteErrorDocument") as string | undefined) ??
-      siteIndexDocument;
-    const puzzleCount =
-      Number(this.node.tryGetContext("puzzleCount")) || readPuzzleCount();
+    const puzzleCount = readPuzzleCount();
 
     const bucket = new s3.Bucket(this, "SiteBucket", {
       bucketName,
@@ -57,46 +42,43 @@ export class SudokuWebStack extends Stack {
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
       removalPolicy: RemovalPolicy.RETAIN,
-      versioned: !importExistingResources,
+      versioned: true,
     });
 
-    const randomPuzzleFunction = importExistingResources
-      ? undefined
-      : new cloudfront.Function(this, "RandomPuzzleFunction", {
-          code: cloudfront.FunctionCode.fromInline(
-            readRandomPuzzleFunctionCode(puzzleCount),
-          ),
-          comment:
-            "Rewrites /api/puzzles/random to a random static puzzle JSON.",
-          runtime: cloudfront.FunctionRuntime.JS_2_0,
-        });
+    const randomPuzzleFunction = new cloudfront.Function(
+      this,
+      "RandomPuzzleFunction",
+      {
+        code: cloudfront.FunctionCode.fromInline(
+          readRandomPuzzleFunctionCode(puzzleCount),
+        ),
+        comment: "Rewrites /api/puzzles/random to a random static puzzle JSON.",
+        runtime: cloudfront.FunctionRuntime.JS_2_0,
+      },
+    );
 
-    const randomPuzzleResponseHeadersPolicy = importExistingResources
-      ? undefined
-      : new cloudfront.ResponseHeadersPolicy(
-          this,
-          "RandomPuzzleResponseHeadersPolicy",
-          {
-            customHeadersBehavior: {
-              customHeaders: [
-                {
-                  header: "Cache-Control",
-                  override: true,
-                  value: "no-store",
-                },
-              ],
-            },
+    const randomPuzzleResponseHeadersPolicy =
+      new cloudfront.ResponseHeadersPolicy(
+        this,
+        "RandomPuzzleResponseHeadersPolicy",
+        {
+          customHeadersBehavior: {
+            customHeaders: [
+              {
+                header: "Cache-Control",
+                override: true,
+                value: "no-store",
+              },
+            ],
           },
-        );
+        },
+      );
 
-    const certificate =
-      domainName && certificateArn
-        ? acm.Certificate.fromCertificateArn(
-            this,
-            "SiteCertificate",
-            certificateArn,
-          )
-        : undefined;
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      "SiteCertificate",
+      certificateArn,
+    );
     const siteOrigin = origins.S3BucketOrigin.withOriginAccessControl(bucket);
 
     const distribution = new cloudfront.Distribution(this, "Distribution", {
@@ -106,92 +88,79 @@ export class SudokuWebStack extends Stack {
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
         compress: true,
-        functionAssociations: randomPuzzleFunction
-          ? [
-              {
-                eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
-                function: randomPuzzleFunction,
-              },
-            ]
-          : undefined,
+        functionAssociations: [
+          {
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+            function: randomPuzzleFunction,
+          },
+        ],
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
-      additionalBehaviors:
-        randomPuzzleFunction && randomPuzzleResponseHeadersPolicy
-          ? {
-              "/api/puzzles/random": {
-                origin: siteOrigin,
-                allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-                cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-                cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
-                compress: true,
-                functionAssociations: [
-                  {
-                    eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
-                    function: randomPuzzleFunction,
-                  },
-                ],
-                responseHeadersPolicy: randomPuzzleResponseHeadersPolicy,
-                viewerProtocolPolicy:
-                  cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-              },
-            }
-          : undefined,
-      defaultRootObject: siteIndexDocument,
-      domainNames: domainName ? [domainName] : undefined,
-      errorResponses: importExistingResources
-        ? undefined
-        : [
+      additionalBehaviors: {
+        "/api/puzzles/random": {
+          origin: siteOrigin,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+          cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+          compress: true,
+          functionAssociations: [
             {
-              httpStatus: 403,
-              responseHttpStatus: 200,
-              responsePagePath: `/${siteErrorDocument}`,
-              ttl: Duration.minutes(5),
-            },
-            {
-              httpStatus: 404,
-              responseHttpStatus: 200,
-              responsePagePath: `/${siteErrorDocument}`,
-              ttl: Duration.minutes(5),
+              eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+              function: randomPuzzleFunction,
             },
           ],
+          responseHeadersPolicy: randomPuzzleResponseHeadersPolicy,
+          viewerProtocolPolicy:
+            cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        },
+      },
+      defaultRootObject: siteDocument,
+      domainNames: [domainName],
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: `/${siteDocument}`,
+          ttl: Duration.minutes(5),
+        },
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: `/${siteDocument}`,
+          ttl: Duration.minutes(5),
+        },
+      ],
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      priceClass: importExistingResources
-        ? cloudfront.PriceClass.PRICE_CLASS_ALL
-        : cloudfront.PriceClass.PRICE_CLASS_200,
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
     });
 
-    if (!importExistingResources) {
-      new s3deploy.BucketDeployment(this, "DeployWebsite", {
-        destinationBucket: bucket,
-        distribution,
-        distributionPaths: ["/*"],
-        prune: true,
-        sources: [s3deploy.Source.asset(join(projectRoot, "dist"))],
-      });
-    }
+    new s3deploy.BucketDeployment(this, "DeployWebsite", {
+      destinationBucket: bucket,
+      distribution,
+      distributionPaths: ["/*"],
+      prune: true,
+      sources: [s3deploy.Source.asset(join(projectRoot, "dist"))],
+    });
 
-    if (domainName && hostedZoneName) {
-      const hostedZone = route53.HostedZone.fromLookup(this, "HostedZone", {
-        domainName: hostedZoneName,
-      });
+    const hostedZone = route53.HostedZone.fromLookup(this, "HostedZone", {
+      domainName: hostedZoneName,
+    });
 
-      new route53.ARecord(this, "AliasRecord", {
-        recordName: domainName,
-        target: route53.RecordTarget.fromAlias(
-          new route53Targets.CloudFrontTarget(distribution),
-        ),
-        zone: hostedZone,
-      });
+    new route53.ARecord(this, "AliasRecord", {
+      recordName: domainName,
+      target: route53.RecordTarget.fromAlias(
+        new route53Targets.CloudFrontTarget(distribution),
+      ),
+      zone: hostedZone,
+    });
 
-      new route53.AaaaRecord(this, "AliasRecordIpv6", {
-        recordName: domainName,
-        target: route53.RecordTarget.fromAlias(
-          new route53Targets.CloudFrontTarget(distribution),
-        ),
-        zone: hostedZone,
-      });
-    }
+    new route53.AaaaRecord(this, "AliasRecordIpv6", {
+      recordName: domainName,
+      target: route53.RecordTarget.fromAlias(
+        new route53Targets.CloudFrontTarget(distribution),
+      ),
+      zone: hostedZone,
+    });
 
     new CfnOutput(this, "BucketName", {
       value: bucket.bucketName,
