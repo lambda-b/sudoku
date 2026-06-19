@@ -24,6 +24,7 @@ type PuzzleManifest = {
 const infraDir = fileURLToPath(new URL("..", import.meta.url));
 const projectRoot = join(infraDir, "..");
 const bucketName = "dancinglinks-sudoku-solver";
+const puzzleBucketName = "dancinglinks-sudoku-solver-puzzles";
 const certificateArn =
   "arn:aws:acm:us-east-1:154539905353:certificate/28775c3e-1141-4ef3-8a41-cde305b8d76f";
 const domainName = "sudoku.pisan-zapra.com";
@@ -36,8 +37,16 @@ export class SudokuWebStack extends Stack {
 
     const puzzleCount = readPuzzleCount();
 
-    const bucket = new s3.Bucket(this, "SiteBucket", {
+    const siteBucket = new s3.Bucket(this, "SiteBucket", {
       bucketName,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      removalPolicy: RemovalPolicy.RETAIN,
+      versioned: true,
+    });
+    const puzzleBucket = new s3.Bucket(this, "PuzzleBucket", {
+      bucketName: puzzleBucketName,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       enforceSSL: true,
@@ -79,7 +88,10 @@ export class SudokuWebStack extends Stack {
       "SiteCertificate",
       certificateArn,
     );
-    const siteOrigin = origins.S3BucketOrigin.withOriginAccessControl(bucket);
+    const siteOrigin =
+      origins.S3BucketOrigin.withOriginAccessControl(siteBucket);
+    const puzzleOrigin =
+      origins.S3BucketOrigin.withOriginAccessControl(puzzleBucket);
 
     const distribution = new cloudfront.Distribution(this, "Distribution", {
       certificate,
@@ -98,7 +110,7 @@ export class SudokuWebStack extends Stack {
       },
       additionalBehaviors: {
         "/api/puzzles/random": {
-          origin: siteOrigin,
+          origin: puzzleOrigin,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
@@ -110,6 +122,14 @@ export class SudokuWebStack extends Stack {
             },
           ],
           responseHeadersPolicy: randomPuzzleResponseHeadersPolicy,
+          viewerProtocolPolicy:
+            cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        },
+        "/puzzles/*": {
+          origin: puzzleOrigin,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+          compress: true,
           viewerProtocolPolicy:
             cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         },
@@ -135,12 +155,17 @@ export class SudokuWebStack extends Stack {
     });
 
     new s3deploy.BucketDeployment(this, "DeployWebsite", {
-      destinationBucket: bucket,
+      destinationBucket: siteBucket,
       distribution,
       distributionPaths: ["/*"],
+      exclude: ["puzzles/*"],
       memoryLimit: 1024,
       prune: true,
-      sources: [s3deploy.Source.asset(join(projectRoot, "dist"))],
+      sources: [
+        s3deploy.Source.asset(join(projectRoot, "dist"), {
+          exclude: ["puzzles/*"],
+        }),
+      ],
     });
 
     const hostedZone = route53.HostedZone.fromLookup(this, "HostedZone", {
@@ -164,7 +189,10 @@ export class SudokuWebStack extends Stack {
     });
 
     new CfnOutput(this, "BucketName", {
-      value: bucket.bucketName,
+      value: siteBucket.bucketName,
+    });
+    new CfnOutput(this, "PuzzleBucketName", {
+      value: puzzleBucket.bucketName,
     });
     new CfnOutput(this, "DistributionId", {
       value: distribution.distributionId,

@@ -12,6 +12,7 @@
     "infra:synth": "npm --prefix infra run synth",
     "lint": "biome check . && oxlint .",
     "format": "biome check --write .",
+    "puzzles:deploy": "aws s3 sync public/puzzles s3://dancinglinks-sudoku-solver-puzzles/puzzles --delete && aws cloudfront create-invalidation --distribution-id E2E3427N1NDFOA --paths '/puzzles/*' '/api/puzzles/random'",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -22,11 +22,18 @@ Deploy:
 npm run infra:deploy
 ```
 
+Deploy puzzle JSON files separately:
+
+```sh
+npm run puzzles:deploy
+```
+
 This project defaults to:
 
 - Domain: `sudoku.pisan-zapra.com`
 - Hosted zone: `pisan-zapra.com`
 - S3 bucket: `dancinglinks-sudoku-solver`
+- Puzzle S3 bucket: `dancinglinks-sudoku-solver-puzzles`
 - ACM certificate: `arn:aws:acm:us-east-1:154539905353:certificate/28775c3e-1141-4ef3-8a41-cde305b8d76f`
 
 Override them when needed:
