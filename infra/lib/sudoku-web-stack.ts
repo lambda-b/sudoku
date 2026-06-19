@@ -138,6 +138,7 @@ export class SudokuWebStack extends Stack {
       destinationBucket: bucket,
       distribution,
       distributionPaths: ["/*"],
+      memoryLimit: 1024,
       prune: true,
       sources: [s3deploy.Source.asset(join(projectRoot, "dist"))],
     });
