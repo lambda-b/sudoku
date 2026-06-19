@@ -161,11 +161,7 @@ export class SudokuWebStack extends Stack {
       exclude: ["puzzles/*"],
       memoryLimit: 1024,
       prune: true,
-      sources: [
-        s3deploy.Source.asset(join(projectRoot, "dist"), {
-          exclude: ["puzzles/*"],
-        }),
-      ],
+      sources: [s3deploy.Source.asset(join(projectRoot, "dist/site"))],
     });
 
     const hostedZone = route53.HostedZone.fromLookup(this, "HostedZone", {
@@ -204,7 +200,7 @@ export class SudokuWebStack extends Stack {
 }
 
 const readPuzzleCount = (): number => {
-  const manifestPath = join(projectRoot, "public/puzzles/manifest.json");
+  const manifestPath = join(projectRoot, "app/puzzles/manifest.json");
   const manifest = JSON.parse(
     readFileSync(manifestPath, "utf-8"),
   ) as PuzzleManifest;

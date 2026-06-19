@@ -1,37 +1,27 @@
 {
-  "name": "app2",
+  "name": "sudoku",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "app",
+    "infra"
+  ],
   "scripts": {
-    "dev": "vite --host",
-    "build": "tsc --noEmit && vite build",
+    "dev": "npm --prefix app run dev",
+    "build": "rm -rf dist && npm --prefix app run build && npm --prefix app run build:puzzles",
     "infra:bootstrap": "npm --prefix infra run bootstrap",
     "infra:diff": "npm --prefix infra run diff",
     "infra:deploy": "npm run build && npm --prefix infra run deploy",
     "infra:synth": "npm --prefix infra run synth",
     "lint": "biome check . && oxlint .",
     "format": "biome check --write .",
-    "puzzles:deploy": "aws s3 sync public/puzzles s3://dancinglinks-sudoku-solver-puzzles/puzzles --delete && aws cloudfront create-invalidation --distribution-id E2E3427N1NDFOA --paths '/puzzles/*' '/api/puzzles/random'",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.101.0",
-    "jotai": "^2.20.1",
-    "jotai-family": "^1.0.2",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "puzzles:build": "npm --prefix app run build:puzzles",
+    "puzzles:deploy": "npm run puzzles:build && aws s3 sync dist/puzzles s3://dancinglinks-sudoku-solver-puzzles/puzzles --delete && aws cloudfront create-invalidation --distribution-id E2E3427N1NDFOA --paths '/puzzles/*' '/api/puzzles/random'",
+    "preview": "npm --prefix app run preview"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.0",
-    "@tailwindcss/vite": "^4.3.1",
-    "@types/node": "^25.9.3",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
-    "oxlint": "^1.70.0",
-    "tailwindcss": "^4.3.1",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "oxlint": "^1.70.0"
   }
 }

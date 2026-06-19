@@ -22,11 +22,15 @@ Deploy:
 npm run infra:deploy
 ```
 
+This builds the frontend into `dist/site` and deploys only the SPA/static site bucket.
+
 Deploy puzzle JSON files separately:
 
 ```sh
 npm run puzzles:deploy
 ```
+
+This builds puzzle assets into `dist/puzzles`, syncs them to the puzzle bucket, and invalidates `/puzzles/*` and `/api/puzzles/random`.
 
 This project defaults to:
 
