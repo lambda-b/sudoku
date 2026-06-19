@@ -25,7 +25,7 @@ const randomPuzzleApi = (): Plugin => {
         }
 
         const manifestPath = fileURLToPath(
-          new URL("./public/puzzles/manifest.json", import.meta.url),
+          new URL("./puzzles/manifest.json", import.meta.url),
         );
         const manifest = JSON.parse(
           readFileSync(manifestPath, "utf-8"),
@@ -35,7 +35,7 @@ const randomPuzzleApi = (): Plugin => {
           "0",
         );
         const puzzlePath = fileURLToPath(
-          new URL(`./public/puzzles/${id}.json`, import.meta.url),
+          new URL(`./puzzles/${id}.json`, import.meta.url),
         );
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -47,6 +47,10 @@ const randomPuzzleApi = (): Plugin => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    outDir: "../dist/site",
+    emptyOutDir: true,
+  },
   plugins: [react(), tailwindcss(), randomPuzzleApi()],
   resolve: {
     tsconfigPaths: true,

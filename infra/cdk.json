@@ -1,0 +1,7 @@
+{
+  "app": "npx tsx bin/app.ts",
+  "context": {
+    "deploymentAccount": "154539905353",
+    "deploymentRegion": "ap-northeast-1"
+  }
+}

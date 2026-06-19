@@ -5,6 +5,7 @@
       "**",
       "!.devcontainer",
       "!dist",
+      "!infra/cdk.out",
       "!node_modules",
       "!package-lock.json"
     ]
