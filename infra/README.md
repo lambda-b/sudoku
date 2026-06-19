@@ -45,8 +45,8 @@ CloudFront certificates must be in `us-east-1`.
 To let CDK manage resources that already exist, import them into this stack after the first successful `cdk synth`:
 
 ```sh
-npm --prefix infra run synth
-npx --prefix infra cdk import
+npm --prefix infra run synth -- -c importExistingResources=true
+npx --prefix infra cdk import -c importExistingResources=true
 ```
 
 The resources to map are:
@@ -59,3 +59,9 @@ The resources to map are:
 - `SudokuWebStack/AliasRecordIpv6`, if an AAAA record already exists
 
 If you prefer replacing the manual resources instead of importing them, deploy this stack as-is, verify the new CloudFront distribution, then remove the old resources manually.
+
+After import completes, run a normal deploy to add CloudFront Function, BucketDeployment, Route53 records, and SPA fallback settings:
+
+```sh
+npm run infra:deploy
+```
