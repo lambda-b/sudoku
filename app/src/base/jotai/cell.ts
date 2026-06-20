@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 import { atomFamily } from "jotai-family";
 import { addressAtom } from "@/base/jotai/address";
+import { conflictAddressesState, solveStatusState } from "@/base/jotai/solver";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
 import {
   ADDRESS_NUMBER,
@@ -30,6 +31,10 @@ export const cellState = atomFamily((address: AddressNumberType) =>
 
       set(addressAtom, cell.address);
       set(cellAtom(address), cell);
+      if (oldCell.cellNumber !== cell.cellNumber) {
+        set(solveStatusState, "idle");
+        set(conflictAddressesState, []);
+      }
     },
   ),
 );
@@ -46,9 +51,17 @@ export const cellNumberState = atom(
     return cell.cellNumber;
   },
   (get, set, cellNumber: number) => {
+    if (get(solveStatusState) === "solving") {
+      return;
+    }
     const address = get(addressAtom);
+    if (get(puzzleState)[address] !== "0") {
+      return;
+    }
     const cell = get(cellAtom(address));
     set(cellAtom(address), { ...cell, cellNumber });
+    set(solveStatusState, "idle");
+    set(conflictAddressesState, []);
   },
 );
 
