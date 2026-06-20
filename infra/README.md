@@ -30,7 +30,28 @@ Deploy puzzle JSON files separately:
 npm run puzzles:deploy
 ```
 
-This builds puzzle assets into `dist/puzzles`, syncs them to the puzzle bucket, and invalidates `/puzzles/*` and `/api/puzzles/random`.
+This copies the source dataset from `puzzles` into `dist/puzzles`, syncs it to the puzzle bucket, and invalidates `/puzzles/*` and `/api/puzzles/random`.
+
+## GitHub Actions
+
+`.github/workflows/site.yml` validates pull requests. After a change is merged into `main`, it validates the same commit and deploys `dist/site` through CDK.
+
+`.github/workflows/puzzles.yml` is started manually from the Actions tab. It deploys `dist/puzzles` to the puzzle bucket and invalidates the related CloudFront paths.
+
+Both deployment jobs use GitHub OIDC instead of static AWS access keys. Create a GitHub Environment named `production`, then add an environment variable named `AWS_ROLE_ARN` containing the IAM role ARN that GitHub Actions should assume.
+
+The IAM role trust policy must allow the GitHub OIDC provider with these conditions:
+
+```json
+{
+  "StringEquals": {
+    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+    "token.actions.githubusercontent.com:sub": "repo:lambda-b/sudoku:environment:production"
+  }
+}
+```
+
+The role needs permission to assume the CDK bootstrap deployment roles. It also needs `s3:ListBucket`, `s3:PutObject`, and `s3:DeleteObject` for `dancinglinks-sudoku-solver-puzzles`, plus `cloudfront:CreateInvalidation` for the site distribution.
 
 This project defaults to:
 

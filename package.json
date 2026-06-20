@@ -9,14 +9,15 @@
   ],
   "scripts": {
     "dev": "npm --prefix app run dev",
-    "build": "rm -rf dist && npm --prefix app run build && npm --prefix app run build:puzzles",
+    "build": "rm -rf dist && npm run site:build && npm run puzzles:build",
+    "site:build": "npm --prefix app run build",
     "infra:bootstrap": "npm --prefix infra run bootstrap",
     "infra:diff": "npm --prefix infra run diff",
-    "infra:deploy": "npm run build && npm --prefix infra run deploy",
+    "infra:deploy": "npm run site:build && npm --prefix infra run deploy",
     "infra:synth": "npm --prefix infra run synth",
     "lint": "biome check . && oxlint .",
     "format": "biome check --write .",
-    "puzzles:build": "npm --prefix app run build:puzzles",
+    "puzzles:build": "rm -rf dist/puzzles && mkdir -p dist/puzzles && cp -R puzzles/. dist/puzzles/",
     "puzzles:deploy": "npm run puzzles:build && aws s3 sync dist/puzzles s3://dancinglinks-sudoku-solver-puzzles/puzzles --delete && aws cloudfront create-invalidation --distribution-id E2E3427N1NDFOA --paths '/puzzles/*' '/api/puzzles/random'",
     "preview": "npm --prefix app run preview"
   },

@@ -200,7 +200,7 @@ export class SudokuWebStack extends Stack {
 }
 
 const readPuzzleCount = (): number => {
-  const manifestPath = join(projectRoot, "app/puzzles/manifest.json");
+  const manifestPath = join(projectRoot, "puzzles/manifest.json");
   const manifest = JSON.parse(
     readFileSync(manifestPath, "utf-8"),
   ) as PuzzleManifest;
