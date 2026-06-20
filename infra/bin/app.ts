@@ -7,10 +7,10 @@ const app = new App();
 new SudokuWebStack(app, "SudokuWebStack", {
   env: {
     account:
-      process.env.CDK_DEFAULT_ACCOUNT ??
-      (app.node.tryGetContext("deploymentAccount") as string | undefined),
+      (app.node.tryGetContext("deploymentAccount") as string | undefined) ??
+      process.env.CDK_DEFAULT_ACCOUNT,
     region:
-      process.env.CDK_DEFAULT_REGION ??
-      (app.node.tryGetContext("deploymentRegion") as string | undefined),
+      (app.node.tryGetContext("deploymentRegion") as string | undefined) ??
+      process.env.CDK_DEFAULT_REGION,
   },
 });
