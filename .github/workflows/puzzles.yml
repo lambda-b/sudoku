@@ -1,0 +1,38 @@
+name: Deploy puzzles
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    name: Deploy puzzles
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: puzzles-production
+      cancel-in-progress: false
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      - name: Deploy puzzle assets
+        run: npm run puzzles:deploy

@@ -25,7 +25,7 @@ const randomPuzzleApi = (): Plugin => {
         }
 
         const manifestPath = fileURLToPath(
-          new URL("./puzzles/manifest.json", import.meta.url),
+          new URL("../puzzles/manifest.json", import.meta.url),
         );
         const manifest = JSON.parse(
           readFileSync(manifestPath, "utf-8"),
@@ -35,7 +35,7 @@ const randomPuzzleApi = (): Plugin => {
           "0",
         );
         const puzzlePath = fileURLToPath(
-          new URL(`./puzzles/${id}.json`, import.meta.url),
+          new URL(`../puzzles/${id}.json`, import.meta.url),
         );
 
         res.setHeader("Content-Type", "application/json; charset=utf-8");

@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
-    "build:puzzles": "rm -rf ../dist/puzzles && mkdir -p ../dist/puzzles && cp -R puzzles/. ../dist/puzzles/",
     "preview": "vite preview --outDir ../dist/site"
   },
   "dependencies": {
