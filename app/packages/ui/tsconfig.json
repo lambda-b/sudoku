@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "paths": {
+      "@sudoku/core": ["../core/src/index.ts"],
+      "@sudoku/core/*": ["../core/src/*"],
+      "@sudoku/ui/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

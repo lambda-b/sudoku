@@ -1,11 +1,11 @@
+import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
 import { clsx } from "clsx";
 import { Square, WandSparkles } from "lucide-react";
-import type { SolveStatus } from "@/services/solver/type";
 
 type SudokuSolveButtonProps = {
   onSolve: () => void;
   onStop: () => void;
-  solveStatus: SolveStatus;
+  solveStatus: SudokuSolveStatusType;
 };
 
 export const SudokuSolveButton = ({

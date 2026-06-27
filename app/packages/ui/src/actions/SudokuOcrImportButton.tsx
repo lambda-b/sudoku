@@ -1,10 +1,20 @@
+import { Modal } from "@sudoku/ui/primitives/Modal";
+import { SudokuBoard } from "@sudoku/ui/sudoku/SudokuBoard";
+import { SudokuNumberPad } from "@sudoku/ui/sudoku/SudokuNumberPad";
+import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import { Check, ImageUp, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
-import { Modal } from "@/components/atom/Modal";
-import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
-import SudokuTable from "@/components/block/SudokuTable";
-import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { RecognizeSudokuOcr } from "@/services/ocr/useSudokuOcr";
+
+type SudokuOcrRecognitionResult = {
+  puzzle: string;
+};
+
+export type SudokuOcrRecognize = (
+  file: File,
+  options?: {
+    onSuccess?: (result: SudokuOcrRecognitionResult) => void;
+  },
+) => void;
 
 const normalizePuzzle = (value: string) =>
   value
@@ -12,7 +22,7 @@ const normalizePuzzle = (value: string) =>
     .slice(0, 81)
     .padEnd(81, "0");
 
-const createPreviewCells = (puzzle: string): SudokuCellModel[] =>
+const createPreviewCells = (puzzle: string): SudokuUiCell[] =>
   normalizePuzzle(puzzle)
     .split("")
     .map((value, address) => ({
@@ -22,17 +32,17 @@ const createPreviewCells = (puzzle: string): SudokuCellModel[] =>
       status: "default",
     }));
 
-type SudokuOcrImporterProps = {
+type SudokuOcrImportButtonProps = {
   hasResult: boolean;
   message: string;
-  onFileRecognize: RecognizeSudokuOcr;
+  onFileRecognize: SudokuOcrRecognize;
   onPuzzleApply: (puzzle: string) => void;
   onReset: () => void;
   processing: boolean;
   showEditor: boolean;
 };
 
-export const SudokuOcrImporter = ({
+export const SudokuOcrImportButton = ({
   hasResult,
   message,
   onFileRecognize,
@@ -40,7 +50,7 @@ export const SudokuOcrImporter = ({
   onReset,
   processing,
   showEditor,
-}: SudokuOcrImporterProps) => {
+}: SudokuOcrImportButtonProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [puzzleDraft, setPuzzleDraft] = useState("");
@@ -48,7 +58,7 @@ export const SudokuOcrImporter = ({
   const draft = normalizePuzzle(puzzleDraft);
   const previewCells = createPreviewCells(draft);
 
-  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
 
@@ -141,17 +151,13 @@ export const SudokuOcrImporter = ({
             </div>
             <div className="h-[372px] w-[306px] overflow-hidden">
               <div className="w-[630px] origin-top-left scale-[0.485714]">
-                <SudokuTable
+                <SudokuBoard
                   cells={previewCells}
                   onCellNumberChange={updateCell}
                   onCellSelect={setSelectedAddress}
                   selectedAddress={selectedAddress}
-                  solveStatus="idle"
                 />
-                <SudokuSelectSheet
-                  onCellNumberSelect={inputSelectedCellNumber}
-                  solveStatus="idle"
-                />
+                <SudokuNumberPad onNumberSelect={inputSelectedCellNumber} />
               </div>
             </div>
           </div>

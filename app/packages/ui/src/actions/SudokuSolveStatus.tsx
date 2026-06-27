@@ -1,7 +1,7 @@
+import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
 import { clsx } from "clsx";
-import type { SolveStatus } from "@/services/solver/type";
 
-const messages: Record<SolveStatus, string> = {
+const messages: Record<SudokuSolveStatusType, string> = {
   idle: "",
   solving: "求解中…",
   solved: "解けました",
@@ -13,7 +13,7 @@ const messages: Record<SolveStatus, string> = {
 };
 
 type SudokuSolveStatusProps = {
-  solveStatus: SolveStatus;
+  solveStatus: SudokuSolveStatusType;
 };
 
 export const SudokuSolveStatus = ({ solveStatus }: SudokuSolveStatusProps) => {

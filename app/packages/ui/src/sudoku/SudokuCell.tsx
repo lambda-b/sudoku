@@ -1,37 +1,29 @@
+import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import { clsx } from "clsx";
 import { type ChangeEvent, memo, useEffect, useRef } from "react";
-import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/solver/type";
 
 export interface SudokuCellProps {
+  cell: SudokuUiCell;
   className?: string;
-  cell: SudokuCellModel;
+  disabled?: boolean;
   isSelected: boolean;
   onCellNumberChange: (address: number, cellNumber: number) => void;
   onCellSelect: (address: number) => void;
-  solveStatus: SolveStatus;
 }
 
-/**
- * セル一個を表示するためのコンポーネント
- *
- * @param className CSSクラス
- * @param cellNumber cellの番号
- * @param address セルの位置
- */
-const SudokuCell = ({
-  className = "",
+const SudokuCellComponent = ({
   cell,
+  className = "",
+  disabled = false,
   isSelected,
   onCellNumberChange,
   onCellSelect,
-  solveStatus,
 }: SudokuCellProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { address, cellNumber, initialCellNumber, status } = cell;
   const isGiven = initialCellNumber !== 0;
-  const editable = !isGiven && solveStatus !== "solving";
+  const editable = !isGiven && !disabled;
 
   const updateCellNumber = (cellNumber: number) =>
     editable && onCellNumberChange(address, cellNumber);
@@ -115,4 +107,4 @@ const SudokuCell = ({
   );
 };
 
-export default memo(SudokuCell);
+export const SudokuCell = memo(SudokuCellComponent);

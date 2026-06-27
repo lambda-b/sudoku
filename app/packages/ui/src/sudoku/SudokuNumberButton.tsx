@@ -1,20 +1,19 @@
 import { clsx } from "clsx";
 import { memo } from "react";
-import type { SolveStatus } from "@/services/solver/type";
 
-export interface SudokuButtonProps {
+export interface SudokuNumberButtonProps {
   className?: string;
-  cellNumber: number;
-  onCellNumberSelect: (cellNumber: number) => void;
-  solveStatus: SolveStatus;
+  disabled?: boolean;
+  number: number;
+  onNumberSelect: (cellNumber: number) => void;
 }
 
-const SudokuButton = ({
+const SudokuNumberButtonComponent = ({
   className = "",
-  cellNumber,
-  onCellNumberSelect,
-  solveStatus,
-}: SudokuButtonProps) => {
+  disabled = false,
+  number,
+  onNumberSelect,
+}: SudokuNumberButtonProps) => {
   return (
     <div
       className={clsx(
@@ -24,14 +23,14 @@ const SudokuButton = ({
     >
       <button
         className="h-full w-full cursor-pointer text-center [font-size:clamp(22px,calc((100vw-16px)/15.75),40px)] disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={solveStatus === "solving"}
-        onClick={() => onCellNumberSelect(cellNumber)}
+        disabled={disabled}
+        onClick={() => onNumberSelect(number)}
         type="button"
       >
-        {cellNumber}
+        {number}
       </button>
     </div>
   );
 };
 
-export default memo(SudokuButton);
+export const SudokuNumberButton = memo(SudokuNumberButtonComponent);

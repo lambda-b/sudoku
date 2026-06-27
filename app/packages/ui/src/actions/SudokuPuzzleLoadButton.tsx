@@ -1,19 +1,19 @@
+import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
 import { RotateCw, Shuffle } from "lucide-react";
-import type { SolveStatus } from "@/services/solver/type";
 
-type SudokuPuzzleLoaderProps = {
+type SudokuPuzzleLoadButtonProps = {
   error: boolean;
   loading: boolean;
   onLoad: () => void;
-  solveStatus: SolveStatus;
+  solveStatus: SudokuSolveStatusType;
 };
 
-export const SudokuPuzzleLoader = ({
+export const SudokuPuzzleLoadButton = ({
   error,
   loading,
   onLoad,
   solveStatus,
-}: SudokuPuzzleLoaderProps) => {
+}: SudokuPuzzleLoadButtonProps) => {
   const label = error ? "Retry" : loading ? "Loading" : "Random";
   const Icon = error ? RotateCw : Shuffle;
 
