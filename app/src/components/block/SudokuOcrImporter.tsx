@@ -1,4 +1,5 @@
 import { useSetAtom } from "jotai";
+import { Check, ImageUp, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 import { puzzleState, tableState } from "@/base/jotai/cell";
 import { solveStatusState } from "@/base/jotai/solver";
@@ -87,11 +88,12 @@ export const SudokuOcrImporter = () => {
         type="file"
       />
       <button
-        className="cursor-pointer rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
+        className="inline-flex cursor-pointer items-center gap-2 rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
         disabled={processing}
         onClick={() => setIsOpen(true)}
         type="button"
       >
+        <Upload aria-hidden="true" size={16} strokeWidth={2} />
         {processing ? "OCR" : "Upload"}
       </button>
       <Modal
@@ -102,11 +104,12 @@ export const SudokuOcrImporter = () => {
       >
         <div className="mb-4 flex items-center gap-3">
           <button
-            className="cursor-pointer rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
+            className="inline-flex cursor-pointer items-center gap-2 rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
             disabled={processing}
             onClick={() => inputRef.current?.click()}
             type="button"
           >
+            <ImageUp aria-hidden="true" size={16} strokeWidth={2} />
             {processing ? "OCR" : "Choose Image"}
           </button>
           {message && <span className="text-sm text-zinc-600">{message}</span>}
@@ -118,10 +121,11 @@ export const SudokuOcrImporter = () => {
                 Review OCR result
               </p>
               <button
-                className="cursor-pointer rounded border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
                 onClick={applyPuzzle}
                 type="button"
               >
+                <Check aria-hidden="true" size={14} strokeWidth={2} />
                 Apply
               </button>
             </div>

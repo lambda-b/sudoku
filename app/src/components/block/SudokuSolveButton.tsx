@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { useAtomValue, useSetAtom } from "jotai";
+import { Square, WandSparkles } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { cellStatusUpdater, tableState } from "@/base/jotai/cell";
 import { solveStatusState } from "@/base/jotai/solver";
@@ -24,6 +25,7 @@ export const SudokuSolveButton = () => {
     onTableChange: setTable,
   });
   const processing = status === "solving";
+  const Icon = processing ? Square : WandSparkles;
 
   useEffect(() => setSolveStatus(status), [setSolveStatus, status]);
   useEffect(() => setCellStatuses(conflicts), [conflicts, setCellStatuses]);
@@ -31,7 +33,7 @@ export const SudokuSolveButton = () => {
   return (
     <button
       className={clsx(
-        "cursor-pointer rounded border px-4 py-2 font-medium transition-colors",
+        "inline-flex cursor-pointer items-center gap-2 rounded border px-4 py-2 font-medium transition-colors",
         processing
           ? "border-red-600 text-red-600 hover:bg-red-50"
           : "border-cyan-600 text-cyan-600 hover:bg-cyan-50",
@@ -39,6 +41,7 @@ export const SudokuSolveButton = () => {
       onClick={processing ? stop : solve}
       type="button"
     >
+      <Icon aria-hidden="true" size={16} strokeWidth={2} />
       {processing ? "Stop" : "Solve"}
     </button>
   );

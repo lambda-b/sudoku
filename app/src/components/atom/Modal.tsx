@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 
@@ -74,12 +75,12 @@ export const Modal = ({
           </p>
           <button
             aria-label={`Close ${title}`}
-            className="grid h-8 w-8 cursor-pointer place-items-center rounded border border-zinc-300 text-xl leading-none text-zinc-600 transition-colors hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-50"
+            className="grid h-8 w-8 cursor-pointer place-items-center rounded border border-zinc-300 text-zinc-600 transition-colors hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-50"
             disabled={closeDisabled}
             onClick={requestClose}
             type="button"
           >
-            &times;
+            <X aria-hidden="true" size={18} strokeWidth={2} />
           </button>
         </div>
         {children}
