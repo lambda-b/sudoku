@@ -34,7 +34,6 @@ export const SudokuOcrImporter = ({
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [puzzleDraft, setPuzzleDraft] = useState("");
-  const [rawText, setRawText] = useState("");
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
   const ocrMutation = useMutation<SudokuOcrResult, Error, File>({
     mutationFn: async (file) => {
@@ -48,12 +47,10 @@ export const SudokuOcrImporter = ({
     },
     onMutate: () => {
       setMessage("Loading OCR");
-      setRawText("");
       setSelectedAddress(-1);
     },
     onSuccess: (result) => {
       setPuzzleDraft(result.puzzle);
-      setRawText(result.rawText.trim());
       setMessage(`OCR confidence ${Math.round(result.confidence)}%`);
     },
     onError: (error) => {
@@ -163,14 +160,6 @@ export const SudokuOcrImporter = ({
                 />
               </div>
             </div>
-            {rawText && (
-              <details className="mt-3 text-sm text-zinc-600">
-                <summary className="cursor-pointer">Raw OCR text</summary>
-                <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap rounded bg-zinc-50 p-2">
-                  {rawText}
-                </pre>
-              </details>
-            )}
           </div>
         )}
         {!showEditor && !message && (
