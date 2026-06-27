@@ -1,5 +1,5 @@
 import { createContext, type ReactNode } from "react";
-import type { SudokuSolverClient } from "@/services/api/client";
+import type { SudokuSolverClient } from "@/services/solver/api/client";
 
 export const SudokuSolverClientContext =
   createContext<SudokuSolverClient | null>(null);

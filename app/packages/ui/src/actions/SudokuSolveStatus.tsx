@@ -1,7 +1,7 @@
+import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
 import { clsx } from "clsx";
-import type { SolveStatus } from "@/services/type";
 
-const messages: Record<SolveStatus, string> = {
+const messages: Record<SudokuSolveStatusType, string> = {
   idle: "",
   solving: "求解中…",
   solved: "解けました",
@@ -13,7 +13,7 @@ const messages: Record<SolveStatus, string> = {
 };
 
 type SudokuSolveStatusProps = {
-  solveStatus: SolveStatus;
+  solveStatus: SudokuSolveStatusType;
 };
 
 export const SudokuSolveStatus = ({ solveStatus }: SudokuSolveStatusProps) => {
@@ -21,7 +21,7 @@ export const SudokuSolveStatus = ({ solveStatus }: SudokuSolveStatusProps) => {
     <p
       aria-live="polite"
       className={clsx(
-        "min-w-72 text-right text-sm font-medium",
+        "min-w-0 whitespace-normal text-right text-[11px] leading-tight font-medium sm:text-sm",
         solveStatus === "solved" && "text-emerald-700",
         (solveStatus === "invalid" || solveStatus === "no-solution") &&
           "text-red-700",

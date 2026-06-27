@@ -1,37 +1,29 @@
+import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import { clsx } from "clsx";
 import { type ChangeEvent, memo, useEffect, useRef } from "react";
-import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/type";
 
 export interface SudokuCellProps {
+  cell: SudokuUiCell;
   className?: string;
-  cell: SudokuCellModel;
+  disabled?: boolean;
   isSelected: boolean;
   onCellNumberChange: (address: number, cellNumber: number) => void;
   onCellSelect: (address: number) => void;
-  solveStatus: SolveStatus;
 }
 
-/**
- * セル一個を表示するためのコンポーネント
- *
- * @param className CSSクラス
- * @param cellNumber cellの番号
- * @param address セルの位置
- */
-const SudokuCell = ({
-  className = "",
+const SudokuCellComponent = ({
   cell,
+  className = "",
+  disabled = false,
   isSelected,
   onCellNumberChange,
   onCellSelect,
-  solveStatus,
 }: SudokuCellProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { address, cellNumber, initialCellNumber, status } = cell;
   const isGiven = initialCellNumber !== 0;
-  const editable = !isGiven && solveStatus !== "solving";
+  const editable = !isGiven && !disabled;
 
   const updateCellNumber = (cellNumber: number) =>
     editable && onCellNumberChange(address, cellNumber);
@@ -52,10 +44,15 @@ const SudokuCell = ({
   }, [isSelected]);
 
   return (
-    <div className={clsx("h-[70px] w-[70px] border-[#b5b5b5]", className)}>
+    <div
+      className={clsx(
+        "h-[var(--sudoku-cell)] w-[var(--sudoku-cell)] border-[#b5b5b5]",
+        className,
+      )}
+    >
       <label
         className={clsx(
-          "block h-full w-full cursor-pointer text-center text-[40px] leading-[70px]",
+          "block h-full w-full cursor-pointer text-center [font-size:clamp(22px,calc((100vw-16px)/15.75),40px)] [line-height:var(--sudoku-cell)]",
           isGiven && "font-bold text-zinc-900",
           status === "conflict" && "bg-red-100 text-red-700",
           isSelected && "shadow-[0_0_10px_hsl(207_61%_53%)]",
@@ -110,4 +107,4 @@ const SudokuCell = ({
   );
 };
 
-export default memo(SudokuCell);
+export const SudokuCell = memo(SudokuCellComponent);

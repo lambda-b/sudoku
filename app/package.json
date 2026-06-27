@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm --prefix packages/utility run build && npm --prefix packages/core run build && npm --prefix packages/ocr run build && tsc --noEmit && vite build",
+    "build": "npm --prefix packages/utility run build && npm --prefix packages/core run build && npm --prefix packages/ocr run build && npm --prefix packages/ui run build && tsc --noEmit && vite build",
     "preview": "vite preview --outDir ../dist/site"
   },
   "dependencies": {
     "@sudoku/core": "file:packages/core",
     "@sudoku/ocr": "file:packages/ocr",
+    "@sudoku/ui": "file:packages/ui",
     "@tanstack/react-query": "^5.101.0",
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",

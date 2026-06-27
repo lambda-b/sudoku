@@ -2,21 +2,24 @@ import {
   ADDRESS_NUMBER,
   isAddressNumber,
 } from "@sudoku/core/model/type/AddressNumber";
+import { SudokuOcrImportButton } from "@sudoku/ui/actions/SudokuOcrImportButton";
+import { SudokuPuzzleLoadButton } from "@sudoku/ui/actions/SudokuPuzzleLoadButton";
+import { SudokuResetButton } from "@sudoku/ui/actions/SudokuResetButton";
+import { SudokuSolveButton } from "@sudoku/ui/actions/SudokuSolveButton";
+import { SudokuSolveStatus } from "@sudoku/ui/actions/SudokuSolveStatus";
+import { SudokuBoard } from "@sudoku/ui/sudoku/SudokuBoard";
+import { SudokuNumberPad } from "@sudoku/ui/sudoku/SudokuNumberPad";
+import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import { useCallback, useState } from "react";
-import { SudokuOcrImporter } from "@/components/block/SudokuOcrImporter";
-import { SudokuPuzzleLoader } from "@/components/block/SudokuPuzzleLoader";
-import { SudokuResetButton } from "@/components/block/SudokuResetButton";
-import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
-import { SudokuSolveButton } from "@/components/block/SudokuSolveButton";
-import { SudokuSolveStatus } from "@/components/block/SudokuSolveStatus";
-import SudokuTable from "@/components/block/SudokuTable";
-import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/type";
+import { useSudokuOcr } from "@/services/ocr/useSudokuOcr";
+import { useRandomPuzzleLoader } from "@/services/random-loader/useRandomPuzzleLoader";
+import type { SolveStatus } from "@/services/solver/type";
+import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
-const createCells = (puzzle: string): SudokuCellModel[] =>
+const createCells = (puzzle: string): SudokuUiCell[] =>
   ADDRESS_NUMBER.map((address) => {
     const cellNumber = Number(puzzle[address] ?? "0");
 
@@ -28,7 +31,7 @@ const createCells = (puzzle: string): SudokuCellModel[] =>
     };
   });
 
-const cellsToTable = (cells: SudokuCellModel[]) =>
+const cellsToTable = (cells: SudokuUiCell[]) =>
   cells.map((cell) => cell.cellNumber).join("");
 
 const Sudoku = () => {
@@ -129,41 +132,58 @@ const Sudoku = () => {
     },
     [selectedAddress, updateCellNumber],
   );
+  const randomPuzzle = useRandomPuzzleLoader({ onPuzzleLoad: applyPuzzle });
+  const ocr = useSudokuOcr();
+  const solver = useSudokuSolver({
+    onConflictsChange: updateCellStatuses,
+    onStatusChange: setSolveStatus,
+    onTableChange: applyTable,
+    solveStatus,
+    table: cellsToTable(cells),
+  });
 
   return (
-    <div className="mx-auto w-[min(630px,calc(100vw-16px))] text-center [--sudoku-scale:min(1,calc((100vw-16px)/630px))]">
-      <div className="w-[630px] origin-top-left [zoom:var(--sudoku-scale)]">
-        <div className="mx-auto my-3 flex w-[630px] items-center justify-between">
-          <div className="flex items-center gap-3">
-            <SudokuPuzzleLoader
-              onPuzzleLoad={applyPuzzle}
+    <div className="mx-auto w-[min(630px,calc(100vw-16px))] text-center [--sudoku-board:calc(var(--sudoku-cell)*9)] [--sudoku-cell:min(70px,calc((100vw-16px)/9))]">
+      <div className="w-[var(--sudoku-board)]">
+        <div className="mx-auto my-3 flex w-[var(--sudoku-board)] flex-col gap-2">
+          <div className="flex items-center justify-between gap-1 sm:gap-3">
+            <SudokuPuzzleLoadButton
+              error={randomPuzzle.error}
+              loading={randomPuzzle.loading}
+              onLoad={() => void randomPuzzle.load()}
               solveStatus={solveStatus}
             />
-            <SudokuOcrImporter onPuzzleApply={applyPuzzle} />
+            <SudokuOcrImportButton
+              hasResult={!!ocr.result}
+              message={ocr.message}
+              onFileRecognize={ocr.recognize}
+              onPuzzleApply={applyPuzzle}
+              onReset={ocr.reset}
+              processing={ocr.processing}
+              showEditor={ocr.showEditor}
+            />
             <SudokuResetButton
               onReset={resetPuzzle}
               solveStatus={solveStatus}
             />
             <SudokuSolveButton
-              onSolveStatusChange={setSolveStatus}
-              onTableChange={applyTable}
-              onUpdateCellStatuses={updateCellStatuses}
+              onSolve={solver.solve}
+              onStop={solver.stop}
               solveStatus={solveStatus}
-              table={cellsToTable(cells)}
             />
           </div>
           <SudokuSolveStatus solveStatus={solveStatus} />
         </div>
-        <SudokuTable
+        <SudokuBoard
           cells={cells}
+          disabled={solveStatus === "solving"}
           onCellNumberChange={updateCellNumber}
           onCellSelect={selectCell}
           selectedAddress={selectedAddress}
-          solveStatus={solveStatus}
         />
-        <SudokuSelectSheet
-          onCellNumberSelect={inputSelectedNumber}
-          solveStatus={solveStatus}
+        <SudokuNumberPad
+          disabled={solveStatus === "solving"}
+          onNumberSelect={inputSelectedNumber}
         />
       </div>
     </div>

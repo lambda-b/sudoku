@@ -1,6 +1,5 @@
-import SudokuCell from "@/components/atom/SudokuCell";
-import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/type";
+import { SudokuCell } from "@sudoku/ui/sudoku/SudokuCell";
+import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 
 const rows = Array.from({ length: 9 }, (_, rowIdx) =>
   Array.from({ length: 9 }, (_, colIdx) => 9 * rowIdx + colIdx),
@@ -18,23 +17,23 @@ const cellBorders = [
   "border-t border-b-[3px] border-l border-r-[3px]",
 ];
 
-type SudokuTableProps = {
-  cells: SudokuCellModel[];
+type SudokuBoardProps = {
+  cells: SudokuUiCell[];
+  disabled?: boolean;
   onCellNumberChange: (address: number, cellNumber: number) => void;
   onCellSelect: (address: number) => void;
   selectedAddress: number | -1;
-  solveStatus: SolveStatus;
 };
 
-const SudokuTable = ({
+export const SudokuBoard = ({
   cells,
+  disabled = false,
   onCellNumberChange,
   onCellSelect,
   selectedAddress,
-  solveStatus,
-}: SudokuTableProps) => {
+}: SudokuBoardProps) => {
   return (
-    <div className="mx-auto min-h-[630px] min-w-[630px] px-0">
+    <div className="mx-auto h-[var(--sudoku-board)] w-[var(--sudoku-board)] px-0">
       {rows.map((row) => {
         const rowIdx = Math.floor(row[0] / 9);
 
@@ -50,12 +49,12 @@ const SudokuTable = ({
               return (
                 <SudokuCell
                   key={address}
-                  className={cellBorders[type - 1]}
                   cell={cells[address]}
+                  className={cellBorders[type - 1]}
+                  disabled={disabled}
                   isSelected={address === selectedAddress}
                   onCellNumberChange={onCellNumberChange}
                   onCellSelect={onCellSelect}
-                  solveStatus={solveStatus}
                 />
               );
             })}
@@ -65,5 +64,3 @@ const SudokuTable = ({
     </div>
   );
 };
-
-export default SudokuTable;

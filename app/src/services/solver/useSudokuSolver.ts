@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useContext, useEffect, useRef } from "react";
-import { SudokuSolverClientContext } from "@/services/api/SudokuSolverClientProvider";
-import type { SolutionStep, SolveResult } from "@/services/api/type";
-import type { SolveStatus } from "@/services/type";
+import { SudokuSolverClientContext } from "@/services/solver/api/SudokuSolverClientProvider";
+import type { SolutionStep, SolveResult } from "@/services/solver/api/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 const REVEAL_INTERVAL_MS = 100;
 

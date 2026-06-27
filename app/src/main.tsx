@@ -1,6 +1,6 @@
 import Sudoku from "@/Sudoku";
-import { SudokuSolverClient } from "@/services/api/client";
-import { SudokuSolverClientProvider } from "@/services/api/SudokuSolverClientProvider";
+import { SudokuSolverClient } from "@/services/solver/api/client";
+import { SudokuSolverClientProvider } from "@/services/solver/api/SudokuSolverClientProvider";
 import "@/style.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";

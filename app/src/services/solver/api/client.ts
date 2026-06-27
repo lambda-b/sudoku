@@ -1,5 +1,5 @@
 import { type Remote, wrap } from "comlink";
-import type { SolveResult, SudokuSolverApi } from "@/services/api/type";
+import type { SolveResult, SudokuSolverApi } from "@/services/solver/api/type";
 
 export class SudokuSolverClient {
   readonly #worker: Worker;
