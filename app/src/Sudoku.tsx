@@ -1,3 +1,4 @@
+import { SudokuOcrImporter } from "@/components/block/SudokuOcrImporter";
 import { SudokuPuzzleLoader } from "@/components/block/SudokuPuzzleLoader";
 import { SudokuResetButton } from "@/components/block/SudokuResetButton";
 import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
@@ -12,6 +13,7 @@ const Sudoku = () => {
         <div className="mx-auto my-3 flex w-[630px] items-center justify-between">
           <div className="flex items-center gap-3">
             <SudokuPuzzleLoader />
+            <SudokuOcrImporter />
             <SudokuResetButton />
             <SudokuSolveButton />
           </div>
