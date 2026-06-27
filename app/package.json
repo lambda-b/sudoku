@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm --prefix packages/utility run build && npm --prefix packages/core run build && tsc --noEmit && vite build",
+    "build": "npm --prefix packages/utility run build && npm --prefix packages/core run build && npm --prefix packages/ocr run build && tsc --noEmit && vite build",
     "preview": "vite preview --outDir ../dist/site"
   },
   "dependencies": {
     "@sudoku/core": "file:packages/core",
+    "@sudoku/ocr": "file:packages/ocr",
     "@tanstack/react-query": "^5.101.0",
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",
-    "jotai": "^2.20.1",
-    "jotai-family": "^1.0.2",
+    "lucide-react": "^1.21.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },

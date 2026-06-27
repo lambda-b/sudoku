@@ -1,6 +1,4 @@
 import { clsx } from "clsx";
-import { useAtomValue } from "jotai";
-import { solveStatusState } from "@/base/jotai/solver";
 import type { SolveStatus } from "@/services/type";
 
 const messages: Record<SolveStatus, string> = {
@@ -14,24 +12,27 @@ const messages: Record<SolveStatus, string> = {
   error: "求解中にエラーが発生しました",
 };
 
-export const SudokuSolveStatus = () => {
-  const status = useAtomValue(solveStatusState);
+type SudokuSolveStatusProps = {
+  solveStatus: SolveStatus;
+};
 
+export const SudokuSolveStatus = ({ solveStatus }: SudokuSolveStatusProps) => {
   return (
     <p
       aria-live="polite"
       className={clsx(
         "min-w-72 text-right text-sm font-medium",
-        status === "solved" && "text-emerald-700",
-        (status === "invalid" || status === "no-solution") && "text-red-700",
-        (status === "multiple-solutions" || status === "stopped") &&
+        solveStatus === "solved" && "text-emerald-700",
+        (solveStatus === "invalid" || solveStatus === "no-solution") &&
+          "text-red-700",
+        (solveStatus === "multiple-solutions" || solveStatus === "stopped") &&
           "text-zinc-600",
-        status === "error" && "text-red-700",
-        status === "solving" && "text-cyan-700",
+        solveStatus === "error" && "text-red-700",
+        solveStatus === "solving" && "text-cyan-700",
       )}
       role="status"
     >
-      {messages[status]}
+      {messages[solveStatus]}
     </p>
   );
 };

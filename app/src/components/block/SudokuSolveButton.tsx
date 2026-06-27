@@ -1,37 +1,37 @@
 import { clsx } from "clsx";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useContext, useEffect } from "react";
-import { cellStatusUpdater, tableState } from "@/base/jotai/cell";
-import { solveStatusState } from "@/base/jotai/solver";
-import { SudokuSolverClientContext } from "@/services/api/SudokuSolverClientProvider";
+import { Square, WandSparkles } from "lucide-react";
+import type { SolveStatus } from "@/services/type";
 import { useSudokuSolver } from "@/services/useSudokuSolver";
 
-const requireSudokuSolverClient = () => {
-  throw new Error("SudokuSolverClientProvider is not found");
+type SudokuSolveButtonProps = {
+  onSolveStatusChange: (status: SolveStatus) => void;
+  onTableChange: (table: string) => void;
+  onUpdateCellStatuses: (conflicts: number[]) => void;
+  solveStatus: SolveStatus;
+  table: string;
 };
 
-export const SudokuSolveButton = () => {
-  const client =
-    useContext(SudokuSolverClientContext) ?? requireSudokuSolverClient();
-  const table = useAtomValue(tableState);
-  const setTable = useSetAtom(tableState);
-  const setSolveStatus = useSetAtom(solveStatusState);
-  const setCellStatuses = useSetAtom(cellStatusUpdater);
-
-  const { conflicts, solve, status, stop } = useSudokuSolver({
-    client,
+export const SudokuSolveButton = ({
+  onSolveStatusChange,
+  onTableChange,
+  onUpdateCellStatuses,
+  solveStatus,
+  table,
+}: SudokuSolveButtonProps) => {
+  const { solve, stop } = useSudokuSolver({
+    onConflictsChange: onUpdateCellStatuses,
+    onStatusChange: onSolveStatusChange,
+    onTableChange,
+    solveStatus,
     table,
-    onTableChange: setTable,
   });
-  const processing = status === "solving";
-
-  useEffect(() => setSolveStatus(status), [setSolveStatus, status]);
-  useEffect(() => setCellStatuses(conflicts), [conflicts, setCellStatuses]);
+  const processing = solveStatus === "solving";
+  const Icon = processing ? Square : WandSparkles;
 
   return (
     <button
       className={clsx(
-        "cursor-pointer rounded border px-4 py-2 font-medium transition-colors",
+        "inline-flex cursor-pointer items-center gap-2 rounded border px-4 py-2 font-medium transition-colors",
         processing
           ? "border-red-600 text-red-600 hover:bg-red-50"
           : "border-cyan-600 text-cyan-600 hover:bg-cyan-50",
@@ -39,6 +39,7 @@ export const SudokuSolveButton = () => {
       onClick={processing ? stop : solve}
       type="button"
     >
+      <Icon aria-hidden="true" size={16} strokeWidth={2} />
       {processing ? "Stop" : "Solve"}
     </button>
   );

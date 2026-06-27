@@ -1,7 +1,6 @@
-import { useSetAtom } from "jotai";
-import { useEffect } from "react";
-import { handleJotaiByKey } from "@/base/keyboard";
 import SudokuCell from "@/components/atom/SudokuCell";
+import type { SudokuCellModel } from "@/model/SudokuCellModel";
+import type { SolveStatus } from "@/services/type";
 
 const rows = Array.from({ length: 9 }, (_, rowIdx) =>
   Array.from({ length: 9 }, (_, colIdx) => 9 * rowIdx + colIdx),
@@ -19,15 +18,21 @@ const cellBorders = [
   "border-t border-b-[3px] border-l border-r-[3px]",
 ];
 
-const SudokuTable = () => {
-  const handleKey = useSetAtom(handleJotaiByKey);
+type SudokuTableProps = {
+  cells: SudokuCellModel[];
+  onCellNumberChange: (address: number, cellNumber: number) => void;
+  onCellSelect: (address: number) => void;
+  selectedAddress: number | -1;
+  solveStatus: SolveStatus;
+};
 
-  useEffect(() => {
-    document.addEventListener("keydown", handleKey, false);
-
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [handleKey]);
-
+const SudokuTable = ({
+  cells,
+  onCellNumberChange,
+  onCellSelect,
+  selectedAddress,
+  solveStatus,
+}: SudokuTableProps) => {
   return (
     <div className="mx-auto min-h-[630px] min-w-[630px] px-0">
       {rows.map((row) => {
@@ -46,7 +51,11 @@ const SudokuTable = () => {
                 <SudokuCell
                   key={address}
                   className={cellBorders[type - 1]}
-                  address={address}
+                  cell={cells[address]}
+                  isSelected={address === selectedAddress}
+                  onCellNumberChange={onCellNumberChange}
+                  onCellSelect={onCellSelect}
+                  solveStatus={solveStatus}
                 />
               );
             })}
