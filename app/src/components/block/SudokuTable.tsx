@@ -1,6 +1,3 @@
-import { useSetAtom } from "jotai";
-import { useEffect } from "react";
-import { handleJotaiByKey } from "@/base/keyboard";
 import SudokuCell from "@/components/atom/SudokuCell";
 
 const rows = Array.from({ length: 9 }, (_, rowIdx) =>
@@ -20,14 +17,6 @@ const cellBorders = [
 ];
 
 const SudokuTable = () => {
-  const handleKey = useSetAtom(handleJotaiByKey);
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKey, false);
-
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [handleKey]);
-
   return (
     <div className="mx-auto min-h-[630px] min-w-[630px] px-0">
       {rows.map((row) => {

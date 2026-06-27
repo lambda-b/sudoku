@@ -1,6 +1,7 @@
 import {
   ADDRESS_NUMBER,
   type AddressNumberType,
+  isAddressNumber,
 } from "@sudoku/core/model/type/AddressNumber";
 import { atom } from "jotai";
 import { atomFamily } from "jotai-family";
@@ -27,12 +28,16 @@ export const cellState = atomFamily((address: AddressNumberType) =>
     (get) => get(cellAtom(address)),
     (get, set, cell: SudokuCellModel) => {
       const oldAddress = get(addressAtom);
-      const oldCell = get(cellAtom(oldAddress));
-      set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
+      const oldCell = isAddressNumber(oldAddress)
+        ? get(cellAtom(oldAddress))
+        : undefined;
+      if (oldCell) {
+        set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
+      }
 
       set(addressAtom, cell.address);
       set(cellAtom(address), cell);
-      if (oldCell.cellNumber !== cell.cellNumber) {
+      if (oldCell && oldCell.cellNumber !== cell.cellNumber) {
         set(solveStatusState, "idle");
         for (const cellAddress of ADDRESS_NUMBER) {
           const tableCell = get(cellAtom(cellAddress));
@@ -41,6 +46,24 @@ export const cellState = atomFamily((address: AddressNumberType) =>
       }
     },
   ),
+);
+
+export const selectedCellState = atom(
+  (get) => get(addressAtom),
+  (get, set, address: AddressNumberType | -1) => {
+    const oldAddress = get(addressAtom);
+    if (isAddressNumber(oldAddress)) {
+      const oldCell = get(cellAtom(oldAddress));
+      set(cellAtom(oldAddress), { ...oldCell, isSelected: false });
+    }
+
+    if (isAddressNumber(address)) {
+      const newCell = get(cellAtom(address));
+      set(cellAtom(address), { ...newCell, isSelected: true });
+    }
+
+    set(addressAtom, address);
+  },
 );
 
 export const cellStatusUpdater = atom(null, (get, set, conflicts: number[]) => {
