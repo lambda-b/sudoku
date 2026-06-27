@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { RotateCw, Shuffle } from "lucide-react";
 import { useEffect } from "react";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 type SudokuPuzzle = {
   id: string;

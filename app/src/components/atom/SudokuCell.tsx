@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import { type ChangeEvent, memo, useEffect, useRef } from "react";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 export interface SudokuCellProps {
   className?: string;

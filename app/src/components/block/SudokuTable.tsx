@@ -1,6 +1,6 @@
 import SudokuCell from "@/components/atom/SudokuCell";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 const rows = Array.from({ length: 9 }, (_, rowIdx) =>
   Array.from({ length: 9 }, (_, colIdx) => 9 * rowIdx + colIdx),

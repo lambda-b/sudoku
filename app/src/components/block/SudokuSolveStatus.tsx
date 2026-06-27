@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 const messages: Record<SolveStatus, string> = {
   idle: "",

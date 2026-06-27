@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { memo } from "react";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 export interface SudokuButtonProps {
   className?: string;

@@ -11,7 +11,7 @@ import { SudokuSolveButton } from "@/components/block/SudokuSolveButton";
 import { SudokuSolveStatus } from "@/components/block/SudokuSolveStatus";
 import SudokuTable from "@/components/block/SudokuTable";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";

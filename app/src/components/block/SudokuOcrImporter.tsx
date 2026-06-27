@@ -1,11 +1,10 @@
-import type { SudokuOcrResult } from "@sudoku/ocr";
-import { useMutation } from "@tanstack/react-query";
 import { Check, ImageUp, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 import { Modal } from "@/components/atom/Modal";
 import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
 import SudokuTable from "@/components/block/SudokuTable";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
+import { useSudokuOcr } from "@/services/ocr/useSudokuOcr";
 
 const normalizePuzzle = (value: string) =>
   value
@@ -32,33 +31,10 @@ export const SudokuOcrImporter = ({
 }: SudokuOcrImporterProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
   const [puzzleDraft, setPuzzleDraft] = useState("");
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
-  const ocrMutation = useMutation<SudokuOcrResult, Error, File>({
-    mutationFn: async (file) => {
-      const { recognizeSudokuFromImage } = await import("@sudoku/ocr");
-
-      return recognizeSudokuFromImage(file, {
-        onProgress: ({ progress, status }) => {
-          setMessage(`${status} ${Math.round(progress * 100)}%`);
-        },
-      });
-    },
-    onMutate: () => {
-      setMessage("Loading OCR");
-      setSelectedAddress(-1);
-    },
-    onSuccess: (result) => {
-      setPuzzleDraft(result.puzzle);
-      setMessage(`OCR confidence ${Math.round(result.confidence)}%`);
-    },
-    onError: (error) => {
-      setMessage(error.message);
-    },
-  });
-  const processing = ocrMutation.isPending;
-  const showEditor = ocrMutation.isSuccess || ocrMutation.isError;
+  const { message, processing, recognize, reset, result, showEditor } =
+    useSudokuOcr();
   const draft = normalizePuzzle(puzzleDraft);
   const previewCells = createPreviewCells(draft);
 
@@ -70,7 +46,12 @@ export const SudokuOcrImporter = ({
       return;
     }
 
-    ocrMutation.mutate(file);
+    setSelectedAddress(-1);
+    recognize(file, {
+      onSuccess: (result) => {
+        setPuzzleDraft(result.puzzle);
+      },
+    });
   };
 
   const updateCell = (address: number, cellNumber: number) => {
@@ -88,8 +69,7 @@ export const SudokuOcrImporter = ({
   const applyPuzzle = () => {
     const puzzle = normalizePuzzle(puzzleDraft);
     onPuzzleApply(puzzle);
-    ocrMutation.reset();
-    setMessage("");
+    reset();
     setSelectedAddress(-1);
     setIsOpen(false);
   };
@@ -130,7 +110,7 @@ export const SudokuOcrImporter = ({
           </button>
           {message && <span className="text-sm text-zinc-600">{message}</span>}
         </div>
-        {showEditor && (
+        {showEditor && result && (
           <div>
             <div className="mb-3 flex items-center justify-between gap-3">
               <p className="m-0 text-sm font-medium text-zinc-700">

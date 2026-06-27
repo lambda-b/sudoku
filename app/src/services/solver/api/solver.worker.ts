@@ -4,8 +4,8 @@ import type {
   SolutionStep,
   SolveResult,
   SudokuSolverApi,
-} from "@/services/api/type";
-import { validate } from "@/services/api/validate";
+} from "@/services/solver/api/type";
+import { validate } from "@/services/solver/api/validate";
 
 const api: SudokuSolverApi = {
   solve: async (puzzle): Promise<SolveResult> => {

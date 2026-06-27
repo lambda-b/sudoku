@@ -1,5 +1,5 @@
 import { RotateCcw } from "lucide-react";
-import type { SolveStatus } from "@/services/type";
+import type { SolveStatus } from "@/services/solver/type";
 
 type SudokuResetButtonProps = {
   onReset: () => void;
