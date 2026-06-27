@@ -143,10 +143,10 @@ const Sudoku = () => {
   });
 
   return (
-    <div className="mx-auto w-[min(630px,calc(100vw-16px))] text-center [--sudoku-scale:min(1,calc((100vw-16px)/630px))]">
-      <div className="w-[630px] origin-top-left [zoom:var(--sudoku-scale)]">
-        <div className="mx-auto my-3 flex w-[630px] items-center justify-between">
-          <div className="flex items-center gap-3">
+    <div className="mx-auto w-[min(630px,calc(100vw-16px))] text-center [--sudoku-board:calc(var(--sudoku-cell)*9)] [--sudoku-cell:min(70px,calc((100vw-16px)/9))]">
+      <div className="w-[var(--sudoku-board)]">
+        <div className="mx-auto my-3 flex w-[var(--sudoku-board)] flex-col gap-2">
+          <div className="flex items-center justify-between gap-1 sm:gap-3">
             <SudokuPuzzleLoader
               error={randomPuzzle.error}
               loading={randomPuzzle.loading}

@@ -16,9 +16,14 @@ const SudokuButton = ({
   solveStatus,
 }: SudokuButtonProps) => {
   return (
-    <div className={clsx("h-[70px] w-[70px] border-[#b5b5b5]", className)}>
+    <div
+      className={clsx(
+        "h-[var(--sudoku-cell)] w-[var(--sudoku-cell)] border-[#b5b5b5]",
+        className,
+      )}
+    >
       <button
-        className="h-full w-full cursor-pointer text-center text-[40px] disabled:cursor-not-allowed disabled:opacity-50"
+        className="h-full w-full cursor-pointer text-center [font-size:clamp(22px,calc((100vw-16px)/15.75),40px)] disabled:cursor-not-allowed disabled:opacity-50"
         disabled={solveStatus === "solving"}
         onClick={() => onCellNumberSelect(cellNumber)}
         type="button"

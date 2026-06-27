@@ -52,10 +52,15 @@ const SudokuCell = ({
   }, [isSelected]);
 
   return (
-    <div className={clsx("h-[70px] w-[70px] border-[#b5b5b5]", className)}>
+    <div
+      className={clsx(
+        "h-[var(--sudoku-cell)] w-[var(--sudoku-cell)] border-[#b5b5b5]",
+        className,
+      )}
+    >
       <label
         className={clsx(
-          "block h-full w-full cursor-pointer text-center text-[40px] leading-[70px]",
+          "block h-full w-full cursor-pointer text-center [font-size:clamp(22px,calc((100vw-16px)/15.75),40px)] [line-height:var(--sudoku-cell)]",
           isGiven && "font-bold text-zinc-900",
           status === "conflict" && "bg-red-100 text-red-700",
           isSelected && "shadow-[0_0_10px_hsl(207_61%_53%)]",

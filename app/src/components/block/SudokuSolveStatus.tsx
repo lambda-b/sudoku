@@ -21,7 +21,7 @@ export const SudokuSolveStatus = ({ solveStatus }: SudokuSolveStatusProps) => {
     <p
       aria-live="polite"
       className={clsx(
-        "min-w-72 text-right text-sm font-medium",
+        "min-w-0 whitespace-normal text-right text-[11px] leading-tight font-medium sm:text-sm",
         solveStatus === "solved" && "text-emerald-700",
         (solveStatus === "invalid" || solveStatus === "no-solution") &&
           "text-red-700",

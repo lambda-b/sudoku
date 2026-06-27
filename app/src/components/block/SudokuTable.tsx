@@ -34,7 +34,7 @@ const SudokuTable = ({
   solveStatus,
 }: SudokuTableProps) => {
   return (
-    <div className="mx-auto min-h-[630px] min-w-[630px] px-0">
+    <div className="mx-auto h-[var(--sudoku-board)] w-[var(--sudoku-board)] px-0">
       {rows.map((row) => {
         const rowIdx = Math.floor(row[0] / 9);
 
