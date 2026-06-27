@@ -1,11 +1,11 @@
+import type { SudokuOcrResult } from "@sudoku/ocr";
+import { useMutation } from "@tanstack/react-query";
 import { Check, ImageUp, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 import { Modal } from "@/components/atom/Modal";
 import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
 import SudokuTable from "@/components/block/SudokuTable";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
-
-type OcrStatus = "idle" | "loading" | "recognizing" | "ready" | "error";
 
 const normalizePuzzle = (value: string) =>
   value
@@ -32,13 +32,36 @@ export const SudokuOcrImporter = ({
 }: SudokuOcrImporterProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState<OcrStatus>("idle");
   const [message, setMessage] = useState("");
   const [puzzleDraft, setPuzzleDraft] = useState("");
   const [rawText, setRawText] = useState("");
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
-  const processing = status === "loading" || status === "recognizing";
-  const showEditor = status === "ready" || status === "error";
+  const ocrMutation = useMutation<SudokuOcrResult, Error, File>({
+    mutationFn: async (file) => {
+      const { recognizeSudokuFromImage } = await import("@sudoku/ocr");
+
+      return recognizeSudokuFromImage(file, {
+        onProgress: ({ progress, status }) => {
+          setMessage(`${status} ${Math.round(progress * 100)}%`);
+        },
+      });
+    },
+    onMutate: () => {
+      setMessage("Loading OCR");
+      setRawText("");
+      setSelectedAddress(-1);
+    },
+    onSuccess: (result) => {
+      setPuzzleDraft(result.puzzle);
+      setRawText(result.rawText.trim());
+      setMessage(`OCR confidence ${Math.round(result.confidence)}%`);
+    },
+    onError: (error) => {
+      setMessage(error.message);
+    },
+  });
+  const processing = ocrMutation.isPending;
+  const showEditor = ocrMutation.isSuccess || ocrMutation.isError;
   const draft = normalizePuzzle(puzzleDraft);
   const previewCells = createPreviewCells(draft);
 
@@ -50,29 +73,7 @@ export const SudokuOcrImporter = ({
       return;
     }
 
-    setStatus("loading");
-    setMessage("Loading OCR");
-    setRawText("");
-    setSelectedAddress(-1);
-
-    try {
-      const { recognizeSudokuFromImage } = await import("@sudoku/ocr");
-
-      setStatus("recognizing");
-      const result = await recognizeSudokuFromImage(file, {
-        onProgress: ({ progress, status }) => {
-          setMessage(`${status} ${Math.round(progress * 100)}%`);
-        },
-      });
-
-      setPuzzleDraft(result.puzzle);
-      setRawText(result.rawText.trim());
-      setStatus("ready");
-      setMessage(`OCR confidence ${Math.round(result.confidence)}%`);
-    } catch (error) {
-      setStatus("error");
-      setMessage(error instanceof Error ? error.message : "OCR failed");
-    }
+    ocrMutation.mutate(file);
   };
 
   const updateCell = (address: number, cellNumber: number) => {
@@ -90,7 +91,7 @@ export const SudokuOcrImporter = ({
   const applyPuzzle = () => {
     const puzzle = normalizePuzzle(puzzleDraft);
     onPuzzleApply(puzzle);
-    setStatus("idle");
+    ocrMutation.reset();
     setMessage("");
     setSelectedAddress(-1);
     setIsOpen(false);
