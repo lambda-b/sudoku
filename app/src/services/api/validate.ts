@@ -27,7 +27,7 @@ const units = Array.from({ length: SIZE }, (_, index) => [
   box(index),
 ]).flat();
 
-export const validateSudoku = (data: string): SudokuValidation => {
+export const validate = (data: string): SudokuValidation => {
   if (!/^[0-9]{81}$/.test(data)) {
     return { valid: false, conflicts: [] };
   }

@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SudokuSolverClient } from "@/services/api/client";
-import type { SolveResult, SolveStep } from "@/services/api/type";
+import type { SolutionStep, SolveResult } from "@/services/api/type";
 import type { SolveStatus } from "@/services/type";
 
 const REVEAL_INTERVAL_MS = 100;
@@ -15,7 +15,6 @@ type UseSudokuSolverOptions = {
 type SolveVariables = {
   generation: number;
   puzzle: string;
-  reveal: (steps: SolveStep[]) => void;
 };
 
 export const useSudokuSolver = ({
@@ -29,8 +28,6 @@ export const useSudokuSolver = ({
   const generation = useRef(0);
   const originalTable = useRef("");
   const revealingTable = useRef<string[]>([]);
-  const calculationFinished = useRef(false);
-  const revealFinished = useRef(false);
 
   const dispose = useCallback(() => {
     generation.current += 1;
@@ -39,17 +36,10 @@ export const useSudokuSolver = ({
 
   useEffect(() => dispose, [dispose]);
 
-  const finishWhenReady = useCallback(() => {
-    if (calculationFinished.current && revealFinished.current) {
-      setStatus("solved");
-    }
-  }, []);
-
   const reveal = useCallback(
-    (steps: SolveStep[]) => {
+    (steps: SolutionStep[]) => {
       if (steps.length === 0) {
-        revealFinished.current = true;
-        finishWhenReady();
+        setStatus("solved");
         return;
       }
 
@@ -58,8 +48,7 @@ export const useSudokuSolver = ({
         const next = iterator.next();
         if (next.done) {
           clearInterval(interval.current);
-          revealFinished.current = true;
-          finishWhenReady();
+          setStatus("solved");
           return;
         }
 
@@ -67,20 +56,18 @@ export const useSudokuSolver = ({
         onTableChange(revealingTable.current.join(""));
       }, REVEAL_INTERVAL_MS);
     },
-    [finishWhenReady, onTableChange],
+    [onTableChange],
   );
 
   const mutation = useMutation<SolveResult, Error, SolveVariables>({
-    mutationFn: ({ puzzle, reveal: onSolution }) =>
-      client.solve(puzzle, onSolution),
+    mutationFn: ({ puzzle }) => client.solve(puzzle),
     onSuccess: (result, variables) => {
       if (variables.generation !== generation.current) {
         return;
       }
 
-      if (result.status === "unique") {
-        calculationFinished.current = true;
-        finishWhenReady();
+      if (result.status === "success") {
+        reveal(result.solution);
         return;
       }
 
@@ -112,8 +99,6 @@ export const useSudokuSolver = ({
     clearInterval(interval.current);
     originalTable.current = table;
     revealingTable.current = table.split("");
-    calculationFinished.current = false;
-    revealFinished.current = false;
     setConflicts([]);
     setStatus("solving");
 
@@ -121,9 +106,8 @@ export const useSudokuSolver = ({
     mutation.mutate({
       generation: currentGeneration,
       puzzle: table,
-      reveal,
     });
-  }, [mutation, reveal, status, table]);
+  }, [mutation, status, table]);
 
   const stop = useCallback(() => {
     dispose();

@@ -1,16 +1,14 @@
-export type SolveStep = {
+export type SolutionStep = {
   address: number;
   value: number;
 };
 
 export type SolveResult =
   | { status: "invalid"; conflicts: number[] }
-  | { status: "unique" }
+  | { status: "success"; solution: SolutionStep[] }
   | { status: "no-solution" }
   | { status: "multiple-solutions" };
 
-export type OnSolution = (steps: SolveStep[]) => void | Promise<void>;
-
 export interface SudokuSolverApi {
-  solve(puzzle: string, onSolution: OnSolution): Promise<SolveResult>;
+  solve(puzzle: string): Promise<SolveResult>;
 }
