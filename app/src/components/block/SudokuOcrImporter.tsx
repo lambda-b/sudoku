@@ -2,6 +2,7 @@ import { useSetAtom } from "jotai";
 import { type ChangeEvent, useRef, useState } from "react";
 import { puzzleState, tableState } from "@/base/jotai/cell";
 import { solveStatusState } from "@/base/jotai/solver";
+import { Modal } from "@/components/atom/Modal";
 
 type OcrStatus = "idle" | "loading" | "recognizing" | "ready" | "error";
 
@@ -18,10 +19,14 @@ export const SudokuOcrImporter = () => {
   const setPuzzle = useSetAtom(puzzleState);
   const setTable = useSetAtom(tableState);
   const setSolveStatus = useSetAtom(solveStatusState);
+  const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState<OcrStatus>("idle");
   const [message, setMessage] = useState("");
   const [puzzleDraft, setPuzzleDraft] = useState("");
   const [rawText, setRawText] = useState("");
+  const processing = status === "loading" || status === "recognizing";
+  const showEditor = status === "ready" || status === "error";
+  const draft = normalizePuzzle(puzzleDraft);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -69,14 +74,11 @@ export const SudokuOcrImporter = () => {
     setTable(puzzle);
     setStatus("idle");
     setMessage("");
+    setIsOpen(false);
   };
 
-  const processing = status === "loading" || status === "recognizing";
-  const showEditor = status === "ready" || status === "error";
-  const draft = normalizePuzzle(puzzleDraft);
-
   return (
-    <div className="text-left">
+    <>
       <input
         ref={inputRef}
         accept="image/*"
@@ -87,62 +89,78 @@ export const SudokuOcrImporter = () => {
       <button
         className="cursor-pointer rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
         disabled={processing}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => setIsOpen(true)}
         type="button"
       >
         {processing ? "OCR" : "Upload"}
       </button>
-      {message && (
-        <span className="ml-3 align-middle text-sm text-zinc-600">
-          {message}
-        </span>
-      )}
-      {showEditor && (
-        <div className="mt-3 w-[630px] rounded border border-zinc-300 bg-white p-3 shadow-sm">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <p className="m-0 text-sm font-medium text-zinc-700">
-              Review OCR result
-            </p>
-            <button
-              className="cursor-pointer rounded border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
-              onClick={applyPuzzle}
-              type="button"
-            >
-              Apply
-            </button>
-          </div>
-          <div className="grid w-[306px] grid-cols-9 border-[2px] border-zinc-800">
-            {cellIndexes.map((index) => {
-              const row = Math.floor(index / 9);
-              const col = index % 9;
-
-              return (
-                <input
-                  key={index}
-                  aria-label={`OCR cell ${index + 1}`}
-                  className={[
-                    "h-8 w-8 border border-zinc-300 text-center text-lg outline-none focus:bg-emerald-50",
-                    col === 2 || col === 5 ? "border-r-zinc-800" : "",
-                    row === 2 || row === 5 ? "border-b-zinc-800" : "",
-                  ].join(" ")}
-                  inputMode="numeric"
-                  maxLength={1}
-                  onChange={(event) => updateCell(index, event.target.value)}
-                  value={draft[index] === "0" ? "" : draft[index]}
-                />
-              );
-            })}
-          </div>
-          {rawText && (
-            <details className="mt-3 text-sm text-zinc-600">
-              <summary className="cursor-pointer">Raw OCR text</summary>
-              <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap rounded bg-zinc-50 p-2">
-                {rawText}
-              </pre>
-            </details>
-          )}
+      <Modal
+        closeDisabled={processing}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="OCR Import"
+      >
+        <div className="mb-4 flex items-center gap-3">
+          <button
+            className="cursor-pointer rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
+            disabled={processing}
+            onClick={() => inputRef.current?.click()}
+            type="button"
+          >
+            {processing ? "OCR" : "Choose Image"}
+          </button>
+          {message && <span className="text-sm text-zinc-600">{message}</span>}
         </div>
-      )}
-    </div>
+        {showEditor && (
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <p className="m-0 text-sm font-medium text-zinc-700">
+                Review OCR result
+              </p>
+              <button
+                className="cursor-pointer rounded border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
+                onClick={applyPuzzle}
+                type="button"
+              >
+                Apply
+              </button>
+            </div>
+            <div className="grid w-[306px] grid-cols-9 border-[2px] border-zinc-800">
+              {cellIndexes.map((index) => {
+                const row = Math.floor(index / 9);
+                const col = index % 9;
+
+                return (
+                  <input
+                    key={index}
+                    aria-label={`OCR cell ${index + 1}`}
+                    className={[
+                      "h-8 w-8 border border-zinc-300 text-center text-lg outline-none focus:bg-emerald-50",
+                      col === 2 || col === 5 ? "border-r-zinc-800" : "",
+                      row === 2 || row === 5 ? "border-b-zinc-800" : "",
+                    ].join(" ")}
+                    inputMode="numeric"
+                    maxLength={1}
+                    onChange={(event) => updateCell(index, event.target.value)}
+                    value={draft[index] === "0" ? "" : draft[index]}
+                  />
+                );
+              })}
+            </div>
+            {rawText && (
+              <details className="mt-3 text-sm text-zinc-600">
+                <summary className="cursor-pointer">Raw OCR text</summary>
+                <pre className="mt-2 max-h-28 overflow-auto whitespace-pre-wrap rounded bg-zinc-50 p-2">
+                  {rawText}
+                </pre>
+              </details>
+            )}
+          </div>
+        )}
+        {!showEditor && !message && (
+          <div className="h-28 rounded border border-dashed border-zinc-300" />
+        )}
+      </Modal>
+    </>
   );
 };
