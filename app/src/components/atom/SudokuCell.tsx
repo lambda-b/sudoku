@@ -6,6 +6,7 @@ import type { SolveStatus } from "@/services/type";
 export interface SudokuCellProps {
   className?: string;
   cell: SudokuCellModel;
+  isSelected: boolean;
   onCellNumberChange: (address: number, cellNumber: number) => void;
   onCellSelect: (address: number) => void;
   solveStatus: SolveStatus;
@@ -21,13 +22,15 @@ export interface SudokuCellProps {
 const SudokuCell = ({
   className = "",
   cell,
+  isSelected,
   onCellNumberChange,
   onCellSelect,
   solveStatus,
 }: SudokuCellProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { address, cellNumber, isGiven, isSelected, status } = cell;
+  const { address, cellNumber, initialCellNumber, status } = cell;
+  const isGiven = initialCellNumber !== 0;
   const editable = !isGiven && solveStatus !== "solving";
 
   const updateCellNumber = (cellNumber: number) =>

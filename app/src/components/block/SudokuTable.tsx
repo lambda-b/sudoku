@@ -22,6 +22,7 @@ type SudokuTableProps = {
   cells: SudokuCellModel[];
   onCellNumberChange: (address: number, cellNumber: number) => void;
   onCellSelect: (address: number) => void;
+  selectedAddress: number | -1;
   solveStatus: SolveStatus;
 };
 
@@ -29,6 +30,7 @@ const SudokuTable = ({
   cells,
   onCellNumberChange,
   onCellSelect,
+  selectedAddress,
   solveStatus,
 }: SudokuTableProps) => {
   return (
@@ -50,6 +52,7 @@ const SudokuTable = ({
                   key={address}
                   className={cellBorders[type - 1]}
                   cell={cells[address]}
+                  isSelected={address === selectedAddress}
                   onCellNumberChange={onCellNumberChange}
                   onCellSelect={onCellSelect}
                   solveStatus={solveStatus}

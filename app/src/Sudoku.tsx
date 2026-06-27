@@ -24,8 +24,6 @@ const createCells = (puzzle: string): SudokuCellModel[] =>
       cellNumber,
       initialCellNumber: cellNumber,
       address,
-      isSelected: false,
-      isGiven: cellNumber !== 0,
       status: "default",
     };
   });
@@ -40,12 +38,6 @@ const Sudoku = () => {
 
   const selectCell = useCallback((address: number | -1) => {
     setSelectedAddress(address);
-    setCells((currentCells) =>
-      currentCells.map((cell) => {
-        const isSelected = cell.address === address;
-        return cell.isSelected === isSelected ? cell : { ...cell, isSelected };
-      }),
-    );
   }, []);
 
   const updateCellNumber = useCallback(
@@ -58,7 +50,7 @@ const Sudoku = () => {
       setCells((currentCells) =>
         currentCells.map((cell) => {
           if (cell.address === address) {
-            if (cell.isGiven) {
+            if (cell.initialCellNumber !== 0) {
               return cell;
             }
 
@@ -166,6 +158,7 @@ const Sudoku = () => {
           cells={cells}
           onCellNumberChange={updateCellNumber}
           onCellSelect={selectCell}
+          selectedAddress={selectedAddress}
           solveStatus={solveStatus}
         />
         <SudokuSelectSheet
