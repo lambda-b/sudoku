@@ -1,4 +1,4 @@
-import type { AddressNumberType } from "@/model/type/AddressNumber";
+import type { AddressNumberType } from "@sudoku/core/model/type/AddressNumber";
 
 export interface SudokuCellModel {
   cellNumber: number;

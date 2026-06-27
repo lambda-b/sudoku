@@ -1,5 +1,5 @@
+import SudokuTemplate from "@sudoku/core/calc/SudokuTemplate";
 import { expose } from "comlink";
-import SudokuTemplate from "@/calc/SudokuTemplate";
 import type {
   SolutionStep,
   SolveResult,

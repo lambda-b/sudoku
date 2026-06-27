@@ -68,3 +68,44 @@ wait until constraints and board topology are modeled explicitly.
 - Improve mobile layout; the current board has a 630 px minimum width.
 - Add undo/redo and input history.
 - Optionally use the supplied solution to provide immediate mistake checking.
+
+## Notes: streaming solver progress
+
+The current Worker API returns a single `SolveResult`.
+
+```ts
+type SolveResult =
+  | { status: "invalid"; conflicts: number[] }
+  | { status: "success"; solution: SolutionStep[] }
+  | { status: "no-solution" }
+  | { status: "multiple-solutions" };
+```
+
+This is the right shape while the app solves first and then reveals the
+solution in the UI.
+
+If we later want to show the search process while the Worker is solving, model
+the API as a stream of solver events instead of returning only the final result.
+Good candidates:
+
+- `AsyncIterable<SolverEvent>` as the domain API.
+- TanStack Query's `experimental_streamedQuery` to consume an async iterable and
+  collect streamed chunks.
+- A callback such as `onProgress` if we want a smaller Comlink bridge.
+
+For a true stream, events should probably describe the search, not only the
+final answer:
+
+```ts
+type SolverEvent =
+  | { type: "select"; step: SolutionStep }
+  | { type: "deselect"; step: SolutionStep }
+  | { type: "success"; solution: SolutionStep[] }
+  | { type: "no-solution" }
+  | { type: "multiple-solutions" };
+```
+
+One design detail: after the first complete solution is found, the Worker may
+continue searching for a second solution to classify uniqueness. The UI should
+decide whether to freeze the first solution during that uniqueness check or keep
+rendering backtracking events.

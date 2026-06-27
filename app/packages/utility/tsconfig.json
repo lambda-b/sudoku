@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "paths": {
+      "@sudoku/utility": ["./src/index.ts"],
+      "@sudoku/utility/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

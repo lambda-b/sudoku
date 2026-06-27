@@ -1,6 +1,10 @@
-import type { PointType } from "@/model/type/PointType";
-import type BaseModel from "@/utility/model/BaseModel";
-import { equals, type IdObject, type IdType } from "@/utility/model/IdObject";
+import type { PointType } from "@sudoku/core/model/type/PointType";
+import type BaseModel from "@sudoku/utility/model/BaseModel";
+import {
+  equals,
+  type IdObject,
+  type IdType,
+} from "@sudoku/utility/model/IdObject";
 
 export abstract class GridKey implements IdObject, BaseModel {
   #type: PointType;

@@ -1,4 +1,4 @@
-import type { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
+import type { LinkNode } from "@sudoku/core/algorithm/dancinglinks/LinkNode";
 
 /**
  * 列クラス

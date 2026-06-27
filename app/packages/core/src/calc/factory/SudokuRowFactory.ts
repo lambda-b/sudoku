@@ -1,16 +1,16 @@
-import { LinkNode } from "@/algorithm/dancinglinks/LinkNode";
-import type { ColumnAdapter } from "@/calc/adapter/ColumnAdapter";
-import { RowAdapter } from "@/calc/adapter/RowAdapter";
-import { GridBoxNumKey } from "@/model/GridBoxNumKey";
-import { GridColNumKey } from "@/model/GridColNumKey";
-import type { GridKey } from "@/model/GridKey";
-import { GridOption } from "@/model/GridOption";
-import { GridRowColKey } from "@/model/GridRowColKey";
-import { GridRowNumKey } from "@/model/GridRowNumKey";
-import type { BoxType } from "@/model/type/BoxType";
-import { COL_TYPE } from "@/model/type/ColType";
-import { ROW_TYPE } from "@/model/type/RowType";
-import { SOLUTION_NUMBERS } from "@/model/type/SolutionNumberType";
+import { LinkNode } from "@sudoku/core/algorithm/dancinglinks/LinkNode";
+import type { ColumnAdapter } from "@sudoku/core/calc/adapter/ColumnAdapter";
+import { RowAdapter } from "@sudoku/core/calc/adapter/RowAdapter";
+import { GridBoxNumKey } from "@sudoku/core/model/GridBoxNumKey";
+import { GridColNumKey } from "@sudoku/core/model/GridColNumKey";
+import type { GridKey } from "@sudoku/core/model/GridKey";
+import { GridOption } from "@sudoku/core/model/GridOption";
+import { GridRowColKey } from "@sudoku/core/model/GridRowColKey";
+import { GridRowNumKey } from "@sudoku/core/model/GridRowNumKey";
+import type { BoxType } from "@sudoku/core/model/type/BoxType";
+import { COL_TYPE } from "@sudoku/core/model/type/ColType";
+import { ROW_TYPE } from "@sudoku/core/model/type/RowType";
+import { SOLUTION_NUMBERS } from "@sudoku/core/model/type/SolutionNumberType";
 
 export const createAllRows = (allColumns: Map<GridKey, ColumnAdapter>) => {
   const covers: RowAdapter[] = [];

@@ -1,6 +1,6 @@
-import { GridKey } from "@/model/GridKey";
-import type { RowType } from "@/model/type/RowType";
-import type { SolutionNumberType } from "@/model/type/SolutionNumberType";
+import { GridKey } from "@sudoku/core/model/GridKey";
+import type { RowType } from "@sudoku/core/model/type/RowType";
+import type { SolutionNumberType } from "@sudoku/core/model/type/SolutionNumberType";
 
 export class GridRowNumKey extends GridKey {
   #row: RowType;

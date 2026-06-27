@@ -1,4 +1,4 @@
-import type { IdObject, IdType } from "@/utility/model/IdObject";
+import type { IdObject, IdType } from "@sudoku/utility/model/IdObject";
 
 interface Pair<K, V> {
   key: K;

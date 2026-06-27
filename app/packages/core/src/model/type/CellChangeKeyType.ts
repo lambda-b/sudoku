@@ -1,4 +1,4 @@
-import { ONE_DIGIT_NUMBERS } from "@/model/type/OneDigitNumberType";
+import { ONE_DIGIT_NUMBERS } from "@sudoku/core/model/type/OneDigitNumberType";
 
 export const CELL_CHANGE_KEYS = [...ONE_DIGIT_NUMBERS, "Backspace"] as const;
 

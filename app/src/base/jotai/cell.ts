@@ -1,12 +1,12 @@
+import {
+  ADDRESS_NUMBER,
+  type AddressNumberType,
+} from "@sudoku/core/model/type/AddressNumber";
 import { atom } from "jotai";
 import { atomFamily } from "jotai-family";
 import { addressAtom } from "@/base/jotai/address";
 import { solveStatusState } from "@/base/jotai/solver";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
-import {
-  ADDRESS_NUMBER,
-  type AddressNumberType,
-} from "@/model/type/AddressNumber";
 
 export const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";

@@ -1,6 +1,6 @@
-import { Row } from "@/algorithm/dancinglinks/Row";
-import type { GridOption } from "@/model/GridOption";
-import { IdMap } from "@/utility/IdMap";
+import { Row } from "@sudoku/core/algorithm/dancinglinks/Row";
+import type { GridOption } from "@sudoku/core/model/GridOption";
+import { IdMap } from "@sudoku/utility/IdMap";
 
 export class RowAdapter extends Row {
   #row: GridOption;

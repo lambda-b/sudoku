@@ -1,5 +1,5 @@
-import { ADDRESS_MOVE_KEYS } from "@/model/type/AddressMoveKeyType";
-import { CELL_CHANGE_KEYS } from "@/model/type/CellChangeKeyType";
+import { ADDRESS_MOVE_KEYS } from "@sudoku/core/model/type/AddressMoveKeyType";
+import { CELL_CHANGE_KEYS } from "@sudoku/core/model/type/CellChangeKeyType";
 
 export const USE_KEYS = [...ADDRESS_MOVE_KEYS, CELL_CHANGE_KEYS] as const;
 
