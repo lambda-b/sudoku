@@ -1,16 +1,27 @@
 import { Check, ImageUp, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 import { Modal } from "@/components/atom/Modal";
+import SudokuSelectSheet from "@/components/block/SudokuSelectSheet";
+import SudokuTable from "@/components/block/SudokuTable";
+import type { SudokuCellModel } from "@/model/SudokuCellModel";
 
 type OcrStatus = "idle" | "loading" | "recognizing" | "ready" | "error";
-
-const cellIndexes = Array.from({ length: 81 }, (_, index) => index);
 
 const normalizePuzzle = (value: string) =>
   value
     .replace(/[^0-9]/g, "")
     .slice(0, 81)
     .padEnd(81, "0");
+
+const createPreviewCells = (puzzle: string): SudokuCellModel[] =>
+  normalizePuzzle(puzzle)
+    .split("")
+    .map((value, address) => ({
+      address,
+      cellNumber: Number(value),
+      initialCellNumber: 0,
+      status: "default",
+    }));
 
 type SudokuOcrImporterProps = {
   onPuzzleApply: (puzzle: string) => void;
@@ -25,9 +36,11 @@ export const SudokuOcrImporter = ({
   const [message, setMessage] = useState("");
   const [puzzleDraft, setPuzzleDraft] = useState("");
   const [rawText, setRawText] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
   const processing = status === "loading" || status === "recognizing";
   const showEditor = status === "ready" || status === "error";
   const draft = normalizePuzzle(puzzleDraft);
+  const previewCells = createPreviewCells(draft);
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,6 +53,7 @@ export const SudokuOcrImporter = ({
     setStatus("loading");
     setMessage("Loading OCR");
     setRawText("");
+    setSelectedAddress(-1);
 
     try {
       const { recognizeSudokuFromImage } = await import("@sudoku/ocr");
@@ -61,11 +75,16 @@ export const SudokuOcrImporter = ({
     }
   };
 
-  const updateCell = (index: number, value: string) => {
-    const nextValue = value.replace(/[^0-9]/g, "").slice(-1) || "0";
+  const updateCell = (address: number, cellNumber: number) => {
     const cells = normalizePuzzle(puzzleDraft).split("");
-    cells[index] = nextValue;
+    cells[address] = String(cellNumber);
     setPuzzleDraft(cells.join(""));
+  };
+
+  const inputSelectedCellNumber = (cellNumber: number) => {
+    if (selectedAddress !== -1) {
+      updateCell(selectedAddress, cellNumber);
+    }
   };
 
   const applyPuzzle = () => {
@@ -73,6 +92,7 @@ export const SudokuOcrImporter = ({
     onPuzzleApply(puzzle);
     setStatus("idle");
     setMessage("");
+    setSelectedAddress(-1);
     setIsOpen(false);
   };
 
@@ -127,27 +147,20 @@ export const SudokuOcrImporter = ({
                 Apply
               </button>
             </div>
-            <div className="grid w-[306px] grid-cols-9 border-[2px] border-zinc-800">
-              {cellIndexes.map((index) => {
-                const row = Math.floor(index / 9);
-                const col = index % 9;
-
-                return (
-                  <input
-                    key={index}
-                    aria-label={`OCR cell ${index + 1}`}
-                    className={[
-                      "h-8 w-8 border border-zinc-300 text-center text-lg outline-none focus:bg-emerald-50",
-                      col === 2 || col === 5 ? "border-r-zinc-800" : "",
-                      row === 2 || row === 5 ? "border-b-zinc-800" : "",
-                    ].join(" ")}
-                    inputMode="numeric"
-                    maxLength={1}
-                    onChange={(event) => updateCell(index, event.target.value)}
-                    value={draft[index] === "0" ? "" : draft[index]}
-                  />
-                );
-              })}
+            <div className="h-[372px] w-[306px] overflow-hidden">
+              <div className="w-[630px] origin-top-left scale-[0.485714]">
+                <SudokuTable
+                  cells={previewCells}
+                  onCellNumberChange={updateCell}
+                  onCellSelect={setSelectedAddress}
+                  selectedAddress={selectedAddress}
+                  solveStatus="idle"
+                />
+                <SudokuSelectSheet
+                  onCellNumberSelect={inputSelectedCellNumber}
+                  solveStatus="idle"
+                />
+              </div>
             </div>
             {rawText && (
               <details className="mt-3 text-sm text-zinc-600">
