@@ -1,5 +1,5 @@
+import { clsx } from "clsx";
 import { useAtom, useAtomValue } from "jotai";
-import { cx } from "@/base/function";
 import { cellState, puzzleState } from "@/base/jotai/cell";
 import { solveStatusState } from "@/base/jotai/solver";
 
@@ -24,10 +24,10 @@ const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
   const isGiven = puzzle[address] !== "0";
 
   return (
-    <div className={cx("h-[70px] w-[70px] border-[#b5b5b5]", className)}>
+    <div className={clsx("h-[70px] w-[70px] border-[#b5b5b5]", className)}>
       <button
         type="button"
-        className={cx(
+        className={clsx(
           "h-full w-full cursor-pointer appearance-none bg-transparent p-0 text-center text-[40px] leading-[70px]",
           isGiven && "font-bold text-zinc-900",
           status === "conflict" && "bg-red-100 text-red-700",

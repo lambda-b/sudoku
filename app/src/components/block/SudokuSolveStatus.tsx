@@ -1,5 +1,5 @@
+import { clsx } from "clsx";
 import { useAtomValue } from "jotai";
-import { cx } from "@/base/function";
 import { solveStatusState } from "@/base/jotai/solver";
 import type { SolveStatus } from "@/services/type";
 
@@ -20,7 +20,7 @@ export const SudokuSolveStatus = () => {
   return (
     <p
       aria-live="polite"
-      className={cx(
+      className={clsx(
         "min-w-72 text-right text-sm font-medium",
         status === "solved" && "text-emerald-700",
         (status === "invalid" || status === "no-solution") && "text-red-700",

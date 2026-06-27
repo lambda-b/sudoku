@@ -1,6 +1,6 @@
+import { clsx } from "clsx";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useContext, useEffect } from "react";
-import { cx } from "@/base/function";
 import { cellStatusUpdater, tableState } from "@/base/jotai/cell";
 import { solveStatusState } from "@/base/jotai/solver";
 import { SudokuSolverClientContext } from "@/services/api/SudokuSolverClientProvider";
@@ -30,7 +30,7 @@ export const SudokuSolveButton = () => {
 
   return (
     <button
-      className={cx(
+      className={clsx(
         "cursor-pointer rounded border px-4 py-2 font-medium transition-colors",
         processing
           ? "border-red-600 text-red-600 hover:bg-red-50"
