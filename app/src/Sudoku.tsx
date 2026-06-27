@@ -7,17 +7,19 @@ import SudokuTable from "@/components/block/SudokuTable";
 
 const Sudoku = () => {
   return (
-    <div className="min-w-[630px] text-center">
-      <div className="mx-auto my-3 flex w-[630px] items-center justify-between">
-        <div className="flex items-center gap-3">
-          <SudokuPuzzleLoader />
-          <SudokuResetButton />
-          <SudokuSolveButton />
+    <div className="mx-auto w-[min(630px,calc(100vw-16px))] text-center [--sudoku-scale:min(1,calc((100vw-16px)/630px))]">
+      <div className="w-[630px] origin-top-left [zoom:var(--sudoku-scale)]">
+        <div className="mx-auto my-3 flex w-[630px] items-center justify-between">
+          <div className="flex items-center gap-3">
+            <SudokuPuzzleLoader />
+            <SudokuResetButton />
+            <SudokuSolveButton />
+          </div>
+          <SudokuSolveStatus />
         </div>
-        <SudokuSolveStatus />
+        <SudokuTable />
+        <SudokuSelectSheet />
       </div>
-      <SudokuTable />
-      <SudokuSelectSheet />
     </div>
   );
 };
