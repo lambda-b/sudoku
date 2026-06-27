@@ -156,6 +156,7 @@ const Sudoku = () => {
               onSolveStatusChange={setSolveStatus}
               onTableChange={applyTable}
               onUpdateCellStatuses={updateCellStatuses}
+              solveStatus={solveStatus}
               table={cellsToTable(cells)}
             />
           </div>
