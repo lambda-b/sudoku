@@ -11,7 +11,10 @@ import { SudokuSolveButton } from "@/components/block/SudokuSolveButton";
 import { SudokuSolveStatus } from "@/components/block/SudokuSolveStatus";
 import SudokuTable from "@/components/block/SudokuTable";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
+import { useSudokuOcr } from "@/services/ocr/useSudokuOcr";
+import { useRandomPuzzleLoader } from "@/services/random-loader/useRandomPuzzleLoader";
 import type { SolveStatus } from "@/services/solver/type";
+import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
@@ -129,6 +132,15 @@ const Sudoku = () => {
     },
     [selectedAddress, updateCellNumber],
   );
+  const randomPuzzle = useRandomPuzzleLoader({ onPuzzleLoad: applyPuzzle });
+  const ocr = useSudokuOcr();
+  const solver = useSudokuSolver({
+    onConflictsChange: updateCellStatuses,
+    onStatusChange: setSolveStatus,
+    onTableChange: applyTable,
+    solveStatus,
+    table: cellsToTable(cells),
+  });
 
   return (
     <div className="mx-auto w-[min(630px,calc(100vw-16px))] text-center [--sudoku-scale:min(1,calc((100vw-16px)/630px))]">
@@ -136,20 +148,28 @@ const Sudoku = () => {
         <div className="mx-auto my-3 flex w-[630px] items-center justify-between">
           <div className="flex items-center gap-3">
             <SudokuPuzzleLoader
-              onPuzzleLoad={applyPuzzle}
+              error={randomPuzzle.error}
+              loading={randomPuzzle.loading}
+              onLoad={() => void randomPuzzle.load()}
               solveStatus={solveStatus}
             />
-            <SudokuOcrImporter onPuzzleApply={applyPuzzle} />
+            <SudokuOcrImporter
+              hasResult={!!ocr.result}
+              message={ocr.message}
+              onFileRecognize={ocr.recognize}
+              onPuzzleApply={applyPuzzle}
+              onReset={ocr.reset}
+              processing={ocr.processing}
+              showEditor={ocr.showEditor}
+            />
             <SudokuResetButton
               onReset={resetPuzzle}
               solveStatus={solveStatus}
             />
             <SudokuSolveButton
-              onSolveStatusChange={setSolveStatus}
-              onTableChange={applyTable}
-              onUpdateCellStatuses={updateCellStatuses}
+              onSolve={solver.solve}
+              onStop={solver.stop}
               solveStatus={solveStatus}
-              table={cellsToTable(cells)}
             />
           </div>
           <SudokuSolveStatus solveStatus={solveStatus} />

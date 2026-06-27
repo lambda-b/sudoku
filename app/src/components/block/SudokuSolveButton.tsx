@@ -1,30 +1,18 @@
 import { clsx } from "clsx";
 import { Square, WandSparkles } from "lucide-react";
 import type { SolveStatus } from "@/services/solver/type";
-import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 
 type SudokuSolveButtonProps = {
-  onSolveStatusChange: (status: SolveStatus) => void;
-  onTableChange: (table: string) => void;
-  onUpdateCellStatuses: (conflicts: number[]) => void;
+  onSolve: () => void;
+  onStop: () => void;
   solveStatus: SolveStatus;
-  table: string;
 };
 
 export const SudokuSolveButton = ({
-  onSolveStatusChange,
-  onTableChange,
-  onUpdateCellStatuses,
+  onSolve,
+  onStop,
   solveStatus,
-  table,
 }: SudokuSolveButtonProps) => {
-  const { solve, stop } = useSudokuSolver({
-    onConflictsChange: onUpdateCellStatuses,
-    onStatusChange: onSolveStatusChange,
-    onTableChange,
-    solveStatus,
-    table,
-  });
   const processing = solveStatus === "solving";
   const Icon = processing ? Square : WandSparkles;
 
@@ -36,7 +24,7 @@ export const SudokuSolveButton = ({
           ? "border-red-600 text-red-600 hover:bg-red-50"
           : "border-cyan-600 text-cyan-600 hover:bg-cyan-50",
       )}
-      onClick={processing ? stop : solve}
+      onClick={processing ? onStop : onSolve}
       type="button"
     >
       <Icon aria-hidden="true" size={16} strokeWidth={2} />

@@ -2,6 +2,8 @@ import type { SudokuOcrResult } from "@sudoku/ocr";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
+export type RecognizeSudokuOcr = ReturnType<typeof useSudokuOcr>["recognize"];
+
 export const useSudokuOcr = () => {
   const [message, setMessage] = useState("");
 
