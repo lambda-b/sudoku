@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { cx } from "@/base/function";
 import { cellState, puzzleState } from "@/base/jotai/cell";
-import { conflictAddressesState, solveStatusState } from "@/base/jotai/solver";
+import { solveStatusState } from "@/base/jotai/solver";
 
 export interface SudokuCellProps {
   className?: string;
@@ -19,9 +19,8 @@ const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
   const [cell, setCell] = useAtom(cellState(address));
   const puzzle = useAtomValue(puzzleState);
   const solveStatus = useAtomValue(solveStatusState);
-  const conflictAddresses = useAtomValue(conflictAddressesState);
 
-  const { cellNumber, isSelected } = cell;
+  const { cellNumber, isSelected, status } = cell;
   const isGiven = puzzle[address] !== "0";
 
   return (
@@ -31,10 +30,10 @@ const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
         className={cx(
           "h-full w-full cursor-pointer appearance-none bg-transparent p-0 text-center text-[40px] leading-[70px]",
           isGiven && "font-bold text-zinc-900",
-          conflictAddresses.includes(address) && "bg-red-100 text-red-700",
+          status === "conflict" && "bg-red-100 text-red-700",
           isSelected && "shadow-[0_0_10px_hsl(207_61%_53%)]",
         )}
-        onClick={() => setCell({ cellNumber, address, isSelected: true })}
+        onClick={() => setCell({ ...cell, isSelected: true })}
         onDoubleClick={() => {
           if (!isGiven && solveStatus !== "solving") {
             setCell({ ...cell, cellNumber: 0 });

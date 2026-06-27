@@ -1,61 +1,32 @@
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useContext, useEffect } from "react";
 import { cx } from "@/base/function";
-import { cellUpdater, tableState } from "@/base/jotai/cell";
-import { conflictAddressesState, solveStatusState } from "@/base/jotai/solver";
-import SudokuSolver from "@/calc/SudokuSolver";
+import { cellStatusUpdater, tableState } from "@/base/jotai/cell";
+import { solveStatusState } from "@/base/jotai/solver";
+import { SudokuSolverClientContext } from "@/services/api/SudokuSolverClientProvider";
+import { useSudokuSolver } from "@/services/useSudokuSolver";
+
+const requireSudokuSolverClient = () => {
+  throw new Error("SudokuSolverClientProvider is not found");
+};
 
 export const SudokuSolveButton = () => {
-  const data = useAtomValue(tableState);
-  const setCell = useSetAtom(cellUpdater);
-  const [solver] = useState(() => new SudokuSolver());
-  const [status, setStatus] = useAtom(solveStatusState);
-  const setConflicts = useSetAtom(conflictAddressesState);
-  const interval = useRef<ReturnType<typeof setInterval>>(undefined);
+  const client =
+    useContext(SudokuSolverClientContext) ?? requireSudokuSolverClient();
+  const table = useAtomValue(tableState);
+  const setTable = useSetAtom(tableState);
+  const setSolveStatus = useSetAtom(solveStatusState);
+  const setCellStatuses = useSetAtom(cellStatusUpdater);
 
-  useEffect(() => {
-    return () => clearInterval(interval.current);
-  }, []);
-
-  const stop = () => {
-    clearInterval(interval.current);
-    setStatus("stopped");
-  };
-
-  const solve = () => {
-    const result = solver.solve(data);
-    setConflicts(result.status === "invalid" ? result.conflicts : []);
-    if (result.status !== "unique") {
-      setStatus(result.status);
-      return;
-    }
-
-    if (result.solution.length === 0) {
-      setStatus("solved");
-      return;
-    }
-
-    setStatus("solving");
-    const iterator = result.solution[Symbol.iterator]();
-
-    interval.current = setInterval(() => {
-      const next = iterator.next();
-      if (next.done) {
-        clearInterval(interval.current);
-        setStatus("solved");
-        return;
-      }
-
-      const { row, col, num } = next.value;
-      setCell({
-        address: row * 9 + col,
-        cellNumber: num,
-        isSelected: false,
-      });
-    }, 100);
-  };
-
+  const { conflicts, solve, status, stop } = useSudokuSolver({
+    client,
+    table,
+    onTableChange: setTable,
+  });
   const processing = status === "solving";
+
+  useEffect(() => setSolveStatus(status), [setSolveStatus, status]);
+  useEffect(() => setCellStatuses(conflicts), [conflicts, setCellStatuses]);
 
   return (
     <button

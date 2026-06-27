@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { atomFamily } from "jotai-family";
 import { addressAtom } from "@/base/jotai/address";
-import { conflictAddressesState, solveStatusState } from "@/base/jotai/solver";
+import { solveStatusState } from "@/base/jotai/solver";
 import type { SudokuCellModel } from "@/model/SudokuCellModel";
 import {
   ADDRESS_NUMBER,
@@ -14,10 +14,11 @@ export const INITIAL_SUDOKU_DATA =
 export const puzzleState = atom(INITIAL_SUDOKU_DATA);
 
 export const cellAtom = atomFamily((address: AddressNumberType) =>
-  atom({
+  atom<SudokuCellModel>({
     cellNumber: Number(INITIAL_SUDOKU_DATA[address]),
     address,
     isSelected: false,
+    status: "default",
   }),
 );
 
@@ -33,15 +34,24 @@ export const cellState = atomFamily((address: AddressNumberType) =>
       set(cellAtom(address), cell);
       if (oldCell.cellNumber !== cell.cellNumber) {
         set(solveStatusState, "idle");
-        set(conflictAddressesState, []);
+        for (const cellAddress of ADDRESS_NUMBER) {
+          const tableCell = get(cellAtom(cellAddress));
+          set(cellAtom(cellAddress), { ...tableCell, status: "default" });
+        }
       }
     },
   ),
 );
 
-export const cellUpdater = atom(null, (_, set, cell: SudokuCellModel) => {
-  const { address } = cell;
-  set(cellAtom(address), cell);
+export const cellStatusUpdater = atom(null, (get, set, conflicts: number[]) => {
+  const conflictSet = new Set(conflicts);
+  for (const address of ADDRESS_NUMBER) {
+    const cell = get(cellAtom(address));
+    set(cellAtom(address), {
+      ...cell,
+      status: conflictSet.has(address) ? "conflict" : "default",
+    });
+  }
 });
 
 export const cellNumberState = atom(
@@ -61,7 +71,10 @@ export const cellNumberState = atom(
     const cell = get(cellAtom(address));
     set(cellAtom(address), { ...cell, cellNumber });
     set(solveStatusState, "idle");
-    set(conflictAddressesState, []);
+    for (const cellAddress of ADDRESS_NUMBER) {
+      const tableCell = get(cellAtom(cellAddress));
+      set(cellAtom(cellAddress), { ...tableCell, status: "default" });
+    }
   },
 );
 
@@ -78,7 +91,11 @@ export const tableState = atom(
 
     table.split("").forEach((value, i) => {
       const cell = get(cellAtom(i));
-      set(cellAtom(i), { ...cell, cellNumber: Number(value) });
+      set(cellAtom(i), {
+        ...cell,
+        cellNumber: Number(value),
+        status: "default",
+      });
     });
   },
 );

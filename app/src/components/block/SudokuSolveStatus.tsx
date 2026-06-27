@@ -1,6 +1,7 @@
 import { useAtomValue } from "jotai";
 import { cx } from "@/base/function";
-import { type SolveStatus, solveStatusState } from "@/base/jotai/solver";
+import { solveStatusState } from "@/base/jotai/solver";
+import type { SolveStatus } from "@/services/type";
 
 const messages: Record<SolveStatus, string> = {
   idle: "",
@@ -10,6 +11,7 @@ const messages: Record<SolveStatus, string> = {
   "no-solution": "この盤面には解がありません",
   "multiple-solutions": "問題を確認できませんでした",
   stopped: "求解を停止しました",
+  error: "求解中にエラーが発生しました",
 };
 
 export const SudokuSolveStatus = () => {
@@ -24,6 +26,7 @@ export const SudokuSolveStatus = () => {
         (status === "invalid" || status === "no-solution") && "text-red-700",
         (status === "multiple-solutions" || status === "stopped") &&
           "text-zinc-600",
+        status === "error" && "text-red-700",
         status === "solving" && "text-cyan-700",
       )}
       role="status"

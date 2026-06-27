@@ -1,4 +1,6 @@
 import Sudoku from "@/Sudoku";
+import { SudokuSolverClient } from "@/services/api/client";
+import { SudokuSolverClientProvider } from "@/services/api/SudokuSolverClientProvider";
 import "@/style.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
@@ -11,11 +13,14 @@ if (!root) {
 }
 
 const queryClient = new QueryClient();
+const sudokuSolverClient = new SudokuSolverClient();
 
 createRoot(root).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Sudoku />
+      <SudokuSolverClientProvider client={sudokuSolverClient}>
+        <Sudoku />
+      </SudokuSolverClientProvider>
     </QueryClientProvider>
   </StrictMode>,
 );

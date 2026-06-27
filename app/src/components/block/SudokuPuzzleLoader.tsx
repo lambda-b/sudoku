@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { puzzleState, tableState } from "@/base/jotai/cell";
-import { conflictAddressesState, solveStatusState } from "@/base/jotai/solver";
+import { solveStatusState } from "@/base/jotai/solver";
 
 type SudokuPuzzle = {
   id: string;
@@ -23,7 +23,6 @@ export const SudokuPuzzleLoader = () => {
   const setTable = useSetAtom(tableState);
   const setPuzzle = useSetAtom(puzzleState);
   const [solveStatus, setSolveStatus] = useAtom(solveStatusState);
-  const setConflicts = useSetAtom(conflictAddressesState);
   const { data, isFetching, isError, refetch } = useQuery({
     queryKey: ["puzzles", "random"],
     queryFn: fetchRandomPuzzle,
@@ -33,11 +32,10 @@ export const SudokuPuzzleLoader = () => {
   useEffect(() => {
     if (data) {
       setSolveStatus("idle");
-      setConflicts([]);
       setPuzzle(data.puzzle);
       setTable(data.puzzle);
     }
-  }, [data, setConflicts, setPuzzle, setSolveStatus, setTable]);
+  }, [data, setPuzzle, setSolveStatus, setTable]);
 
   return (
     <button

@@ -1,12 +1,11 @@
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { puzzleState, tableState } from "@/base/jotai/cell";
-import { conflictAddressesState, solveStatusState } from "@/base/jotai/solver";
+import { solveStatusState } from "@/base/jotai/solver";
 
 export const SudokuResetButton = () => {
   const puzzle = useAtomValue(puzzleState);
   const setTable = useSetAtom(tableState);
   const [solveStatus, setSolveStatus] = useAtom(solveStatusState);
-  const setConflicts = useSetAtom(conflictAddressesState);
 
   return (
     <button
@@ -14,7 +13,6 @@ export const SudokuResetButton = () => {
       disabled={solveStatus === "solving"}
       onClick={() => {
         setSolveStatus("idle");
-        setConflicts([]);
         setTable(puzzle);
       }}
       type="button"
