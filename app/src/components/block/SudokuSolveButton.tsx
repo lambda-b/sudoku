@@ -1,34 +1,43 @@
 import { clsx } from "clsx";
-import { useAtomValue, useSetAtom } from "jotai";
 import { Square, WandSparkles } from "lucide-react";
 import { useContext, useEffect } from "react";
-import { cellStatusUpdater, tableState } from "@/base/jotai/cell";
-import { solveStatusState } from "@/base/jotai/solver";
 import { SudokuSolverClientContext } from "@/services/api/SudokuSolverClientProvider";
+import type { SolveStatus } from "@/services/type";
 import { useSudokuSolver } from "@/services/useSudokuSolver";
 
 const requireSudokuSolverClient = () => {
   throw new Error("SudokuSolverClientProvider is not found");
 };
 
-export const SudokuSolveButton = () => {
+type SudokuSolveButtonProps = {
+  onSolveStatusChange: (status: SolveStatus) => void;
+  onTableChange: (table: string) => void;
+  onUpdateCellStatuses: (conflicts: number[]) => void;
+  table: string;
+};
+
+export const SudokuSolveButton = ({
+  onSolveStatusChange,
+  onTableChange,
+  onUpdateCellStatuses,
+  table,
+}: SudokuSolveButtonProps) => {
   const client =
     useContext(SudokuSolverClientContext) ?? requireSudokuSolverClient();
-  const table = useAtomValue(tableState);
-  const setTable = useSetAtom(tableState);
-  const setSolveStatus = useSetAtom(solveStatusState);
-  const setCellStatuses = useSetAtom(cellStatusUpdater);
 
   const { conflicts, solve, status, stop } = useSudokuSolver({
     client,
     table,
-    onTableChange: setTable,
+    onTableChange,
   });
   const processing = status === "solving";
   const Icon = processing ? Square : WandSparkles;
 
-  useEffect(() => setSolveStatus(status), [setSolveStatus, status]);
-  useEffect(() => setCellStatuses(conflicts), [conflicts, setCellStatuses]);
+  useEffect(() => onSolveStatusChange(status), [onSolveStatusChange, status]);
+  useEffect(
+    () => onUpdateCellStatuses(conflicts),
+    [conflicts, onUpdateCellStatuses],
+  );
 
   return (
     <button

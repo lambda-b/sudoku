@@ -1,8 +1,17 @@
 import SudokuButton from "@/components/atom/SudokuButton";
+import type { SolveStatus } from "@/services/type";
 
 const cellNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const SudokuSelectSheet = () => {
+type SudokuSelectSheetProps = {
+  onCellNumberSelect: (cellNumber: number) => void;
+  solveStatus: SolveStatus;
+};
+
+const SudokuSelectSheet = ({
+  onCellNumberSelect,
+  solveStatus,
+}: SudokuSelectSheetProps) => {
   return (
     <div className="flex items-center justify-center">
       {cellNumbers.map((cellNumber) => {
@@ -11,6 +20,8 @@ const SudokuSelectSheet = () => {
             key={cellNumber}
             className="mt-16 border"
             cellNumber={cellNumber}
+            onCellNumberSelect={onCellNumberSelect}
+            solveStatus={solveStatus}
           />
         );
       })}

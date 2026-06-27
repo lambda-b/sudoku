@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAtom, useSetAtom } from "jotai";
 import { RotateCw, Shuffle } from "lucide-react";
 import { useEffect } from "react";
-import { puzzleState, tableState } from "@/base/jotai/cell";
-import { solveStatusState } from "@/base/jotai/solver";
+import type { SolveStatus } from "@/services/type";
 
 type SudokuPuzzle = {
   id: string;
@@ -20,10 +18,15 @@ const fetchRandomPuzzle = async () => {
   return response.json() as Promise<SudokuPuzzle>;
 };
 
-export const SudokuPuzzleLoader = () => {
-  const setTable = useSetAtom(tableState);
-  const setPuzzle = useSetAtom(puzzleState);
-  const [solveStatus, setSolveStatus] = useAtom(solveStatusState);
+type SudokuPuzzleLoaderProps = {
+  onPuzzleLoad: (puzzle: string) => void;
+  solveStatus: SolveStatus;
+};
+
+export const SudokuPuzzleLoader = ({
+  onPuzzleLoad,
+  solveStatus,
+}: SudokuPuzzleLoaderProps) => {
   const { data, isFetching, isError, refetch } = useQuery({
     queryKey: ["puzzles", "random"],
     queryFn: fetchRandomPuzzle,
@@ -34,11 +37,9 @@ export const SudokuPuzzleLoader = () => {
 
   useEffect(() => {
     if (data) {
-      setSolveStatus("idle");
-      setPuzzle(data.puzzle);
-      setTable(data.puzzle);
+      onPuzzleLoad(data.puzzle);
     }
-  }, [data, setPuzzle, setSolveStatus, setTable]);
+  }, [data, onPuzzleLoad]);
 
   return (
     <button

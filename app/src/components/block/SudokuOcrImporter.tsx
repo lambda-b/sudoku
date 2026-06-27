@@ -1,8 +1,5 @@
-import { useSetAtom } from "jotai";
 import { Check, ImageUp, Upload } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
-import { puzzleState, tableState } from "@/base/jotai/cell";
-import { solveStatusState } from "@/base/jotai/solver";
 import { Modal } from "@/components/atom/Modal";
 
 type OcrStatus = "idle" | "loading" | "recognizing" | "ready" | "error";
@@ -15,11 +12,14 @@ const normalizePuzzle = (value: string) =>
     .slice(0, 81)
     .padEnd(81, "0");
 
-export const SudokuOcrImporter = () => {
+type SudokuOcrImporterProps = {
+  onPuzzleApply: (puzzle: string) => void;
+};
+
+export const SudokuOcrImporter = ({
+  onPuzzleApply,
+}: SudokuOcrImporterProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const setPuzzle = useSetAtom(puzzleState);
-  const setTable = useSetAtom(tableState);
-  const setSolveStatus = useSetAtom(solveStatusState);
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState<OcrStatus>("idle");
   const [message, setMessage] = useState("");
@@ -70,9 +70,7 @@ export const SudokuOcrImporter = () => {
 
   const applyPuzzle = () => {
     const puzzle = normalizePuzzle(puzzleDraft);
-    setSolveStatus("idle");
-    setPuzzle(puzzle);
-    setTable(puzzle);
+    onPuzzleApply(puzzle);
     setStatus("idle");
     setMessage("");
     setIsOpen(false);

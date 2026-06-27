@@ -1,12 +1,14 @@
 import { clsx } from "clsx";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { type ChangeEvent, useEffect, useRef } from "react";
-import { cellState, puzzleState, selectedCellState } from "@/base/jotai/cell";
-import { solveStatusState } from "@/base/jotai/solver";
+import { type ChangeEvent, memo, useEffect, useRef } from "react";
+import type { SudokuCellModel } from "@/model/SudokuCellModel";
+import type { SolveStatus } from "@/services/type";
 
 export interface SudokuCellProps {
   className?: string;
-  address: number;
+  cell: SudokuCellModel;
+  onCellNumberChange: (address: number, cellNumber: number) => void;
+  onCellSelect: (address: number) => void;
+  solveStatus: SolveStatus;
 }
 
 /**
@@ -16,19 +18,20 @@ export interface SudokuCellProps {
  * @param cellNumber cellの番号
  * @param address セルの位置
  */
-const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
+const SudokuCell = ({
+  className = "",
+  cell,
+  onCellNumberChange,
+  onCellSelect,
+  solveStatus,
+}: SudokuCellProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [cell, setCell] = useAtom(cellState(address));
-  const setSelectedCell = useSetAtom(selectedCellState);
-  const puzzle = useAtomValue(puzzleState);
-  const solveStatus = useAtomValue(solveStatusState);
 
-  const { cellNumber, isSelected, status } = cell;
-  const isGiven = puzzle[address] !== "0";
+  const { address, cellNumber, isGiven, isSelected, status } = cell;
   const editable = !isGiven && solveStatus !== "solving";
 
   const updateCellNumber = (cellNumber: number) =>
-    editable && setCell({ ...cell, cellNumber });
+    editable && onCellNumberChange(address, cellNumber);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replace(/\D/g, "").slice(-1);
@@ -62,7 +65,7 @@ const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
           className="sr-only"
           inputMode="none"
           onChange={handleChange}
-          onFocus={() => setSelectedCell(address)}
+          onFocus={() => onCellSelect(address)}
           onKeyDown={(event) => {
             if (event.key === "Backspace" || event.key === "Delete") {
               event.preventDefault();
@@ -72,25 +75,25 @@ const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
 
             if (event.key === "ArrowUp") {
               event.preventDefault();
-              setSelectedCell(address < 9 ? address : address - 9);
+              onCellSelect(address < 9 ? address : address - 9);
               return;
             }
 
             if (event.key === "ArrowDown") {
               event.preventDefault();
-              setSelectedCell(address + 9 > 80 ? address : address + 9);
+              onCellSelect(address + 9 > 80 ? address : address + 9);
               return;
             }
 
             if (event.key === "ArrowLeft") {
               event.preventDefault();
-              setSelectedCell(address % 9 === 0 ? address : address - 1);
+              onCellSelect(address % 9 === 0 ? address : address - 1);
               return;
             }
 
             if (event.key === "ArrowRight") {
               event.preventDefault();
-              setSelectedCell(address % 9 === 8 ? address : address + 1);
+              onCellSelect(address % 9 === 8 ? address : address + 1);
             }
           }}
           pattern="[0-9]*"
@@ -104,4 +107,4 @@ const SudokuCell = ({ className = "", address }: SudokuCellProps) => {
   );
 };
 
-export default SudokuCell;
+export default memo(SudokuCell);
