@@ -1,6 +1,6 @@
+import type { AddressNumberType } from "@sudoku/core/model/type/AddressNumber";
 import { atom } from "jotai";
 import { cellAtom } from "@/base/jotai/cell";
-import type { AddressNumberType } from "@/model/type/AddressNumber";
 
 export const addressAtom = atom<AddressNumberType | -1>(-1);
 

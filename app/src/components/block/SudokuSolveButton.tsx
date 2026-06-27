@@ -1,41 +1,42 @@
+import { clsx } from "clsx";
 import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
-import { cx } from "@/base/function";
-import { cellUpdater, tableState } from "@/base/jotai/cell";
-import SudokuSolver from "@/calc/SudokuSolver";
+import { useContext, useEffect } from "react";
+import { cellStatusUpdater, tableState } from "@/base/jotai/cell";
+import { solveStatusState } from "@/base/jotai/solver";
+import { SudokuSolverClientContext } from "@/services/api/SudokuSolverClientProvider";
+import { useSudokuSolver } from "@/services/useSudokuSolver";
+
+const requireSudokuSolverClient = () => {
+  throw new Error("SudokuSolverClientProvider is not found");
+};
 
 export const SudokuSolveButton = () => {
-  const data = useAtomValue(tableState);
+  const client =
+    useContext(SudokuSolverClientContext) ?? requireSudokuSolverClient();
+  const table = useAtomValue(tableState);
+  const setTable = useSetAtom(tableState);
+  const setSolveStatus = useSetAtom(solveStatusState);
+  const setCellStatuses = useSetAtom(cellStatusUpdater);
 
-  const setCell = useSetAtom(cellUpdater);
+  const { conflicts, solve, status, stop } = useSudokuSolver({
+    client,
+    table,
+    onTableChange: setTable,
+  });
+  const processing = status === "solving";
 
-  const [solver] = useState<SudokuSolver>(new SudokuSolver(setCell));
-
-  const [processing, setProcessing] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (processing) {
-      const itr = solver.solve(data);
-
-      const exe = setInterval(() => {
-        if (itr.next().done) {
-          clearInterval(exe);
-        }
-      }, 100);
-
-      return () => clearInterval(exe);
-    }
-  }, [processing, data, solver]);
+  useEffect(() => setSolveStatus(status), [setSolveStatus, status]);
+  useEffect(() => setCellStatuses(conflicts), [conflicts, setCellStatuses]);
 
   return (
     <button
-      className={cx(
-        "my-3 cursor-pointer rounded border px-4 py-2 font-medium transition-colors",
+      className={clsx(
+        "cursor-pointer rounded border px-4 py-2 font-medium transition-colors",
         processing
           ? "border-red-600 text-red-600 hover:bg-red-50"
           : "border-cyan-600 text-cyan-600 hover:bg-cyan-50",
       )}
-      onClick={() => setProcessing((b) => !b)}
+      onClick={processing ? stop : solve}
       type="button"
     >
       {processing ? "Stop" : "Solve"}

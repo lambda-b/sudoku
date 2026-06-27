@@ -5,6 +5,7 @@
   "type": "module",
   "workspaces": [
     "app",
+    "app/packages/*",
     "infra"
   ],
   "scripts": {
@@ -15,7 +16,7 @@
     "infra:diff": "npm --prefix infra run diff",
     "infra:deploy": "npm run site:build && npm --prefix infra run deploy",
     "infra:synth": "npm --prefix infra run synth",
-    "lint": "biome check . && oxlint .",
+    "lint": "biome check app infra && oxlint app infra",
     "format": "biome check --write .",
     "puzzles:build": "rm -rf dist/puzzles && mkdir -p dist/puzzles && cp -R puzzles/. dist/puzzles/",
     "puzzles:deploy": "npm run puzzles:build && aws s3 sync dist/puzzles s3://dancinglinks-sudoku-solver-puzzles/puzzles --delete && aws cloudfront create-invalidation --distribution-id E2E3427N1NDFOA --paths '/puzzles/*' '/api/puzzles/random'",

@@ -1,7 +1,8 @@
-import type { AddressNumberType } from "@/model/type/AddressNumber";
+import type { AddressNumberType } from "@sudoku/core/model/type/AddressNumber";
 
 export interface SudokuCellModel {
   cellNumber: number;
   address: AddressNumberType;
   isSelected: boolean;
+  status: "default" | "conflict";
 }

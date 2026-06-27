@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { puzzleState, tableState } from "@/base/jotai/cell";
+import { solveStatusState } from "@/base/jotai/solver";
 
 type SudokuPuzzle = {
   id: string;
@@ -21,6 +22,7 @@ const fetchRandomPuzzle = async () => {
 export const SudokuPuzzleLoader = () => {
   const setTable = useSetAtom(tableState);
   const setPuzzle = useSetAtom(puzzleState);
+  const [solveStatus, setSolveStatus] = useAtom(solveStatusState);
   const { data, isFetching, isError, refetch } = useQuery({
     queryKey: ["puzzles", "random"],
     queryFn: fetchRandomPuzzle,
@@ -29,15 +31,16 @@ export const SudokuPuzzleLoader = () => {
 
   useEffect(() => {
     if (data) {
+      setSolveStatus("idle");
       setPuzzle(data.puzzle);
       setTable(data.puzzle);
     }
-  }, [data, setPuzzle, setTable]);
+  }, [data, setPuzzle, setSolveStatus, setTable]);
 
   return (
     <button
       className="cursor-pointer rounded border border-zinc-600 px-4 py-2 font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-60"
-      disabled={isFetching}
+      disabled={isFetching || solveStatus === "solving"}
       onClick={() => refetch()}
       type="button"
     >

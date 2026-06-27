@@ -1,15 +1,15 @@
-import { atom } from "jotai";
-import { addressState } from "@/base/jotai/address";
-import { cellNumberState } from "@/base/jotai/cell";
 import {
   type AddressMoveKeyType,
   isAddressMoveKeyType,
-} from "@/model/type/AddressMoveKeyType";
+} from "@sudoku/core/model/type/AddressMoveKeyType";
 import {
   type AddressNumberType,
   isAddressNumber,
-} from "@/model/type/AddressNumber";
-import { isOneDigitNumberType } from "@/model/type/OneDigitNumberType";
+} from "@sudoku/core/model/type/AddressNumber";
+import { isOneDigitNumberType } from "@sudoku/core/model/type/OneDigitNumberType";
+import { atom } from "jotai";
+import { addressState } from "@/base/jotai/address";
+import { cellNumberState } from "@/base/jotai/cell";
 
 const selectAddressFunction = (
   address: AddressNumberType | -1,
