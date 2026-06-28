@@ -18,12 +18,13 @@
     "@types/react-dom": "^19.2.3"
   },
   "exports": {
-    "./actions/SudokuOcrImportButton": "./src/actions/SudokuOcrImportButton.tsx",
-    "./actions/SudokuPuzzleLoadButton": "./src/actions/SudokuPuzzleLoadButton.tsx",
-    "./actions/SudokuResetButton": "./src/actions/SudokuResetButton.tsx",
-    "./actions/SudokuSolveButton": "./src/actions/SudokuSolveButton.tsx",
+    "./actions/RandomButton": "./src/actions/RandomButton.tsx",
+    "./actions/ResetButton": "./src/actions/ResetButton.tsx",
+    "./actions/SolveButton": "./src/actions/SolveButton.tsx",
     "./actions/SudokuSolveStatus": "./src/actions/SudokuSolveStatus.tsx",
+    "./actions/UploadButton": "./src/actions/UploadButton.tsx",
     "./actions/types": "./src/actions/types.ts",
+    "./primitives/Button": "./src/primitives/Button.tsx",
     "./primitives/Modal": "./src/primitives/Modal.tsx",
     "./sudoku/SudokuBoard": "./src/sudoku/SudokuBoard.tsx",
     "./sudoku/SudokuCell": "./src/sudoku/SudokuCell.tsx",

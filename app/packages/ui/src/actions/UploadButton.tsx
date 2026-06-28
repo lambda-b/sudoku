@@ -1,3 +1,4 @@
+import { Button } from "@sudoku/ui/primitives/Button";
 import { Modal } from "@sudoku/ui/primitives/Modal";
 import { SudokuBoard } from "@sudoku/ui/sudoku/SudokuBoard";
 import { SudokuNumberPad } from "@sudoku/ui/sudoku/SudokuNumberPad";
@@ -9,7 +10,7 @@ type SudokuOcrRecognitionResult = {
   puzzle: string;
 };
 
-export type SudokuOcrRecognize = (
+export type UploadRecognize = (
   file: File,
   options?: {
     onSuccess?: (result: SudokuOcrRecognitionResult) => void;
@@ -32,17 +33,17 @@ const createPreviewCells = (puzzle: string): SudokuUiCell[] =>
       status: "default",
     }));
 
-type SudokuOcrImportButtonProps = {
+type UploadButtonProps = {
   hasResult: boolean;
   message: string;
-  onFileRecognize: SudokuOcrRecognize;
+  onFileRecognize: UploadRecognize;
   onPuzzleApply: (puzzle: string) => void;
   onReset: () => void;
   processing: boolean;
   showEditor: boolean;
 };
 
-export const SudokuOcrImportButton = ({
+export const UploadButton = ({
   hasResult,
   message,
   onFileRecognize,
@@ -50,7 +51,7 @@ export const SudokuOcrImportButton = ({
   onReset,
   processing,
   showEditor,
-}: SudokuOcrImportButtonProps) => {
+}: UploadButtonProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [puzzleDraft, setPuzzleDraft] = useState("");
@@ -103,11 +104,11 @@ export const SudokuOcrImportButton = ({
         onChange={handleFileChange}
         type="file"
       />
-      <button
-        className="inline-flex cursor-pointer items-center gap-1 rounded border border-emerald-600 px-2 py-1.5 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60 sm:gap-2 sm:px-4 sm:py-2 sm:text-base"
+      <Button
         disabled={processing}
         onClick={() => setIsOpen(true)}
-        type="button"
+        size="toolbar"
+        tone="success"
       >
         <Upload
           aria-hidden="true"
@@ -115,7 +116,7 @@ export const SudokuOcrImportButton = ({
           strokeWidth={2}
         />
         {processing ? "OCR" : "Upload"}
-      </button>
+      </Button>
       <Modal
         closeDisabled={processing}
         isOpen={isOpen}
@@ -123,15 +124,14 @@ export const SudokuOcrImportButton = ({
         title="OCR Import"
       >
         <div className="mb-4 flex items-center gap-3">
-          <button
-            className="inline-flex cursor-pointer items-center gap-2 rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60"
+          <Button
             disabled={processing}
             onClick={() => inputRef.current?.click()}
-            type="button"
+            tone="success"
           >
             <ImageUp aria-hidden="true" size={16} strokeWidth={2} />
             {processing ? "OCR" : "Choose Image"}
-          </button>
+          </Button>
           {message && <span className="text-sm text-zinc-600">{message}</span>}
         </div>
         {showEditor && hasResult && (
@@ -140,14 +140,10 @@ export const SudokuOcrImportButton = ({
               <p className="m-0 text-sm font-medium text-zinc-700">
                 Review OCR result
               </p>
-              <button
-                className="inline-flex cursor-pointer items-center gap-1.5 rounded border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50"
-                onClick={applyPuzzle}
-                type="button"
-              >
+              <Button onClick={applyPuzzle} size="small" tone="success">
                 <Check aria-hidden="true" size={14} strokeWidth={2} />
                 Apply
-              </button>
+              </Button>
             </div>
             <div className="mx-auto w-[var(--sudoku-board)] [--sudoku-board:calc(var(--sudoku-cell)*9)] [--sudoku-cell:min(34px,calc((100vw-64px)/9))]">
               <SudokuBoard

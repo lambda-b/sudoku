@@ -1,21 +1,18 @@
 import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
+import { Button } from "@sudoku/ui/primitives/Button";
 import { RotateCcw } from "lucide-react";
 
-type SudokuResetButtonProps = {
+type ResetButtonProps = {
   onReset: () => void;
   solveStatus: SudokuSolveStatusType;
 };
 
-export const SudokuResetButton = ({
-  onReset,
-  solveStatus,
-}: SudokuResetButtonProps) => {
+export const ResetButton = ({ onReset, solveStatus }: ResetButtonProps) => {
   return (
-    <button
-      className="inline-flex cursor-pointer items-center gap-1 rounded border border-zinc-600 px-2 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 sm:gap-2 sm:px-4 sm:py-2 sm:text-base"
+    <Button
       disabled={solveStatus === "solving"}
       onClick={onReset}
-      type="button"
+      size="toolbar"
     >
       <RotateCcw
         aria-hidden="true"
@@ -23,6 +20,6 @@ export const SudokuResetButton = ({
         strokeWidth={2}
       />
       Reset
-    </button>
+    </Button>
   );
 };

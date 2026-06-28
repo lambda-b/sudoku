@@ -2,11 +2,11 @@ import {
   ADDRESS_NUMBER,
   isAddressNumber,
 } from "@sudoku/core/model/type/AddressNumber";
-import { SudokuOcrImportButton } from "@sudoku/ui/actions/SudokuOcrImportButton";
-import { SudokuPuzzleLoadButton } from "@sudoku/ui/actions/SudokuPuzzleLoadButton";
-import { SudokuResetButton } from "@sudoku/ui/actions/SudokuResetButton";
-import { SudokuSolveButton } from "@sudoku/ui/actions/SudokuSolveButton";
+import { RandomButton } from "@sudoku/ui/actions/RandomButton";
+import { ResetButton } from "@sudoku/ui/actions/ResetButton";
+import { SolveButton } from "@sudoku/ui/actions/SolveButton";
 import { SudokuSolveStatus } from "@sudoku/ui/actions/SudokuSolveStatus";
+import { UploadButton } from "@sudoku/ui/actions/UploadButton";
 import { SudokuBoard } from "@sudoku/ui/sudoku/SudokuBoard";
 import { SudokuNumberPad } from "@sudoku/ui/sudoku/SudokuNumberPad";
 import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
@@ -147,13 +147,13 @@ const Sudoku = () => {
       <div className="w-[var(--sudoku-board)]">
         <div className="mx-auto my-3 flex w-[var(--sudoku-board)] flex-col gap-2">
           <div className="flex items-center justify-between gap-1 sm:gap-3">
-            <SudokuPuzzleLoadButton
+            <RandomButton
               error={randomPuzzle.error}
               loading={randomPuzzle.loading}
               onLoad={() => void randomPuzzle.load()}
               solveStatus={solveStatus}
             />
-            <SudokuOcrImportButton
+            <UploadButton
               hasResult={!!ocr.result}
               message={ocr.message}
               onFileRecognize={ocr.recognize}
@@ -162,11 +162,8 @@ const Sudoku = () => {
               processing={ocr.processing}
               showEditor={ocr.showEditor}
             />
-            <SudokuResetButton
-              onReset={resetPuzzle}
-              solveStatus={solveStatus}
-            />
-            <SudokuSolveButton
+            <ResetButton onReset={resetPuzzle} solveStatus={solveStatus} />
+            <SolveButton
               onSolve={solver.solve}
               onStop={solver.stop}
               solveStatus={solveStatus}
