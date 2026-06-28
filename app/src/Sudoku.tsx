@@ -5,7 +5,7 @@ import {
 import { RandomButton } from "@sudoku/ui/actions/RandomButton";
 import { ResetButton } from "@sudoku/ui/actions/ResetButton";
 import { SolveButton } from "@sudoku/ui/actions/SolveButton";
-import { SudokuSolveStatus } from "@sudoku/ui/actions/SudokuSolveStatus";
+import { SolveStatusToast } from "@sudoku/ui/actions/SolveStatusToast";
 import { UploadButton } from "@sudoku/ui/actions/UploadButton";
 import { UploadModal } from "@sudoku/ui/actions/UploadModal";
 import { SudokuBoard } from "@sudoku/ui/sudoku/SudokuBoard";
@@ -177,7 +177,7 @@ const Sudoku = () => {
               solveStatus={solveStatus}
             />
           </div>
-          <SudokuSolveStatus
+          <SolveStatusToast
             onSolve={solver.solve}
             onStop={solver.stop}
             solveStatus={solveStatus}
