@@ -149,16 +149,14 @@ export const SudokuOcrImportButton = ({
                 Apply
               </button>
             </div>
-            <div className="h-[372px] w-[306px] overflow-hidden">
-              <div className="w-[630px] origin-top-left scale-[0.485714]">
-                <SudokuBoard
-                  cells={previewCells}
-                  onCellNumberChange={updateCell}
-                  onCellSelect={setSelectedAddress}
-                  selectedAddress={selectedAddress}
-                />
-                <SudokuNumberPad onNumberSelect={inputSelectedCellNumber} />
-              </div>
+            <div className="mx-auto w-[var(--sudoku-board)] [--sudoku-board:calc(var(--sudoku-cell)*9)] [--sudoku-cell:min(34px,calc((100vw-64px)/9))]">
+              <SudokuBoard
+                cells={previewCells}
+                onCellNumberChange={updateCell}
+                onCellSelect={setSelectedAddress}
+                selectedAddress={selectedAddress}
+              />
+              <SudokuNumberPad onNumberSelect={inputSelectedCellNumber} />
             </div>
           </div>
         )}

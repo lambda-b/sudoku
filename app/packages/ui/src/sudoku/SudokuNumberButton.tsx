@@ -22,7 +22,7 @@ const SudokuNumberButtonComponent = ({
       )}
     >
       <button
-        className="h-full w-full cursor-pointer text-center [font-size:clamp(22px,calc((100vw-16px)/15.75),40px)] disabled:cursor-not-allowed disabled:opacity-50"
+        className="h-full w-full cursor-pointer text-center [font-size:calc(var(--sudoku-cell)*0.5714)] disabled:cursor-not-allowed disabled:opacity-50"
         disabled={disabled}
         onClick={() => onNumberSelect(number)}
         type="button"

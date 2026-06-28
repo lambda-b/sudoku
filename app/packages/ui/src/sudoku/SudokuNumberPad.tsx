@@ -17,7 +17,7 @@ export const SudokuNumberPad = ({
         return (
           <SudokuNumberButton
             key={cellNumber}
-            className="mt-16 border"
+            className="mt-[calc(var(--sudoku-cell)*0.914)] border"
             disabled={disabled}
             number={cellNumber}
             onNumberSelect={onNumberSelect}
