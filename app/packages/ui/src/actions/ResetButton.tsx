@@ -11,15 +11,10 @@ export const ResetButton = ({ onReset, solveStatus }: ResetButtonProps) => {
   return (
     <Button
       disabled={solveStatus === "solving"}
+      icon={RotateCcw}
       onClick={onReset}
       size="toolbar"
-    >
-      <RotateCcw
-        aria-hidden="true"
-        className="size-3.5 sm:size-4"
-        strokeWidth={2}
-      />
-      Reset
-    </Button>
+      text="Reset"
+    />
   );
 };

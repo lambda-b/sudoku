@@ -1,12 +1,14 @@
 import { clsx } from "clsx";
+import type { LucideIcon } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type ButtonTone = "neutral" | "success" | "primary" | "danger";
 type ButtonSize = "toolbar" | "default" | "small";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  children: ReactNode;
+  icon?: LucideIcon;
   size?: ButtonSize;
+  text: ReactNode;
   tone?: ButtonTone;
 };
 
@@ -24,14 +26,23 @@ const sizeClasses: Record<ButtonSize, string> = {
     "gap-1 px-2 py-1.5 text-xs font-medium sm:gap-2 sm:px-4 sm:py-2 sm:text-base",
 };
 
+const iconSizeClasses: Record<ButtonSize, string> = {
+  default: "size-4",
+  small: "size-3.5",
+  toolbar: "size-3.5 sm:size-4",
+};
+
 export const Button = ({
-  children,
   className,
+  icon,
   size = "default",
+  text,
   tone = "neutral",
   type = "button",
   ...props
 }: ButtonProps) => {
+  const Icon = icon;
+
   return (
     <button
       className={clsx(
@@ -43,7 +54,14 @@ export const Button = ({
       type={type}
       {...props}
     >
-      {children}
+      {Icon && (
+        <Icon
+          aria-hidden="true"
+          className={iconSizeClasses[size]}
+          strokeWidth={2}
+        />
+      )}
+      {text}
     </button>
   );
 };

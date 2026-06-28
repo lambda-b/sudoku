@@ -106,17 +106,12 @@ export const UploadButton = ({
       />
       <Button
         disabled={processing}
+        icon={Upload}
         onClick={() => setIsOpen(true)}
         size="toolbar"
+        text={processing ? "OCR" : "Upload"}
         tone="success"
-      >
-        <Upload
-          aria-hidden="true"
-          className="size-3.5 sm:size-4"
-          strokeWidth={2}
-        />
-        {processing ? "OCR" : "Upload"}
-      </Button>
+      />
       <Modal
         closeDisabled={processing}
         isOpen={isOpen}
@@ -126,12 +121,11 @@ export const UploadButton = ({
         <div className="mb-4 flex items-center gap-3">
           <Button
             disabled={processing}
+            icon={ImageUp}
             onClick={() => inputRef.current?.click()}
+            text={processing ? "OCR" : "Choose Image"}
             tone="success"
-          >
-            <ImageUp aria-hidden="true" size={16} strokeWidth={2} />
-            {processing ? "OCR" : "Choose Image"}
-          </Button>
+          />
           {message && <span className="text-sm text-zinc-600">{message}</span>}
         </div>
         {showEditor && hasResult && (
@@ -140,10 +134,13 @@ export const UploadButton = ({
               <p className="m-0 text-sm font-medium text-zinc-700">
                 Review OCR result
               </p>
-              <Button onClick={applyPuzzle} size="small" tone="success">
-                <Check aria-hidden="true" size={14} strokeWidth={2} />
-                Apply
-              </Button>
+              <Button
+                icon={Check}
+                onClick={applyPuzzle}
+                size="small"
+                text="Apply"
+                tone="success"
+              />
             </div>
             <div className="mx-auto w-[var(--sudoku-board)] [--sudoku-board:calc(var(--sudoku-cell)*9)] [--sudoku-cell:min(34px,calc((100vw-64px)/9))]">
               <SudokuBoard

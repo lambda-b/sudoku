@@ -21,11 +21,10 @@ export const RandomButton = ({
   return (
     <Button
       disabled={loading || solveStatus === "solving"}
+      icon={Icon}
       onClick={onLoad}
       size="toolbar"
-    >
-      <Icon aria-hidden="true" className="size-3.5 sm:size-4" strokeWidth={2} />
-      {label}
-    </Button>
+      text={label}
+    />
   );
 };

@@ -14,16 +14,14 @@ export const SolveButton = ({
   solveStatus,
 }: SolveButtonProps) => {
   const processing = solveStatus === "solving";
-  const Icon = processing ? Square : WandSparkles;
 
   return (
     <Button
+      icon={processing ? Square : WandSparkles}
       onClick={processing ? onStop : onSolve}
       size="toolbar"
+      text={processing ? "Stop" : "Solve"}
       tone={processing ? "danger" : "primary"}
-    >
-      <Icon aria-hidden="true" className="size-3.5 sm:size-4" strokeWidth={2} />
-      {processing ? "Stop" : "Solve"}
-    </Button>
+    />
   );
 };
