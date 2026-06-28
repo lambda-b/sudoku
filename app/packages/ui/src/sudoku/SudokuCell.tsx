@@ -52,7 +52,7 @@ const SudokuCellComponent = ({
     >
       <label
         className={clsx(
-          "block h-full w-full cursor-pointer text-center [font-size:clamp(22px,calc((100vw-16px)/15.75),40px)] [line-height:var(--sudoku-cell)]",
+          "block h-full w-full cursor-pointer text-center [font-size:calc(var(--sudoku-cell)*0.5714)] [line-height:var(--sudoku-cell)]",
           isGiven && "font-bold text-zinc-900",
           status === "conflict" && "bg-red-100 text-red-700",
           isSelected && "shadow-[0_0_10px_hsl(207_61%_53%)]",
