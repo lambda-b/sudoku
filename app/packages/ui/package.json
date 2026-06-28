@@ -26,6 +26,7 @@
     "./actions/UploadModal": "./src/actions/UploadModal.tsx",
     "./actions/types": "./src/actions/types.ts",
     "./primitives/Button": "./src/primitives/Button.tsx",
+    "./primitives/Cell": "./src/primitives/Cell.tsx",
     "./primitives/Modal": "./src/primitives/Modal.tsx",
     "./sudoku/SudokuBoard": "./src/sudoku/SudokuBoard.tsx",
     "./sudoku/SudokuCell": "./src/sudoku/SudokuCell.tsx",
