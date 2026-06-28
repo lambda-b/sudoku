@@ -6,6 +6,11 @@ import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import { Check, ImageUp } from "lucide-react";
 import { type ChangeEvent, useRef, useState } from "react";
 
+const defaultButtonClassName =
+  "inline-flex items-center gap-2 rounded border border-emerald-600 px-4 py-2 font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60";
+const smallButtonClassName =
+  "inline-flex items-center gap-1.5 rounded border border-emerald-600 px-3 py-1.5 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:cursor-wait disabled:opacity-60";
+
 type SudokuOcrRecognitionResult = {
   puzzle: string;
 };
@@ -114,11 +119,11 @@ export const UploadModal = ({
       />
       <div className="mb-4 flex items-center gap-3">
         <Button
+          className={defaultButtonClassName}
           disabled={processing}
           icon={ImageUp}
           onClick={() => inputRef.current?.click()}
           text={processing ? "OCR" : "Choose Image"}
-          tone="success"
         />
         {message && <span className="text-sm text-zinc-600">{message}</span>}
       </div>
@@ -129,11 +134,10 @@ export const UploadModal = ({
               Review OCR result
             </p>
             <Button
+              className={smallButtonClassName}
               icon={Check}
               onClick={applyPuzzle}
-              size="small"
               text="Apply"
-              tone="success"
             />
           </div>
           <div className="mx-auto w-[var(--sudoku-board)] [--sudoku-board:calc(var(--sudoku-cell)*9)] [--sudoku-cell:min(34px,calc((100vw-64px)/9))]">

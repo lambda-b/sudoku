@@ -1,3 +1,4 @@
+import { Button } from "@sudoku/ui/primitives/Button";
 import { clsx } from "clsx";
 import { memo } from "react";
 
@@ -21,14 +22,12 @@ const SudokuNumberButtonComponent = ({
         className,
       )}
     >
-      <button
+      <Button
         className="h-full w-full cursor-pointer text-center [font-size:calc(var(--sudoku-cell)*0.5714)] disabled:cursor-not-allowed disabled:opacity-50"
         disabled={disabled}
         onClick={() => onNumberSelect(number)}
-        type="button"
-      >
-        {number}
-      </button>
+        text={number}
+      />
     </div>
   );
 };
