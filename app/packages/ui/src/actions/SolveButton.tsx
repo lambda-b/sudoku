@@ -1,34 +1,35 @@
 import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
+import { Button } from "@sudoku/ui/primitives/Button";
 import { clsx } from "clsx";
 import { Square, WandSparkles } from "lucide-react";
 
-type SudokuSolveButtonProps = {
+const toolbarButtonClassName =
+  "inline-flex items-center gap-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors disabled:cursor-wait disabled:opacity-60 sm:gap-2 sm:px-4 sm:py-2 sm:text-base";
+
+type SolveButtonProps = {
   onSolve: () => void;
   onStop: () => void;
   solveStatus: SudokuSolveStatusType;
 };
 
-export const SudokuSolveButton = ({
+export const SolveButton = ({
   onSolve,
   onStop,
   solveStatus,
-}: SudokuSolveButtonProps) => {
+}: SolveButtonProps) => {
   const processing = solveStatus === "solving";
-  const Icon = processing ? Square : WandSparkles;
 
   return (
-    <button
+    <Button
       className={clsx(
-        "inline-flex cursor-pointer items-center gap-1 rounded border px-2 py-1.5 text-xs font-medium transition-colors sm:gap-2 sm:px-4 sm:py-2 sm:text-base",
+        toolbarButtonClassName,
         processing
           ? "border-red-600 text-red-600 hover:bg-red-50"
           : "border-cyan-600 text-cyan-600 hover:bg-cyan-50",
       )}
+      icon={processing ? Square : WandSparkles}
       onClick={processing ? onStop : onSolve}
-      type="button"
-    >
-      <Icon aria-hidden="true" className="size-3.5 sm:size-4" strokeWidth={2} />
-      {processing ? "Stop" : "Solve"}
-    </button>
+      text={processing ? "Stop" : "Solve"}
+    />
   );
 };
