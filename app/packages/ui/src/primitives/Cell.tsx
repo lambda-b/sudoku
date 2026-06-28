@@ -49,7 +49,7 @@ export const Cell = ({
   return (
     <label
       className={clsx(
-        "block h-full w-full cursor-pointer text-center focus-within:shadow-[0_0_10px_hsl(207_61%_53%)]",
+        "block box-border shrink-0 cursor-pointer text-center focus-within:shadow-[0_0_10px_hsl(207_61%_53%)]",
         disabled && "cursor-not-allowed opacity-60",
         className,
       )}

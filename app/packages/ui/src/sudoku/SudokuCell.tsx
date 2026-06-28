@@ -29,61 +29,56 @@ const SudokuCellComponent = ({
   const value = cellNumber ? String(cellNumber) : "";
 
   return (
-    <div
+    <Cell
+      ariaLabel={`Sudoku cell ${address + 1}`}
       className={clsx(
         "h-[var(--sudoku-cell)] w-[var(--sudoku-cell)] border-[#b5b5b5]",
         className,
+        "[font-size:calc(var(--sudoku-cell)*0.5714)] [line-height:var(--sudoku-cell)]",
+        isGiven && "font-bold text-zinc-900",
+        status === "conflict" && "bg-red-100 text-red-700",
       )}
-    >
-      <Cell
-        ariaLabel={`Sudoku cell ${address + 1}`}
-        className={clsx(
-          "[font-size:calc(var(--sudoku-cell)*0.5714)] [line-height:var(--sudoku-cell)]",
-          isGiven && "font-bold text-zinc-900",
-          status === "conflict" && "bg-red-100 text-red-700",
-        )}
-        disabled={!editable && !isGiven}
-        focused={isSelected}
-        onFocus={() => onCellSelect(address)}
-        onDoubleClick={() => updateCellNumber(0)}
-        onKeyDown={(event) => {
-          if (event.key === "Backspace" || event.key === "Delete") {
-            event.preventDefault();
-            updateCellNumber(0);
-            return;
-          }
+      disabled={!editable && !isGiven}
+      focused={isSelected}
+      onFocus={() => onCellSelect(address)}
+      onDoubleClick={() => updateCellNumber(0)}
+      onKeyDown={(event) => {
+        if (event.key === "Backspace" || event.key === "Delete") {
+          event.preventDefault();
+          updateCellNumber(0);
+          return;
+        }
 
-          if (event.key === "ArrowUp") {
-            event.preventDefault();
-            onCellSelect(address < 9 ? address : address - 9);
-            return;
-          }
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+          onCellSelect(address < 9 ? address : address - 9);
+          return;
+        }
 
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            onCellSelect(address + 9 > 80 ? address : address + 9);
-            return;
-          }
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          onCellSelect(address + 9 > 80 ? address : address + 9);
+          return;
+        }
 
-          if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            onCellSelect(address % 9 === 0 ? address : address - 1);
-            return;
-          }
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          onCellSelect(address % 9 === 0 ? address : address - 1);
+          return;
+        }
 
-          if (event.key === "ArrowRight") {
-            event.preventDefault();
-            onCellSelect(address % 9 === 8 ? address : address + 1);
-          }
-        }}
-        onValueChange={(nextValue) => {
-          const digit = nextValue.replace(/\D/g, "");
-          updateCellNumber(digit ? Number(digit) : 0);
-        }}
-        readOnly={!editable}
-        value={value}
-      />
-    </div>
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          onCellSelect(address % 9 === 8 ? address : address + 1);
+        }
+      }}
+      onValueChange={(nextValue) => {
+        const digit = nextValue.replace(/\D/g, "");
+        updateCellNumber(digit ? Number(digit) : 0);
+      }}
+      readOnly={!editable}
+      value={value}
+    />
   );
 };
 
