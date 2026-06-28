@@ -1,4 +1,4 @@
-import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
+import type { SolveStatusType } from "@sudoku/ui/actions/types";
 import { Button } from "@sudoku/ui/primitives/Button";
 import { Upload } from "lucide-react";
 
@@ -7,7 +7,7 @@ const toolbarButtonClassName =
 
 type UploadButtonProps = {
   onOpen: () => void;
-  solveStatus: SudokuSolveStatusType;
+  solveStatus: SolveStatusType;
 };
 
 export const UploadButton = ({ onOpen, solveStatus }: UploadButtonProps) => {

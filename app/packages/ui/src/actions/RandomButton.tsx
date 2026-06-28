@@ -1,4 +1,4 @@
-import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
+import type { SolveStatusType } from "@sudoku/ui/actions/types";
 import { Button } from "@sudoku/ui/primitives/Button";
 import { RotateCw, Shuffle } from "lucide-react";
 
@@ -9,7 +9,7 @@ type RandomButtonProps = {
   error: boolean;
   loading: boolean;
   onLoad: () => void;
-  solveStatus: SudokuSolveStatusType;
+  solveStatus: SolveStatusType;
 };
 
 export const RandomButton = ({

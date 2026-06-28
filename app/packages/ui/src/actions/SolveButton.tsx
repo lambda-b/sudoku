@@ -1,4 +1,4 @@
-import type { SudokuSolveStatusType } from "@sudoku/ui/actions/types";
+import type { SolveStatusType } from "@sudoku/ui/actions/types";
 import { Button } from "@sudoku/ui/primitives/Button";
 import { clsx } from "clsx";
 import { Square, WandSparkles } from "lucide-react";
@@ -9,7 +9,7 @@ const toolbarButtonClassName =
 type SolveButtonProps = {
   onSolve: () => void;
   onStop: () => void;
-  solveStatus: SudokuSolveStatusType;
+  solveStatus: SolveStatusType;
 };
 
 export const SolveButton = ({
