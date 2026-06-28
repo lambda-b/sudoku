@@ -177,7 +177,11 @@ const Sudoku = () => {
               solveStatus={solveStatus}
             />
           </div>
-          <SudokuSolveStatus solveStatus={solveStatus} />
+          <SudokuSolveStatus
+            onSolve={solver.solve}
+            onStop={solver.stop}
+            solveStatus={solveStatus}
+          />
         </div>
         <SudokuBoard
           cells={cells}
