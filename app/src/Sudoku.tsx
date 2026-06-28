@@ -7,6 +7,7 @@ import { ResetButton } from "@sudoku/ui/actions/ResetButton";
 import { SolveButton } from "@sudoku/ui/actions/SolveButton";
 import { SudokuSolveStatus } from "@sudoku/ui/actions/SudokuSolveStatus";
 import { UploadButton } from "@sudoku/ui/actions/UploadButton";
+import { UploadModal } from "@sudoku/ui/actions/UploadModal";
 import { SudokuBoard } from "@sudoku/ui/sudoku/SudokuBoard";
 import { SudokuNumberPad } from "@sudoku/ui/sudoku/SudokuNumberPad";
 import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
@@ -38,6 +39,7 @@ const Sudoku = () => {
   const [cells, setCells] = useState(() => createCells(INITIAL_SUDOKU_DATA));
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
   const [solveStatus, setSolveStatus] = useState<SolveStatus>("idle");
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   const selectCell = useCallback((address: number | -1) => {
     setSelectedAddress(address);
@@ -154,8 +156,14 @@ const Sudoku = () => {
               solveStatus={solveStatus}
             />
             <UploadButton
+              onOpen={() => setIsUploadOpen(true)}
+              solveStatus={solveStatus}
+            />
+            <UploadModal
               hasResult={!!ocr.result}
+              isOpen={isUploadOpen}
               message={ocr.message}
+              onClose={() => setIsUploadOpen(false)}
               onFileRecognize={ocr.recognize}
               onPuzzleApply={applyPuzzle}
               onReset={ocr.reset}

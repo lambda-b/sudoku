@@ -23,6 +23,7 @@
     "./actions/SolveButton": "./src/actions/SolveButton.tsx",
     "./actions/SudokuSolveStatus": "./src/actions/SudokuSolveStatus.tsx",
     "./actions/UploadButton": "./src/actions/UploadButton.tsx",
+    "./actions/UploadModal": "./src/actions/UploadModal.tsx",
     "./actions/types": "./src/actions/types.ts",
     "./primitives/Button": "./src/primitives/Button.tsx",
     "./primitives/Modal": "./src/primitives/Modal.tsx",
