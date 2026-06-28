@@ -16,19 +16,15 @@ const SudokuNumberButtonComponent = ({
   onNumberSelect,
 }: SudokuNumberButtonProps) => {
   return (
-    <div
+    <Button
       className={clsx(
-        "h-[var(--sudoku-cell)] w-[var(--sudoku-cell)] border-[#b5b5b5]",
+        "h-[var(--sudoku-cell)] w-[var(--sudoku-cell)] border-[#b5b5b5] text-center [font-size:calc(var(--sudoku-cell)*0.5714)] disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
-    >
-      <Button
-        className="h-full w-full cursor-pointer text-center [font-size:calc(var(--sudoku-cell)*0.5714)] disabled:cursor-not-allowed disabled:opacity-50"
-        disabled={disabled}
-        onClick={() => onNumberSelect(number)}
-        text={number}
-      />
-    </div>
+      disabled={disabled}
+      onClick={() => onNumberSelect(number)}
+      text={number}
+    />
   );
 };
 
