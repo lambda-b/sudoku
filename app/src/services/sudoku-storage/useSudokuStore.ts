@@ -4,7 +4,7 @@ import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import type { Dispatch, SetStateAction } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
-const STORAGE_KEY = "sudoku:cells:v2";
+const STORAGE_KEY = "sudoku:cells:v1";
 
 type PersistedSudokuCell = Pick<
   SudokuUiCell,
