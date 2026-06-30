@@ -12,13 +12,13 @@ type PersistedSudokuCell = Pick<
   "address" | "cellNumber" | "initialCellNumber" | "status"
 >;
 
-type SudokuStoreSnapshot = {
+type PersistedSudokuCells = {
   cells: PersistedSudokuCell[];
   updatedAt: string;
   version: 2;
 };
 
-export type SudokuStoreAction =
+export type SudokuCellsAction =
   | {
       type: "cellNumberChanged";
       address: number;
@@ -83,7 +83,7 @@ const isPersistedCell = (
   );
 };
 
-const createSnapshot = (cells: SudokuUiCell[]): SudokuStoreSnapshot => ({
+const createPersistedCells = (cells: SudokuUiCell[]): PersistedSudokuCells => ({
   cells,
   updatedAt: new Date().toISOString(),
   version: 2,
@@ -146,31 +146,33 @@ const findConflicts = (cells: SudokuUiCell[]) => {
 const validateCells = (cells: SudokuUiCell[]) =>
   applyCellStatuses(cells, findConflicts(cells));
 
-const parseSnapshot = (
+const parsePersistedCells = (
   value: string,
   fallbackCells: SudokuUiCell[],
-): SudokuStoreSnapshot => {
+): PersistedSudokuCells => {
   try {
-    const snapshot = JSON.parse(value) as SudokuStoreSnapshot;
+    const persistedCells = JSON.parse(value) as PersistedSudokuCells;
 
     if (
-      snapshot.version !== 2 ||
-      !Array.isArray(snapshot.cells) ||
-      snapshot.cells.length !== ADDRESS_NUMBER.length ||
-      !snapshot.cells.every((cell, address) => isPersistedCell(cell, address))
+      persistedCells.version !== 2 ||
+      !Array.isArray(persistedCells.cells) ||
+      persistedCells.cells.length !== ADDRESS_NUMBER.length ||
+      !persistedCells.cells.every((cell, address) =>
+        isPersistedCell(cell, address),
+      )
     ) {
-      return createSnapshot(fallbackCells);
+      return createPersistedCells(fallbackCells);
     }
 
-    return snapshot;
+    return persistedCells;
   } catch {
-    return createSnapshot(fallbackCells);
+    return createPersistedCells(fallbackCells);
   }
 };
 
 const reduceSudokuCells = (
   cells: SudokuUiCell[],
-  action: SudokuStoreAction,
+  action: SudokuCellsAction,
 ): SudokuUiCell[] => {
   switch (action.type) {
     case "cellNumberChanged": {
@@ -243,28 +245,32 @@ const reduceSudokuCells = (
   }
 };
 
-export const useSudokuStore = (
+export const useSudokuCellsReducer = (
   initialCells: SudokuUiCell[] | (() => SudokuUiCell[]),
-): readonly [SudokuUiCell[], Dispatch<SudokuStoreAction>] => {
+): readonly [SudokuUiCell[], Dispatch<SudokuCellsAction>] => {
   const resolveInitialCells = () =>
     typeof initialCells === "function" ? initialCells() : initialCells;
 
-  const [snapshot, setSnapshot] = useLocalStorage<SudokuStoreSnapshot>(
-    STORAGE_KEY,
-    () => createSnapshot(resolveInitialCells()),
-    {
-      deserializer: (value) => parseSnapshot(value, resolveInitialCells()),
-    },
-  );
+  const [persistedCells, setPersistedCells] =
+    useLocalStorage<PersistedSudokuCells>(
+      STORAGE_KEY,
+      () => createPersistedCells(resolveInitialCells()),
+      {
+        deserializer: (value) =>
+          parsePersistedCells(value, resolveInitialCells()),
+      },
+    );
 
-  const dispatch = useCallback<Dispatch<SudokuStoreAction>>(
+  const dispatch = useCallback<Dispatch<SudokuCellsAction>>(
     (action) => {
-      setSnapshot((currentSnapshot) => {
-        return createSnapshot(reduceSudokuCells(currentSnapshot.cells, action));
+      setPersistedCells((currentPersistedCells) => {
+        return createPersistedCells(
+          reduceSudokuCells(currentPersistedCells.cells, action),
+        );
       });
     },
-    [setSnapshot],
+    [setPersistedCells],
   );
 
-  return [snapshot.cells, dispatch];
+  return [persistedCells.cells, dispatch];
 };

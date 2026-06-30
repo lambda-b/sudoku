@@ -15,14 +15,14 @@ import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 import {
   createSudokuCells,
   sudokuCellsToTable,
-  useSudokuStore,
-} from "@/services/sudoku-storage/useSudokuStore";
+  useSudokuCellsReducer,
+} from "@/services/sudoku/useSudokuCellsReducer";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
 const Sudoku = () => {
-  const [cells, dispatchCells] = useSudokuStore(() =>
+  const [cells, dispatchCells] = useSudokuCellsReducer(() =>
     createSudokuCells(INITIAL_SUDOKU_DATA),
   );
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
