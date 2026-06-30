@@ -1,3 +1,4 @@
+import { convert } from "@sudoku/core/table";
 import type { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
 import { Matrix } from "@sudoku/solver/algorithm/dancinglinks/Matrix";
 import { ColumnAdapter } from "@sudoku/solver/calc/adapter/ColumnAdapter";
@@ -11,7 +12,6 @@ import {
   isSolutionNumberType,
   type SolutionNumberType,
 } from "@sudoku/solver/model/type/SolutionNumberType";
-import { convert } from "@sudoku/solver/sudoku";
 
 class SudokuTemplate {
   #allColumns = createAllColumns();
