@@ -1,9 +1,11 @@
 import { ADDRESS_NUMBER } from "@sudoku/core/model/type/AddressNumber";
+import { isSolutionNumberType } from "@sudoku/core/model/type/SolutionNumberType";
 import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, useRef } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const STORAGE_KEY = "sudoku:cells:v2";
+const LEGACY_STORAGE_KEYS = ["sudoku:cells:v1"] as const;
 
 type PersistedSudokuCell = Pick<
   SudokuUiCell,
@@ -17,7 +19,7 @@ type SudokuStoreSnapshot = {
 };
 
 const isCellNumber = (value: unknown): value is number =>
-  typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 9;
+  value === 0 || (typeof value === "number" && isSolutionNumberType(value));
 
 const isPersistedCell = (
   cell: unknown,
@@ -64,31 +66,67 @@ const parseSnapshot = (
   }
 };
 
+const readStoredSnapshot = (
+  key: string,
+  fallbackCells: SudokuUiCell[],
+): SudokuStoreSnapshot | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    const value = window.localStorage.getItem(key);
+    return value ? parseSnapshot(value, fallbackCells) : null;
+  } catch {
+    return null;
+  }
+};
+
+const createInitialSnapshot = (
+  initialCells: SudokuUiCell[] | (() => SudokuUiCell[]),
+) => {
+  const fallbackCells =
+    typeof initialCells === "function" ? initialCells() : initialCells;
+
+  for (const key of LEGACY_STORAGE_KEYS) {
+    const snapshot = readStoredSnapshot(key, fallbackCells);
+    if (snapshot) {
+      return snapshot;
+    }
+  }
+
+  return createSnapshot(fallbackCells);
+};
+
 export const useSudokuStore = (
   initialCells: SudokuUiCell[] | (() => SudokuUiCell[]),
 ): readonly [SudokuUiCell[], Dispatch<SetStateAction<SudokuUiCell[]>>] => {
-  const resolveInitialCells = () =>
-    typeof initialCells === "function" ? initialCells() : initialCells;
+  const initialSnapshotRef = useRef<SudokuStoreSnapshot | null>(null);
+  if (!initialSnapshotRef.current) {
+    initialSnapshotRef.current = createInitialSnapshot(initialCells);
+  }
+
+  const getInitialSnapshot = () =>
+    initialSnapshotRef.current ?? createInitialSnapshot(initialCells);
 
   const [snapshot, setSnapshot] = useLocalStorage<SudokuStoreSnapshot>(
     STORAGE_KEY,
-    () => createSnapshot(resolveInitialCells()),
+    getInitialSnapshot,
     {
-      deserializer: (value) => parseSnapshot(value, resolveInitialCells()),
+      deserializer: (value) => parseSnapshot(value, getInitialSnapshot().cells),
     },
   );
 
-  const setCells: Dispatch<SetStateAction<SudokuUiCell[]>> =
-    (nextCells) => {
-      setSnapshot((currentSnapshot) => {
-        const cells =
-          typeof nextCells === "function"
-            ? nextCells(currentSnapshot.cells)
-            : nextCells;
+  const setCells: Dispatch<SetStateAction<SudokuUiCell[]>> = (nextCells) => {
+    setSnapshot((currentSnapshot) => {
+      const cells =
+        typeof nextCells === "function"
+          ? nextCells(currentSnapshot.cells)
+          : nextCells;
 
-        return createSnapshot(cells);
-      });
-    };
+      return createSnapshot(cells);
+    });
+  };
 
   return [snapshot.cells, setCells];
 };
