@@ -75,7 +75,6 @@ export const useSudokuStore = (
     () => createSnapshot(resolveInitialCells()),
     {
       deserializer: (value) => parseSnapshot(value, resolveInitialCells()),
-      serializer: JSON.stringify,
     },
   );
 
