@@ -1,8 +1,8 @@
+import { Button } from "@sudoku/ui/primitives/Button";
 import { clsx } from "clsx";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "./Button";
 
 type ToastTone = "success" | "error" | "neutral" | "info";
 

@@ -3,5 +3,5 @@ export {
   SUDOKU_UNITS,
   type SudokuValidation,
   validateSudokuTable,
-} from "./rules";
-export { convert, stringifySudoku } from "./table";
+} from "@sudoku/core/rules";
+export { convert, stringifySudoku } from "@sudoku/core/table";

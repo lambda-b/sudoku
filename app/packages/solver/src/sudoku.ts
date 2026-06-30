@@ -1,4 +1,4 @@
-import type { SolutionNumberType } from "./model/type/SolutionNumberType";
+import type { SolutionNumberType } from "@sudoku/solver/model/type/SolutionNumberType";
 
 export const convert = (data: string) => {
   type UnsolvedType = SolutionNumberType | 0;

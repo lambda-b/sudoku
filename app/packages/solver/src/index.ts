@@ -1,2 +1,2 @@
-export { default as SudokuTemplate } from "./calc/SudokuTemplate";
-export { convert, stringifySudoku } from "./sudoku";
+export { default as SudokuTemplate } from "@sudoku/solver/calc/SudokuTemplate";
+export { convert, stringifySudoku } from "@sudoku/solver/sudoku";
