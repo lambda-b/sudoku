@@ -16,6 +16,7 @@ import { useSudokuOcr } from "@/services/ocr/useSudokuOcr";
 import { useRandomPuzzleLoader } from "@/services/random-loader/useRandomPuzzleLoader";
 import type { SolveStatus } from "@/services/solver/type";
 import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
+import { useSudokuStore } from "@/services/sudoku-storage/useSudokuStore";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
@@ -36,7 +37,9 @@ const cellsToTable = (cells: SudokuUiCell[]) =>
   cells.map((cell) => cell.cellNumber).join("");
 
 const Sudoku = () => {
-  const [cells, setCells] = useState(() => createCells(INITIAL_SUDOKU_DATA));
+  const [cells, setCells] = useSudokuStore(() =>
+    createCells(INITIAL_SUDOKU_DATA),
+  );
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
   const [solveStatus, setSolveStatus] = useState<SolveStatus>("idle");
   const [isUploadOpen, setIsUploadOpen] = useState(false);
