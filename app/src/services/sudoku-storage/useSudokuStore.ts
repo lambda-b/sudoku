@@ -1,7 +1,7 @@
 import { ADDRESS_NUMBER } from "@sudoku/core/model/type/AddressNumber";
 import { isSolutionNumberType } from "@sudoku/core/model/type/SolutionNumberType";
 import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, useCallback } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const STORAGE_KEY = "sudoku:cells:v1";
@@ -79,16 +79,19 @@ export const useSudokuStore = (
     },
   );
 
-  const setCells: Dispatch<SetStateAction<SudokuUiCell[]>> = (nextCells) => {
-    setSnapshot((currentSnapshot) => {
-      const cells =
-        typeof nextCells === "function"
-          ? nextCells(currentSnapshot.cells)
-          : nextCells;
+  const setCells = useCallback<Dispatch<SetStateAction<SudokuUiCell[]>>>(
+    (nextCells) => {
+      setSnapshot((currentSnapshot) => {
+        const cells =
+          typeof nextCells === "function"
+            ? nextCells(currentSnapshot.cells)
+            : nextCells;
 
-      return createSnapshot(cells);
-    });
-  };
+        return createSnapshot(cells);
+      });
+    },
+    [setSnapshot],
+  );
 
   return [snapshot.cells, setCells];
 };

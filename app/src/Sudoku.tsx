@@ -73,43 +73,52 @@ const Sudoku = () => {
         }),
       );
     },
-    [solveStatus],
+    [setCells, solveStatus],
   );
 
-  const applyTable = useCallback((nextTable: string) => {
-    if (nextTable.length !== ADDRESS_NUMBER.length) {
-      return;
-    }
+  const applyTable = useCallback(
+    (nextTable: string) => {
+      if (nextTable.length !== ADDRESS_NUMBER.length) {
+        return;
+      }
 
-    setCells((currentCells) =>
-      currentCells.map((cell, address) => {
-        const cellNumber = Number(nextTable[address]);
-        return cell.cellNumber === cellNumber && cell.status === "default"
-          ? cell
-          : { ...cell, cellNumber, status: "default" };
-      }),
-    );
-  }, []);
+      setCells((currentCells) =>
+        currentCells.map((cell, address) => {
+          const cellNumber = Number(nextTable[address]);
+          return cell.cellNumber === cellNumber && cell.status === "default"
+            ? cell
+            : { ...cell, cellNumber, status: "default" };
+        }),
+      );
+    },
+    [setCells],
+  );
 
-  const applyPuzzle = useCallback((nextPuzzle: string) => {
-    if (nextPuzzle.length !== ADDRESS_NUMBER.length) {
-      return;
-    }
+  const applyPuzzle = useCallback(
+    (nextPuzzle: string) => {
+      if (nextPuzzle.length !== ADDRESS_NUMBER.length) {
+        return;
+      }
 
-    setSolveStatus("idle");
-    setSelectedAddress(-1);
-    setCells(createCells(nextPuzzle));
-  }, []);
+      setSolveStatus("idle");
+      setSelectedAddress(-1);
+      setCells(createCells(nextPuzzle));
+    },
+    [setCells],
+  );
 
-  const updateCellStatuses = useCallback((conflicts: number[]) => {
-    const conflictSet = new Set(conflicts);
-    setCells((currentCells) =>
-      currentCells.map((cell) => {
-        const status = conflictSet.has(cell.address) ? "conflict" : "default";
-        return cell.status === status ? cell : { ...cell, status };
-      }),
-    );
-  }, []);
+  const updateCellStatuses = useCallback(
+    (conflicts: number[]) => {
+      const conflictSet = new Set(conflicts);
+      setCells((currentCells) =>
+        currentCells.map((cell) => {
+          const status = conflictSet.has(cell.address) ? "conflict" : "default";
+          return cell.status === status ? cell : { ...cell, status };
+        }),
+      );
+    },
+    [setCells],
+  );
 
   const resetPuzzle = useCallback(() => {
     setSolveStatus("idle");
@@ -127,7 +136,7 @@ const Sudoku = () => {
           : nextCell;
       }),
     );
-  }, []);
+  }, [setCells]);
 
   const inputSelectedNumber = useCallback(
     (cellNumber: number) => {
