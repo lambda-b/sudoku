@@ -1,3 +1,3 @@
-export { IdMap } from "./IdMap";
-export type { IdObject, IdType } from "./model/IdObject";
-export { equals } from "./model/IdObject";
+export { IdMap } from "@sudoku/utility/IdMap";
+export type { IdObject, IdType } from "@sudoku/utility/model/IdObject";
+export { equals } from "@sudoku/utility/model/IdObject";

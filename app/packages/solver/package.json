@@ -1,10 +1,14 @@
 {
-  "name": "@sudoku/core",
+  "name": "@sudoku/solver",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sudoku/core": "file:../core",
+    "@sudoku/utility": "file:../utility"
   },
   "exports": {
     ".": "./src/index.ts",

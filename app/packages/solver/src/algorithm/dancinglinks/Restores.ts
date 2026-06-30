@@ -1,5 +1,5 @@
-import type { Column } from "@sudoku/core/algorithm/dancinglinks/Column";
-import type { LinkNode } from "@sudoku/core/algorithm/dancinglinks/LinkNode";
+import type { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
+import type { LinkNode } from "@sudoku/solver/algorithm/dancinglinks/LinkNode";
 
 export class Restores {
   #col: Column;

@@ -4,9 +4,7 @@
     "jsx": "preserve",
     "paths": {
       "@sudoku/core": ["./src/index.ts"],
-      "@sudoku/core/*": ["./src/*"],
-      "@sudoku/utility": ["../utility/src/index.ts"],
-      "@sudoku/utility/*": ["../utility/src/*"]
+      "@sudoku/core/*": ["./src/*"]
     }
   },
   "include": ["src"]

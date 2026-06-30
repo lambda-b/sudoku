@@ -1,15 +1,15 @@
-import SudokuTemplate from "@sudoku/core/calc/SudokuTemplate";
+import { validateSudokuTable } from "@sudoku/core/rules";
+import SudokuTemplate from "@sudoku/solver/calc/SudokuTemplate";
 import { expose } from "comlink";
 import type {
   SolutionStep,
   SolveResult,
   SudokuSolverApi,
 } from "@/services/solver/api/type";
-import { validate } from "@/services/solver/api/validate";
 
 const api: SudokuSolverApi = {
   solve: async (puzzle): Promise<SolveResult> => {
-    const validation = validate(puzzle);
+    const validation = validateSudokuTable(puzzle);
     if (!validation.valid) {
       return { status: "invalid", conflicts: validation.conflicts };
     }

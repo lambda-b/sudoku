@@ -26,6 +26,7 @@ export const useRandomPuzzleLoader = ({
   const query = useQuery({
     queryKey: ["puzzles", "random"],
     queryFn: fetchRandomPuzzle,
+    enabled: false,
     refetchOnWindowFocus: false,
   });
 

@@ -1,4 +1,4 @@
-import type { PointType } from "@sudoku/core/model/type/PointType";
+import type { PointType } from "@sudoku/solver/model/type/PointType";
 import type BaseModel from "@sudoku/utility/model/BaseModel";
 import {
   equals,

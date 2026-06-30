@@ -16,8 +16,18 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"],
+      "@sudoku/core": ["./packages/core/src/index.ts"],
+      "@sudoku/core/*": ["./packages/core/src/*"],
+      "@sudoku/solver": ["./packages/solver/src/index.ts"],
+      "@sudoku/solver/*": ["./packages/solver/src/*"],
       "@sudoku/ui/*": ["./packages/ui/src/*"]
     }
   },
-  "include": ["src", "packages/ui/src", "vite.config.ts"]
+  "include": [
+    "src",
+    "packages/core/src",
+    "packages/solver/src",
+    "packages/ui/src",
+    "vite.config.ts"
+  ]
 }

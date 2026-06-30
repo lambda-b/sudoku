@@ -1,9 +1,11 @@
+import {
+  toolbarButtonClassName,
+  toolbarButtonToneClassName,
+} from "@sudoku/ui/actions/styles";
 import type { SolveStatusType } from "@sudoku/ui/actions/types";
 import { Button } from "@sudoku/ui/primitives/Button";
+import { clsx } from "clsx";
 import { RotateCw, Shuffle } from "lucide-react";
-
-const toolbarButtonClassName =
-  "inline-flex items-center gap-1 rounded border border-zinc-600 px-2 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-wait disabled:opacity-60 sm:gap-2 sm:px-4 sm:py-2 sm:text-base";
 
 type RandomButtonProps = {
   error: boolean;
@@ -26,7 +28,7 @@ export const RandomButton = ({
       disabled={loading || solveStatus === "solving"}
       icon={Icon}
       onClick={onLoad}
-      className={toolbarButtonClassName}
+      className={clsx(toolbarButtonClassName, toolbarButtonToneClassName.zinc)}
       text={label}
     />
   );

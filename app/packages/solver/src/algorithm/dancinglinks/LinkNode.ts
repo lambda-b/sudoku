@@ -1,5 +1,5 @@
-import type { Column } from "@sudoku/core/algorithm/dancinglinks/Column";
-import type { Row } from "@sudoku/core/algorithm/dancinglinks/Row";
+import type { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
+import type { Row } from "@sudoku/solver/algorithm/dancinglinks/Row";
 
 export class LinkNode {
   #row: Row;

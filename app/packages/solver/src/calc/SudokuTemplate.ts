@@ -1,17 +1,17 @@
-import type { Column } from "@sudoku/core/algorithm/dancinglinks/Column";
-import { Matrix } from "@sudoku/core/algorithm/dancinglinks/Matrix";
-import { ColumnAdapter } from "@sudoku/core/calc/adapter/ColumnAdapter";
-import { RowAdapter } from "@sudoku/core/calc/adapter/RowAdapter";
-import { createAllColumns } from "@sudoku/core/calc/factory/SudokuColumnFactory";
-import { createAllRows } from "@sudoku/core/calc/factory/SudokuRowFactory";
-import { GridOption } from "@sudoku/core/model/GridOption";
-import { type ColType, isColType } from "@sudoku/core/model/type/ColType";
-import { isRowType, type RowType } from "@sudoku/core/model/type/RowType";
 import {
   isSolutionNumberType,
   type SolutionNumberType,
 } from "@sudoku/core/model/type/SolutionNumberType";
-import { convert } from "@sudoku/core/sudoku";
+import { convert } from "@sudoku/core/table";
+import type { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
+import { Matrix } from "@sudoku/solver/algorithm/dancinglinks/Matrix";
+import { ColumnAdapter } from "@sudoku/solver/calc/adapter/ColumnAdapter";
+import { RowAdapter } from "@sudoku/solver/calc/adapter/RowAdapter";
+import { createAllColumns } from "@sudoku/solver/calc/factory/SudokuColumnFactory";
+import { createAllRows } from "@sudoku/solver/calc/factory/SudokuRowFactory";
+import { GridOption } from "@sudoku/solver/model/GridOption";
+import { type ColType, isColType } from "@sudoku/solver/model/type/ColType";
+import { isRowType, type RowType } from "@sudoku/solver/model/type/RowType";
 
 class SudokuTemplate {
   #allColumns = createAllColumns();

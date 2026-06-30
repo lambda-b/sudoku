@@ -1,8 +1,8 @@
+const SIZE = 9;
+
 export type SudokuValidation =
   | { valid: true }
   | { valid: false; conflicts: number[] };
-
-const SIZE = 9;
 
 const row = (index: number) =>
   Array.from({ length: SIZE }, (_, offset) => index * SIZE + offset);
@@ -21,27 +21,28 @@ const box = (index: number) => {
   );
 };
 
-const units = Array.from({ length: SIZE }, (_, index) => [
+export const SUDOKU_UNITS = Array.from({ length: SIZE }, (_, index) => [
   row(index),
   column(index),
   box(index),
 ]).flat();
 
-export const validate = (data: string): SudokuValidation => {
-  if (!/^[0-9]{81}$/.test(data)) {
-    return { valid: false, conflicts: [] };
+export const findSudokuConflicts = (table: string) => {
+  if (!/^[0-9]{81}$/.test(table)) {
+    return [];
   }
 
   const conflicts = new Set<number>();
 
-  for (const unit of units) {
+  for (const unit of SUDOKU_UNITS) {
     const positions = new Map<string, number[]>();
 
     for (const address of unit) {
-      const value = data[address];
+      const value = table[address];
       if (value === "0") {
         continue;
       }
+
       positions.set(value, [...(positions.get(value) ?? []), address]);
     }
 
@@ -54,7 +55,15 @@ export const validate = (data: string): SudokuValidation => {
     }
   }
 
-  return conflicts.size
-    ? { valid: false, conflicts: [...conflicts].sort((a, b) => a - b) }
-    : { valid: true };
+  return [...conflicts].sort((a, b) => a - b);
+};
+
+export const validateSudokuTable = (table: string): SudokuValidation => {
+  if (!/^[0-9]{81}$/.test(table)) {
+    return { valid: false, conflicts: [] };
+  }
+
+  const conflicts = findSudokuConflicts(table);
+
+  return conflicts.length ? { valid: false, conflicts } : { valid: true };
 };

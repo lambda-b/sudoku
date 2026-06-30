@@ -1,6 +1,6 @@
-import { Column } from "@sudoku/core/algorithm/dancinglinks/Column";
-import { Restores } from "@sudoku/core/algorithm/dancinglinks/Restores";
-import type { Row } from "@sudoku/core/algorithm/dancinglinks/Row";
+import { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
+import { Restores } from "@sudoku/solver/algorithm/dancinglinks/Restores";
+import type { Row } from "@sudoku/solver/algorithm/dancinglinks/Row";
 
 export class Matrix {
   #headers: Set<Column>;
