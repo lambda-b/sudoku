@@ -14,16 +14,15 @@ import type { SolveStatus } from "@/services/solver/type";
 import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 import {
   createSudokuCells,
-  reduceSudokuCells,
   sudokuCellsToTable,
-} from "@/services/sudoku-board/sudokuCells";
-import { useSudokuStore } from "@/services/sudoku-storage/useSudokuStore";
+  useSudokuStore,
+} from "@/services/sudoku-storage/useSudokuStore";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
 const Sudoku = () => {
-  const [cells, setCells] = useSudokuStore(() =>
+  const [cells, dispatchCells] = useSudokuStore(() =>
     createSudokuCells(INITIAL_SUDOKU_DATA),
   );
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
@@ -41,63 +40,53 @@ const Sudoku = () => {
       }
 
       setSolveStatus("idle");
-      setCells((currentCells) =>
-        reduceSudokuCells(currentCells, {
-          type: "cellNumberChanged",
-          address,
-          cellNumber,
-        }),
-      );
+      dispatchCells({
+        type: "cellNumberChanged",
+        address,
+        cellNumber,
+      });
     },
-    [setCells, solveStatus],
+    [dispatchCells, solveStatus],
   );
 
   const applyTable = useCallback(
     (nextTable: string) => {
-      setCells((currentCells) =>
-        reduceSudokuCells(currentCells, {
-          type: "tableApplied",
-          table: nextTable,
-        }),
-      );
+      dispatchCells({
+        type: "tableApplied",
+        table: nextTable,
+      });
     },
-    [setCells],
+    [dispatchCells],
   );
 
   const applyPuzzle = useCallback(
     (nextPuzzle: string) => {
       setSolveStatus("idle");
       setSelectedAddress(-1);
-      setCells((currentCells) =>
-        reduceSudokuCells(currentCells, {
-          type: "puzzleApplied",
-          puzzle: nextPuzzle,
-        }),
-      );
+      dispatchCells({
+        type: "puzzleApplied",
+        puzzle: nextPuzzle,
+      });
     },
-    [setCells],
+    [dispatchCells],
   );
 
   const updateCellStatuses = useCallback(
     (conflicts: number[]) => {
-      setCells((currentCells) =>
-        reduceSudokuCells(currentCells, {
-          type: "conflictsChanged",
-          conflicts,
-        }),
-      );
+      dispatchCells({
+        type: "conflictsChanged",
+        conflicts,
+      });
     },
-    [setCells],
+    [dispatchCells],
   );
 
   const resetPuzzle = useCallback(() => {
     setSolveStatus("idle");
-    setCells((currentCells) =>
-      reduceSudokuCells(currentCells, {
-        type: "reset",
-      }),
-    );
-  }, [setCells]);
+    dispatchCells({
+      type: "reset",
+    });
+  }, [dispatchCells]);
 
   const inputSelectedNumber = useCallback(
     (cellNumber: number) => {
