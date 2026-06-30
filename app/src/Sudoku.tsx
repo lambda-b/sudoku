@@ -14,6 +14,7 @@ import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
 import { useCallback, useState } from "react";
 import { useSudokuOcr } from "@/services/ocr/useSudokuOcr";
 import { useRandomPuzzleLoader } from "@/services/random-loader/useRandomPuzzleLoader";
+import { validate } from "@/services/solver/api/validate";
 import type { SolveStatus } from "@/services/solver/type";
 import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 import { useSudokuStore } from "@/services/sudoku-storage/useSudokuStore";
@@ -36,6 +37,23 @@ const createCells = (puzzle: string): SudokuUiCell[] =>
 const cellsToTable = (cells: SudokuUiCell[]) =>
   cells.map((cell) => cell.cellNumber).join("");
 
+const applyCellStatuses = (
+  cells: SudokuUiCell[],
+  conflicts: number[],
+): SudokuUiCell[] => {
+  const conflictSet = new Set(conflicts);
+
+  return cells.map((cell) => {
+    const status = conflictSet.has(cell.address) ? "conflict" : "default";
+    return cell.status === status ? cell : { ...cell, status };
+  });
+};
+
+const validateCells = (cells: SudokuUiCell[]) => {
+  const validation = validate(cellsToTable(cells));
+  return applyCellStatuses(cells, validation.valid ? [] : validation.conflicts);
+};
+
 const Sudoku = () => {
   const [cells, setCells] = useSudokuStore(() =>
     createCells(INITIAL_SUDOKU_DATA),
@@ -55,8 +73,8 @@ const Sudoku = () => {
       }
 
       setSolveStatus("idle");
-      setCells((currentCells) =>
-        currentCells.map((cell) => {
+      setCells((currentCells) => {
+        const nextCells = currentCells.map((cell) => {
           if (cell.address === address) {
             if (cell.initialCellNumber !== 0) {
               return cell;
@@ -64,14 +82,16 @@ const Sudoku = () => {
 
             return cell.cellNumber === cellNumber && cell.status === "default"
               ? cell
-              : { ...cell, cellNumber, status: "default" };
+              : { ...cell, cellNumber, status: "default" as const };
           }
 
           return cell.status === "default"
             ? cell
-            : { ...cell, status: "default" };
-        }),
-      );
+            : { ...cell, status: "default" as const };
+        });
+
+        return validateCells(nextCells);
+      });
     },
     [setCells, solveStatus],
   );
@@ -82,14 +102,16 @@ const Sudoku = () => {
         return;
       }
 
-      setCells((currentCells) =>
-        currentCells.map((cell, address) => {
+      setCells((currentCells) => {
+        const nextCells = currentCells.map((cell, address) => {
           const cellNumber = Number(nextTable[address]);
           return cell.cellNumber === cellNumber && cell.status === "default"
             ? cell
-            : { ...cell, cellNumber, status: "default" };
-        }),
-      );
+            : { ...cell, cellNumber, status: "default" as const };
+        });
+
+        return validateCells(nextCells);
+      });
     },
     [setCells],
   );
@@ -102,28 +124,22 @@ const Sudoku = () => {
 
       setSolveStatus("idle");
       setSelectedAddress(-1);
-      setCells(createCells(nextPuzzle));
+      setCells(validateCells(createCells(nextPuzzle)));
     },
     [setCells],
   );
 
   const updateCellStatuses = useCallback(
     (conflicts: number[]) => {
-      const conflictSet = new Set(conflicts);
-      setCells((currentCells) =>
-        currentCells.map((cell) => {
-          const status = conflictSet.has(cell.address) ? "conflict" : "default";
-          return cell.status === status ? cell : { ...cell, status };
-        }),
-      );
+      setCells((currentCells) => applyCellStatuses(currentCells, conflicts));
     },
     [setCells],
   );
 
   const resetPuzzle = useCallback(() => {
     setSolveStatus("idle");
-    setCells((currentCells) =>
-      currentCells.map((cell) => {
+    setCells((currentCells) => {
+      const nextCells = currentCells.map((cell) => {
         const nextCell = {
           ...cell,
           cellNumber: cell.initialCellNumber,
@@ -134,8 +150,10 @@ const Sudoku = () => {
           cell.status === nextCell.status
           ? cell
           : nextCell;
-      }),
-    );
+      });
+
+      return validateCells(nextCells);
+    });
   }, [setCells]);
 
   const inputSelectedNumber = useCallback(
