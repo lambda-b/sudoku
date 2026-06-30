@@ -1,3 +1,4 @@
+import { SOLUTION_NUMBERS } from "@sudoku/core/model/type/SolutionNumberType";
 import { LinkNode } from "@sudoku/solver/algorithm/dancinglinks/LinkNode";
 import type { ColumnAdapter } from "@sudoku/solver/calc/adapter/ColumnAdapter";
 import { RowAdapter } from "@sudoku/solver/calc/adapter/RowAdapter";
@@ -10,7 +11,6 @@ import { GridRowNumKey } from "@sudoku/solver/model/GridRowNumKey";
 import type { BoxType } from "@sudoku/solver/model/type/BoxType";
 import { COL_TYPE } from "@sudoku/solver/model/type/ColType";
 import { ROW_TYPE } from "@sudoku/solver/model/type/RowType";
-import { SOLUTION_NUMBERS } from "@sudoku/solver/model/type/SolutionNumberType";
 
 export const createAllRows = (allColumns: Map<GridKey, ColumnAdapter>) => {
   const covers: RowAdapter[] = [];

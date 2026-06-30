@@ -1,6 +1,6 @@
+import type { SolutionNumberType } from "@sudoku/core/model/type/SolutionNumberType";
 import type { ColType } from "@sudoku/solver/model/type/ColType";
 import type { RowType } from "@sudoku/solver/model/type/RowType";
-import type { SolutionNumberType } from "@sudoku/solver/model/type/SolutionNumberType";
 import type BaseModel from "@sudoku/utility/model/BaseModel";
 import { equals, type IdObject } from "@sudoku/utility/model/IdObject";
 

@@ -1,3 +1,7 @@
+import {
+  isSolutionNumberType,
+  type SolutionNumberType,
+} from "@sudoku/core/model/type/SolutionNumberType";
 import { convert } from "@sudoku/core/table";
 import type { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
 import { Matrix } from "@sudoku/solver/algorithm/dancinglinks/Matrix";
@@ -8,10 +12,6 @@ import { createAllRows } from "@sudoku/solver/calc/factory/SudokuRowFactory";
 import { GridOption } from "@sudoku/solver/model/GridOption";
 import { type ColType, isColType } from "@sudoku/solver/model/type/ColType";
 import { isRowType, type RowType } from "@sudoku/solver/model/type/RowType";
-import {
-  isSolutionNumberType,
-  type SolutionNumberType,
-} from "@sudoku/solver/model/type/SolutionNumberType";
 
 class SudokuTemplate {
   #allColumns = createAllColumns();
