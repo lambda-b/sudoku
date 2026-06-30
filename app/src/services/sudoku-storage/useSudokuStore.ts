@@ -1,11 +1,10 @@
 import { ADDRESS_NUMBER } from "@sudoku/core/model/type/AddressNumber";
 import { isSolutionNumberType } from "@sudoku/core/model/type/SolutionNumberType";
 import type { SudokuUiCell } from "@sudoku/ui/sudoku/types";
-import { type Dispatch, type SetStateAction, useRef } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useLocalStorage } from "usehooks-ts";
 
 const STORAGE_KEY = "sudoku:cells:v2";
-const LEGACY_STORAGE_KEYS = ["sudoku:cells:v1"] as const;
 
 type PersistedSudokuCell = Pick<
   SudokuUiCell,
@@ -66,54 +65,17 @@ const parseSnapshot = (
   }
 };
 
-const readStoredSnapshot = (
-  key: string,
-  fallbackCells: SudokuUiCell[],
-): SudokuStoreSnapshot | null => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    const value = window.localStorage.getItem(key);
-    return value ? parseSnapshot(value, fallbackCells) : null;
-  } catch {
-    return null;
-  }
-};
-
-const createInitialSnapshot = (
-  initialCells: SudokuUiCell[] | (() => SudokuUiCell[]),
-) => {
-  const fallbackCells =
-    typeof initialCells === "function" ? initialCells() : initialCells;
-
-  for (const key of LEGACY_STORAGE_KEYS) {
-    const snapshot = readStoredSnapshot(key, fallbackCells);
-    if (snapshot) {
-      return snapshot;
-    }
-  }
-
-  return createSnapshot(fallbackCells);
-};
-
 export const useSudokuStore = (
   initialCells: SudokuUiCell[] | (() => SudokuUiCell[]),
 ): readonly [SudokuUiCell[], Dispatch<SetStateAction<SudokuUiCell[]>>] => {
-  const initialSnapshotRef = useRef<SudokuStoreSnapshot | null>(null);
-  if (!initialSnapshotRef.current) {
-    initialSnapshotRef.current = createInitialSnapshot(initialCells);
-  }
-
-  const getInitialSnapshot = () =>
-    initialSnapshotRef.current ?? createInitialSnapshot(initialCells);
+  const resolveInitialCells = () =>
+    typeof initialCells === "function" ? initialCells() : initialCells;
 
   const [snapshot, setSnapshot] = useLocalStorage<SudokuStoreSnapshot>(
     STORAGE_KEY,
-    getInitialSnapshot,
+    () => createSnapshot(resolveInitialCells()),
     {
-      deserializer: (value) => parseSnapshot(value, getInitialSnapshot().cells),
+      deserializer: (value) => parseSnapshot(value, resolveInitialCells()),
     },
   );
 
