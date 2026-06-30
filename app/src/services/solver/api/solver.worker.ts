@@ -1,4 +1,4 @@
-import SudokuTemplate from "@sudoku/core/calc/SudokuTemplate";
+import SudokuTemplate from "@sudoku/solver/calc/SudokuTemplate";
 import { expose } from "comlink";
 import type {
   SolutionStep,

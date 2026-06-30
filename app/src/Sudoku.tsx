@@ -13,17 +13,17 @@ import { useRandomPuzzleLoader } from "@/services/random-loader/useRandomPuzzleL
 import type { SolveStatus } from "@/services/solver/type";
 import { useSudokuSolver } from "@/services/solver/useSudokuSolver";
 import {
-  createSudokuCells,
-  sudokuCellsToTable,
-  useSudokuCellsReducer,
-} from "@/services/sudoku/useSudokuCellsReducer";
+  cellsToTable,
+  createCells,
+  useCellsReducer,
+} from "@/services/sudoku/useCellsReducer";
 
 const INITIAL_SUDOKU_DATA =
   "081070250000040000290805073025000480700908006008000900800401002060000010000506000";
 
 const Sudoku = () => {
-  const [cells, dispatchCells] = useSudokuCellsReducer(() =>
-    createSudokuCells(INITIAL_SUDOKU_DATA),
+  const [cells, dispatchCells] = useCellsReducer(() =>
+    createCells(INITIAL_SUDOKU_DATA),
   );
   const [selectedAddress, setSelectedAddress] = useState<number | -1>(-1);
   const [solveStatus, setSolveStatus] = useState<SolveStatus>("idle");
@@ -103,7 +103,7 @@ const Sudoku = () => {
     onStatusChange: setSolveStatus,
     onTableChange: applyTable,
     solveStatus,
-    table: sudokuCellsToTable(cells),
+    table: cellsToTable(cells),
   });
 
   return (

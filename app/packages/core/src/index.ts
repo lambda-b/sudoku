@@ -1,2 +1,7 @@
-export { default as SudokuTemplate } from "./calc/SudokuTemplate";
-export { convert, stringifySudoku } from "./sudoku";
+export {
+  findSudokuConflicts,
+  SUDOKU_UNITS,
+  type SudokuValidation,
+  validateSudokuTable,
+} from "./rules";
+export { convert, stringifySudoku } from "./table";

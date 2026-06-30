@@ -1,5 +1,5 @@
-import { Column } from "@sudoku/core/algorithm/dancinglinks/Column";
-import type { GridKey } from "@sudoku/core/model/GridKey";
+import { Column } from "@sudoku/solver/algorithm/dancinglinks/Column";
+import type { GridKey } from "@sudoku/solver/model/GridKey";
 import { IdMap } from "@sudoku/utility/IdMap";
 
 export class ColumnAdapter extends Column {

@@ -1,12 +1,12 @@
-import { ColumnAdapter } from "@sudoku/core/calc/adapter/ColumnAdapter";
-import { GridBoxNumKey } from "@sudoku/core/model/GridBoxNumKey";
-import { GridColNumKey } from "@sudoku/core/model/GridColNumKey";
-import { GridRowColKey } from "@sudoku/core/model/GridRowColKey";
-import { GridRowNumKey } from "@sudoku/core/model/GridRowNumKey";
-import { BOX_TYPE } from "@sudoku/core/model/type/BoxType";
-import { COL_TYPE } from "@sudoku/core/model/type/ColType";
-import { ROW_TYPE } from "@sudoku/core/model/type/RowType";
-import { SOLUTION_NUMBERS } from "@sudoku/core/model/type/SolutionNumberType";
+import { ColumnAdapter } from "@sudoku/solver/calc/adapter/ColumnAdapter";
+import { GridBoxNumKey } from "@sudoku/solver/model/GridBoxNumKey";
+import { GridColNumKey } from "@sudoku/solver/model/GridColNumKey";
+import { GridRowColKey } from "@sudoku/solver/model/GridRowColKey";
+import { GridRowNumKey } from "@sudoku/solver/model/GridRowNumKey";
+import { BOX_TYPE } from "@sudoku/solver/model/type/BoxType";
+import { COL_TYPE } from "@sudoku/solver/model/type/ColType";
+import { ROW_TYPE } from "@sudoku/solver/model/type/RowType";
+import { SOLUTION_NUMBERS } from "@sudoku/solver/model/type/SolutionNumberType";
 
 export const createAllColumns = () => {
   const allColumns: ColumnAdapter[] = [];
