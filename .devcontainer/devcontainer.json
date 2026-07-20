@@ -7,46 +7,35 @@
       "NODE_VERSION": "24.13.0"
     }
   },
+  // Codex の状態はプロジェクト内に保持し、認証情報はホスト側のものを利用する
+  "initializeCommand": "mkdir -p .codex-local \"${HOME}/.codex\" && if [ ! -f \"${HOME}/.codex/auth.json\" ]; then printf '{}\\n' > \"${HOME}/.codex/auth.json\"; fi",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.codex-local,target=/home/vscode/.codex,type=bind",
+    "source=${localEnv:HOME}/.codex/auth.json,target=/home/vscode/.codex/auth.json,type=bind"
+  ],
   // 追加する拡張機能のIDを入力
   "customizations": {
     "vscode": {
       "extensions": [
-        "formulahendry.code-runner",
-        "blacketpaircolordlw.bracket-pair-color-dlw",
         "christian-kohler.path-intellisense",
-        "donjayamanne.githistory",
         "eamodio.gitlens",
-        "ionutvmi.path-autocomplete",
         "mosapride.zenkaku",
-        "ms-azuretools.vscode-docker",
-        "ms-python.autopep8",
-        "ms-python.debugpy",
-        "ms-python.vscode-pylance",
-        "ms-vscode.cmake-tools",
         "oderwat.indent-rainbow",
+        "openai.chatgpt",
         "qcz.text-power-tools",
         "shardulm94.trailing-spaces",
         "streetsidesoftware.code-spell-checker",
-        "twxs.cmake",
         "shd101wyy.markdown-preview-enhanced",
+        "Vue.volar",
+        "antfu.slidev",
         "esbenp.prettier-vscode",
-        "biomejs.biome"
+        "unifiedjs.vscode-mdx",
+        "biomejs.biome",
+        "bradlc.vscode-tailwindcss"
       ]
     }
   },
-  // コンテナのフォワードポートの設定
-  "forwardPorts": [
-    900
-  ],
   // この設定をしないと、コンテナのデフォルトユーザーがrootとなり不都合が多いので必須。
   // non-root user などで調べるとより詳しくわかります。
-  "remoteUser": "vscode",
-  // 追加導入する機能の選択
-  "features": {
-    "docker-from-docker": "latest",
-    "git": "latest",
-    "sshd": "latest"
-  }
-  // コンテナ起動時に実行するコマンド
-  // "postAttachCommand": ""
+  "remoteUser": "vscode"
 }

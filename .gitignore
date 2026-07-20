@@ -43,3 +43,6 @@ coverage/
 cdk.out/
 .idea/
 *.swp
+
+# ===== customs =====
+.codex-local
